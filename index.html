@@ -176,7 +176,7 @@
     <div id="detail-modal" class="modal">
         <div class="modal-content">
             <div class="close-modal" onclick="closeModal()">&times;</div>
-            <img src="" id="city-img" class="city-image" onerror="this.src='https://images.unsplash.com/photo-1464822759023-fed622ff2c3b'">
+            <img src="" id="city-img" class="city-image">
             <div class="modal-details">
                 <div id="modal-country" class="country-title"></div>
                 <div id="modal-city" class="city-title"></div>
@@ -260,7 +260,10 @@
 
         async function loadData() {
             try {
+                // IMPORTANT: For GitHub Pages, use relative paths to root.
+                // We've moved photos to assets/cities/
                 let res = await fetch('world_retirement_data.json');
+                if (!res.ok) res = await fetch('../world_retirement_data.json');
                 fullData = await res.json();
                 populateCitySelect();
                 updateMarkers();
@@ -323,8 +326,8 @@
         function formatCurrency(val) { return '$' + Math.round(val).toLocaleString('en-US'); }
 
         function getImgPath(path) {
-            // Photos are in root assets/cities folder on GitHub
-            return path;
+            // Adapt to GitHub Pages directory structure
+            return './' + path;
         }
 
         function updateMarkers() {
@@ -344,7 +347,7 @@
                     const name = currentLang === 'zh' ? data.zh : cityName;
                     const finalImg = getImgPath(data.img);
                     
-                    marker.bindTooltip(`<div style="text-align:center"><b>${name}</b><br><img src="${finalImg}" class="tooltip-img" onerror="this.src='https://images.unsplash.com/photo-1464822759023-fed622ff2c3b'"></div>`, { className: 'leaflet-tooltip-custom', direction: 'top', offset: [0, -10] });
+                    marker.bindTooltip(`<div style="text-align:center"><b>${name}</b><br><img src="${finalImg}" class="tooltip-img"></div>`, { className: 'leaflet-tooltip-custom', direction: 'top', offset: [0, -10] });
                     
                     marker.on('click', () => {
                         const t = i18n[currentLang];
