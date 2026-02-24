@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retire Anywhere Map V4.5 - Global City Explorer</title>
+    
+    <!-- Leaflet & Fonts -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-cyan: #00bcd4;
+            --dark-bg: #0f172a;
+            --panel-bg: rgba(15, 23, 42, 0.9);
+            --text-color: #f8fafc;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+            --accent-blue: #3b82f6;
+            --error-red: #ef4444;
+        }
+
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Inter', sans-serif; background-color: var(--dark-bg); color: var(--text-color); overflow: hidden; }
+        #map { height: 100vh; width: 100vw; z-index: 1; background: #0b1120; }
+
+        /* UI Panels */
+        .ui-panel {
+            position: absolute; top: 20px; right: 20px; width: 340px; background: var(--panel-bg);
+            padding: 24px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            backdrop-filter: blur(16px); z-index: 1000; border: 1px solid rgba(255,255,255,0.1);
+            max-height: 80vh; overflow-y: auto;
+        }
+
+        .lang-switcher { position: absolute; top: 20px; left: 20px; display: flex; gap: 8px; z-index: 1001; }
+        .lang-btn { background: var(--panel-bg); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 16px; border-radius: 12px; cursor: pointer; font-size: 0.85rem; backdrop-filter: blur(12px); transition: 0.3s; }
+        .lang-btn.active { background: var(--primary-cyan); border-color: var(--primary-cyan); font-weight: bold; }
+
+        h1 { font-size: 1.5rem; margin: 0 0 20px 0; font-weight: 900; background: linear-gradient(to right, #60a5fa, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; }
+
+        .input-group { margin-bottom: 24px; }
+        label { display: block; font-size: 0.85rem; margin-bottom: 12px; opacity: 0.8; font-weight: 600; }
+
+        .btn-group { display: flex; gap: 6px; margin-bottom: 10px; }
+        .choice-btn { flex: 1; padding: 10px 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; cursor: pointer; font-size: 0.75rem; transition: 0.3s; }
+        
+        .choice-btn.active[data-type="lifestyle"][data-val="Essential"] { border-color: var(--accent-purple); background: rgba(168, 85, 247, 0.2); }
+        .choice-btn.active[data-type="lifestyle"][data-val="Comfortable"] { border-color: var(--accent-blue); background: rgba(59, 130, 246, 0.2); }
+        .choice-btn.active[data-type="lifestyle"][data-val="Luxury"] { border-color: var(--accent-green); background: rgba(16, 185, 129, 0.2); }
+        .choice-btn.active[data-type="household"] { border-color: var(--primary-cyan); background: rgba(0, 188, 212, 0.2); }
+
+        input[type=range] { width: 100%; height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 5px; outline: none; -webkit-appearance: none; accent-color: var(--primary-cyan); }
+
+        /* Custom Tooltip */
+        .leaflet-tooltip-custom {
+            background: var(--panel-bg) !important; color: white !important; border: 1px solid rgba(255,255,255,0.2) !important;
+            border-radius: 12px !important; padding: 10px !important; box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
+            backdrop-filter: blur(8px) !important; font-size: 0.9rem !important;
+        }
+        .tooltip-img { width: 140px; height: 80px; border-radius: 8px; object-fit: cover; display: block; margin-top: 8px; }
+
+        /* Modal / Details */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); justify-content: center; align-items: center; backdrop-filter: blur(10px); }
+        .modal-content { background: #1e293b; border-radius: 32px; width: 480px; max-width: 90%; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 60px rgba(0,0,0,0.6); }
+        .city-image { width: 100%; height: 260px; object-fit: cover; background: #000; }
+        .image-overlay { position: absolute; top: 200px; left: 0; right: 0; padding: 20px; background: linear-gradient(transparent, rgba(30, 41, 59, 1)); }
+        .landmark-tag { background: var(--primary-cyan); color: #000; padding: 5px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 900; }
+
+        .modal-details { padding: 0 32px 32px 32px; }
+        .city-title { font-size: 2.2rem; font-weight: 900; margin: 5px 0; color: white; }
+        .country-title { font-size: 0.9rem; opacity: 0.6; text-transform: uppercase; letter-spacing: 2px; }
+
+        .stat-box { display: flex; justify-content: space-between; padding: 18px; background: rgba(255,255,255,0.03); border-radius: 20px; margin-top: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .stat-item { text-align: center; flex: 1; }
+        .stat-label { font-size: 0.7rem; opacity: 0.5; display: block; margin-bottom: 6px; text-transform: uppercase; }
+        .stat-value { font-size: 1.2rem; font-weight: bold; color: var(--primary-cyan); }
+
+        .reached-badge { display: block; margin-top: 20px; padding: 12px; border-radius: 14px; font-weight: 900; font-size: 0.9rem; text-align: center; letter-spacing: 1px; }
+        .badge-yes { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
+        .badge-no { background: rgba(239, 68, 68, 0.2); color: var(--error-red); border: 1px solid var(--error-red); }
+
+        .close-modal { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: rgba(0,0,0,0.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; z-index: 10; font-size: 24px; transition: 0.3s; }
+
+        /* Visitor Counter & Footer */
+        .footer-info { position: absolute; bottom: 20px; right: 20px; z-index: 1000; background: var(--panel-bg); padding: 10px 20px; border-radius: 12px; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.1); }
+        .visitor-count { font-weight: bold; color: var(--primary-cyan); }
+
+        .legend { position: absolute; bottom: 30px; left: 20px; background: var(--panel-bg); padding: 14px 24px; border-radius: 16px; font-size: 0.8rem; z-index: 1000; display: flex; gap: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        .legend-item { display: flex; align-items: center; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+    </style>
+</head>
+<body>
+
+    <div class="lang-switcher">
+        <button id="btn-en" class="lang-btn active" onclick="setLang('en')">English</button>
+        <button id="btn-zh" class="lang-btn" onclick="setLang('zh')">繁體中文</button>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="ui-panel">
+        <h1 id="ui-title">Retire Anywhere Map</h1>
+        
+        <div class="input-group">
+            <label id="ui-mode-label">Target Lifestyle</label>
+            <div class="btn-group">
+                <button class="choice-btn lifestyle-btn active" data-type="lifestyle" data-val="Essential" onclick="setChoice('lifestyle', 'Essential')">🟣 <span id="txt-ess">Essential</span></button>
+                <button class="choice-btn lifestyle-btn" data-type="lifestyle" data-val="Comfortable" onclick="setChoice('lifestyle', 'Comfortable')">🔵 <span id="txt-com">Comfortable</span></button>
+                <button class="choice-btn lifestyle-btn" data-type="lifestyle" data-val="Luxury" onclick="setChoice('lifestyle', 'Luxury')">🟢 <span id="txt-lux">Luxury</span></button>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label id="ui-household-label">Household Size</label>
+            <div class="btn-group">
+                <button class="choice-btn household-btn" data-type="household" data-val="single" onclick="setChoice('household', 'single')">👤 <span id="txt-single">Single</span></button>
+                <button class="choice-btn household-btn active" data-type="household" data-val="couple" onclick="setChoice('household', 'couple')">👥 <span id="txt-couple">Couple</span></button>
+                <button class="choice-btn household-btn" data-type="household" data-val="family" onclick="setChoice('household', 'family')">👨‍👩‍👧‍👦 <span id="txt-family">Family</span></button>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label><span id="ui-budget-label">Asset Budget (USD)</span>: <span id="budget-display" style="font-weight:bold; color:var(--primary-cyan)">$3,000,000</span></label>
+            <input type="range" id="budget-slider" min="100000" max="10000000" step="50000" value="3000000">
+        </div>
+
+        <div id="ui-tips" style="font-size: 0.75rem; opacity: 0.6; line-height: 1.5; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+            * Calculated with 4.0% withdrawal rate.<br>* Hover on markers for quick info.
+        </div>
+    </div>
+
+    <div class="footer-info">
+        <span id="ui-visitor">Visitors</span>: <span class="visitor-count" id="visitor-val">1,284</span>
+        <span style="margin-left: 15px;">&copy; 2026 Retire Explorer</span>
+    </div>
+
+    <div class="legend">
+        <div class="legend-item"><div class="dot" style="background:var(--accent-purple)"></div> <span id="leg-ess">Essential</span></div>
+        <div class="legend-item"><div class="dot" style="background:var(--accent-blue)"></div> <span id="leg-com">Comfortable</span></div>
+        <div class="legend-item"><div class="dot" style="background:var(--accent-green)"></div> <span id="leg-lux">Luxury</span></div>
+        <div class="legend-item"><div class="dot" style="background:var(--error-red)"></div> <span id="leg-fail">Needed</span></div>
+    </div>
+
+    <div id="detail-modal" class="modal">
+        <div class="modal-content">
+            <div class="close-modal" onclick="closeModal()">&times;</div>
+            <img src="" id="city-img" class="city-image" onerror="this.src='https://images.unsplash.com/photo-1464822759023-fed622ff2c3b'">
+            <div class="image-overlay">
+                <span id="landmark-name" class="landmark-tag">City Sights</span>
+            </div>
+            <div class="modal-details">
+                <div id="modal-country" class="country-title">COUNTRY</div>
+                <div id="modal-city" class="city-title">CITY NAME</div>
+                <div class="stat-box">
+                    <div class="stat-item"><span class="stat-label" id="lbl-modal-cost">Monthly Cost</span><span id="stat-cost" class="stat-value">$0</span></div>
+                    <div class="stat-item" style="border-left: 1px solid rgba(255,255,255,0.1);"><span class="stat-label" id="lbl-modal-goal">Goal Assets</span><span id="stat-goal" class="stat-value">$0</span></div>
+                </div>
+                <div id="reached-badge" class="reached-badge">TARGET REACHED</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        let currentLang = 'en';
+        let currentMode = 'Essential';
+        let currentHousehold = 'couple';
+        let fullData = {};
+        const markers = [];
+
+        const i18n = {
+            en: {
+                title: "Retire Anywhere Map", modeLabel: "Target Lifestyle", householdLabel: "Household Size", budgetLabel: "Asset Budget (USD)",
+                ess: "Essential", com: "Comfortable", lux: "Luxury", single: "Single", couple: "Couple", family: "Family",
+                reached: "TARGET REACHED", notReached: "MORE ASSETS NEEDED", costLabel: "Monthly Cost", goalLabel: "Goal Assets",
+                fail: "Needed", visitor: "Visitors", tips: "* Calculated with 4.0% withdrawal rate.<br>* Hover on markers for quick info."
+            },
+            zh: {
+                title: "全球退休達成度地圖", modeLabel: "退休生活目標", householdLabel: "家庭人數", budgetLabel: "您的資產 (USD)",
+                ess: "基本生活", com: "舒適生活", lux: "奢華生活", single: "單人", couple: "雙人", family: "一家四口",
+                reached: "已達成退休目標", notReached: "資產尚不足", costLabel: "預估月支出", goalLabel: "目標總資產",
+                fail: "尚未達標", visitor: "訪客人數", tips: "* 計算基準為 4.0% 提領率。<br>* 滑鼠移至標記可看簡介。"
+            }
+        };
+
+        const cityMeta = {
+            "New York City": { zh: "紐約市", coords: [40.7128, -74.0060], landmark: "Statue of Liberty", img: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9" },
+            "San Francisco": { zh: "舊金山", coords: [37.7749, -122.4194], landmark: "Golden Gate Bridge", img: "https://images.unsplash.com/photo-1449034446853-66c86144b0ad" },
+            "San Jose": { zh: "聖荷西", coords: [37.3382, -121.8863], landmark: "Silicon Valley Tech", img: "https://images.unsplash.com/photo-1544006659-f0b21f04cb1d" },
+            "Boston": { zh: "波士頓", coords: [42.3601, -71.0589], landmark: "Harvard University", img: "https://images.unsplash.com/photo-1501446529957-6226bd447c46" },
+            "Washington DC": { zh: "華盛頓特區", coords: [38.9072, -77.0369], landmark: "Lincoln Memorial", img: "https://images.unsplash.com/photo-1501446529957-6226bd447c46" },
+            "Seattle": { zh: "西雅圖", coords: [47.6062, -122.3321], landmark: "Space Needle", img: "https://images.unsplash.com/photo-1502175353174-a7a70e73b362" },
+            "San Diego": { zh: "聖地牙哥", coords: [32.7157, -117.1611], landmark: "Balboa Park", img: "https://images.unsplash.com/photo-1533604131587-32c2951543ed" },
+            "Los Angeles": { zh: "洛杉磯", coords: [34.0522, -118.2437], landmark: "Hollywood Sign", img: "https://images.unsplash.com/photo-1501139083538-0139583c060f" },
+            "Miami": { zh: "邁阿密", coords: [25.7617, -80.1918], landmark: "South Beach", img: "https://images.unsplash.com/photo-1533106497176-45ae19e68ba2" },
+            "Philadelphia": { zh: "費城", coords: [39.9526, -75.1652], landmark: "Liberty Bell", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624" },
+            "Denver": { zh: "丹佛", coords: [39.7392, -104.9903], landmark: "Rocky Mountains", img: "https://images.unsplash.com/photo-1546146830-21997fd0fa58" },
+            "Portland": { zh: "波特蘭", coords: [45.5152, -122.6784], landmark: "Rose Garden", img: "https://images.unsplash.com/photo-1502175353174-a7a70e73b362" },
+            "Atlanta": { zh: "亞特蘭大", coords: [33.7490, -84.3880], landmark: "Centennial Park", img: "https://images.unsplash.com/photo-1575030334114-2374b70b2d7d" },
+            "Charlotte": { zh: "夏洛特", coords: [35.2271, -80.8431], landmark: "Uptown Skyline", img: "https://images.unsplash.com/photo-1523293836414-f04e712e1f3b" },
+            "Chicago": { zh: "芝加哥", coords: [41.8781, -87.6298], landmark: "The Bean", img: "https://images.unsplash.com/photo-1494522855154-9297ac14b55f" },
+            "Nashville": { zh: "納許維爾", coords: [36.1627, -86.7816], landmark: "Music Row", img: "https://images.unsplash.com/photo-1541191993068-f0380ae71edc" },
+            "Dallas": { zh: "達拉斯", coords: [32.7767, -96.7970], landmark: "Reunion Tower", img: "https://images.unsplash.com/photo-1544006659-f0b21f04cb1d" },
+            "Austin": { zh: "奧斯丁", coords: [30.2672, -97.7431], landmark: "Texas Capitol", img: "https://images.unsplash.com/photo-1531218150217-54595bc2b934" },
+            "Houston": { zh: "休士頓", coords: [29.7604, -95.3698], landmark: "Space Center", img: "https://images.unsplash.com/photo-1530089711124-9ca31fb9e863" },
+            "Phoenix": { zh: "鳳凰城", coords: [33.4484, -112.0740], landmark: "Desert Botanical", img: "https://images.unsplash.com/photo-1545153996-8009ca01f973" },
+            "Tokyo": { zh: "東京", coords: [35.6762, 139.6503], landmark: "Tokyo Tower", img: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf" },
+            "Osaka": { zh: "大阪", coords: [34.6937, 135.5023], landmark: "Osaka Castle", img: "https://images.unsplash.com/photo-1590559899731-a382839e5549" },
+            "Fukuoka": { zh: "福岡", coords: [33.5902, 130.4017], landmark: "Hakata Bay", img: "https://images.unsplash.com/photo-1624253321171-1bd539fa7005" },
+            "Kyoto": { zh: "京都", coords: [35.0116, 135.7681], landmark: "Kinkaku-ji", img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e" },
+            "Sapporo": { zh: "札幌", coords: [43.0618, 141.3545], landmark: "Odori Park", img: "https://images.unsplash.com/photo-1578507065211-1c4e99a5fd24" },
+            "Yokohama": { zh: "橫濱", coords: [35.4437, 139.6380], landmark: "Minato Mirai", img: "https://images.unsplash.com/photo-1555529035-210da4ad17c7" },
+            "Nagoya": { zh: "名古屋", coords: [35.1815, 136.9066], landmark: "Nagoya Castle", img: "https://images.unsplash.com/photo-1599661046827-dacff0c0f09a" },
+            "Kawasaki": { zh: "川崎", coords: [35.5308, 139.7029], landmark: "Daishi Temple", img: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf" },
+            "Kobe": { zh: "神戶", coords: [34.6901, 135.1955], landmark: "Kobe Port", img: "https://images.unsplash.com/photo-1590559899731-a382839e5549" },
+            "Saitama": { zh: "埼玉", coords: [35.8617, 139.6455], landmark: "Railway Museum", img: "https://images.unsplash.com/photo-1555529035-210da4ad17c7" },
+            "Taipei": { zh: "台北", coords: [25.0330, 121.5654], landmark: "Taipei 101", img: "https://images.unsplash.com/photo-1563297050-4c7862d050bc" },
+            "Taichung": { zh: "台中", coords: [24.1477, 120.6736], landmark: "National Theater", img: "https://images.unsplash.com/photo-1592859600972-0b0803669cf3" },
+            "Tainan": { zh: "台南", coords: [22.9997, 120.2270], landmark: "Chihkan Tower", img: "https://images.unsplash.com/photo-1584270413639-d5ee397272cd" }
+        };
+
+        const map = L.map('map', { center: [30, 10], zoom: 3, zoomControl: false });
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; CARTO' }).addTo(map);
+
+        async function loadData() {
+            try {
+                // Try local development path first
+                let res = await fetch('../world_retirement_data.json');
+                if (!res.ok) {
+                    // Fallback for GitHub deployment (relative to current directory)
+                    res = await fetch('world_retirement_data.json');
+                }
+                fullData = await res.json();
+                updateMarkers();
+            } catch (e) { console.error("Data load failed", e); }
+        }
+
+        function setLang(lang) {
+            currentLang = lang;
+            const t = i18n[lang];
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+            document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+            document.getElementById('ui-title').textContent = t.title;
+            document.getElementById('ui-mode-label').textContent = t.modeLabel;
+            document.getElementById('ui-household-label').textContent = t.householdLabel;
+            document.getElementById('ui-budget-label').textContent = t.budgetLabel;
+            document.getElementById('ui-tips').innerHTML = t.tips;
+            document.getElementById('ui-visitor').textContent = t.visitor;
+            ['ess','com','lux','single','couple','family'].forEach(id => document.getElementById('txt-'+id).textContent = t[id]);
+            ['ess','com','lux','fail'].forEach(id => document.getElementById('leg-'+id).textContent = t[id]);
+            document.getElementById('lbl-modal-cost').textContent = t.costLabel;
+            document.getElementById('lbl-modal-goal').textContent = t.goalLabel;
+            updateMarkers();
+        }
+
+        function setChoice(type, val) {
+            if (type === 'lifestyle') currentMode = val;
+            if (type === 'household') currentHousehold = val;
+            document.querySelectorAll(`.${type}-btn`).forEach(btn => btn.classList.toggle('active', btn.dataset.val === val));
+            updateMarkers();
+        }
+
+        function formatCurrency(val) { return '$' + Math.round(val).toLocaleString('en-US'); }
+
+        function updateMarkers() {
+            const budget = parseFloat(document.getElementById('budget-slider').value);
+            markers.forEach(m => map.removeLayer(m));
+            markers.length = 0;
+            const modeColors = { 'Essential': '#a855f7', 'Comfortable': '#3b82f6', 'Luxury': '#10b981' };
+
+            Object.entries(fullData).forEach(([country, countryData]) => {
+                const citiesItems = countryData.Cities || countryData.States || {};
+                Object.entries(citiesItems).forEach(([cityName, data]) => {
+                    const meta = cityMeta[cityName] || { coords: [0,0], landmark: "Explore", img: "", zh: cityName };
+                    if (meta.coords[0] === 0) return;
+
+                    const monthlyCost = data[`monthly_living_cost_${currentHousehold}`] || (data.monthly_living_cost_couple * (currentHousehold === 'single' ? 0.7 : 1.5));
+                    const baseThresh = (monthlyCost * 12) / 0.04;
+                    const thresholds = { 'Essential': baseThresh, 'Comfortable': baseThresh * 1.5, 'Luxury': baseThresh * 2.0 };
+                    const goal = thresholds[currentMode];
+                    const color = budget >= goal ? modeColors[currentMode] : '#ef4444';
+
+                    const marker = L.circleMarker(meta.coords, { radius: 14, fillColor: color, color: "#fff", weight: 3, opacity: 1, fillOpacity: 0.9 }).addTo(map);
+                    
+                    const displayName = currentLang === 'zh' ? meta.zh : cityName;
+                    marker.bindTooltip(`
+                        <div style="text-align:center">
+                            <b>${displayName}</b><br>
+                            <img src="${meta.img}" class="tooltip-img" onerror="this.style.display='none'">
+                        </div>
+                    `, { className: 'leaflet-tooltip-custom', direction: 'top', offset: [0, -10] });
+
+                    marker.on('click', () => {
+                        const t = i18n[currentLang];
+                        document.getElementById('city-img').src = meta.img;
+                        document.getElementById('landmark-name').textContent = meta.landmark;
+                        document.getElementById('modal-country').textContent = country;
+                        document.getElementById('modal-city').textContent = displayName;
+                        document.getElementById('stat-cost').textContent = formatCurrency(monthlyCost);
+                        document.getElementById('stat-goal').textContent = formatCurrency(goal);
+                        const badge = document.getElementById('reached-badge');
+                        badge.textContent = budget >= goal ? t.reached : t.notReached;
+                        badge.className = `reached-badge ${budget >= goal ? 'badge-yes' : 'badge-no'}`;
+                        document.getElementById('detail-modal').style.display = 'flex';
+                    });
+                    markers.push(marker);
+                });
+            });
+        }
+
+        function closeModal() { document.getElementById('detail-modal').style.display = 'none'; }
+        document.getElementById('budget-slider').addEventListener('input', (e) => {
+            document.getElementById('budget-display').textContent = formatCurrency(e.target.value);
+            updateMarkers();
+        });
+
+        // Mock visitor count
+        document.getElementById('visitor-val').textContent = Math.floor(Math.random() * 5000 + 1000).toLocaleString();
+
+        loadData();
+        setLang('en');
+    </script>
+</body>
+</html>

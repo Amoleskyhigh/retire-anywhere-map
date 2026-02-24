@@ -1,0 +1,30 @@
+{
+  "Thailand": {
+    "Cities": {
+      "Bangkok": { "zh": "曼谷", "monthly_living_cost_single": 1100, "monthly_living_cost_couple": 1800, "monthly_living_cost_family": 3500 },
+      "Chiang Mai": { "zh": "清邁", "monthly_living_cost_single": 700, "monthly_living_cost_couple": 1100, "monthly_living_cost_family": 2200 },
+      "Phuket": { "zh": "普吉島", "monthly_living_cost_single": 900, "monthly_living_cost_couple": 1500, "monthly_living_cost_family": 3000 },
+      "Pattaya": { "zh": "芭達雅", "monthly_living_cost_single": 800, "monthly_living_cost_couple": 1300, "monthly_living_cost_family": 2600 },
+      "Koh Samui": { "zh": "蘇美島", "monthly_living_cost_single": 1000, "monthly_living_cost_couple": 1600, "monthly_living_cost_family": 3200 },
+      "Hua Hin": { "zh": "華欣", "monthly_living_cost_single": 750, "monthly_living_cost_couple": 1200, "monthly_living_cost_family": 2400 },
+      "Khon Kaen": { "zh": "孔敬", "monthly_living_cost_single": 550, "monthly_living_cost_couple": 900, "monthly_living_cost_family": 1800 },
+      "Rayong": { "zh": "羅勇", "monthly_living_cost_single": 650, "monthly_living_cost_couple": 1000, "monthly_living_cost_family": 2000 },
+      "Udon Thani": { "zh": "烏隆他尼", "monthly_living_cost_single": 500, "monthly_living_cost_couple": 850, "monthly_living_cost_family": 1700 },
+      "Nonthaburi": { "zh": "暖武里", "monthly_living_cost_single": 850, "monthly_living_cost_couple": 1400, "monthly_living_cost_family": 2800 }
+    }
+  },
+  "Taiwan": {
+    "Cities": {
+      "Taipei": { "zh": "台北", "monthly_living_cost_single": 1300, "monthly_living_cost_couple": 2200, "monthly_living_cost_family": 4200 },
+      "New Taipei": { "zh": "新北", "monthly_living_cost_single": 1100, "monthly_living_cost_couple": 1800, "monthly_living_cost_family": 3500 },
+      "Hsinchu": { "zh": "新竹", "monthly_living_cost_single": 1200, "monthly_living_cost_couple": 2000, "monthly_living_cost_family": 3800 },
+      "Taichung": { "zh": "台中", "monthly_living_cost_single": 1000, "monthly_living_cost_couple": 1600, "monthly_living_cost_family": 3200 },
+      "Taoyuan": { "zh": "桃園", "monthly_living_cost_single": 950, "monthly_living_cost_couple": 1500, "monthly_living_cost_family": 3000 },
+      "Kaohsiung": { "zh": "高雄", "monthly_living_cost_single": 900, "monthly_living_cost_couple": 1450, "monthly_living_cost_family": 2900 },
+      "Tainan": { "zh": "台南", "monthly_living_cost_single": 850, "monthly_living_cost_couple": 1350, "monthly_living_cost_family": 2700 },
+      "Keelung": { "zh": "基隆", "monthly_living_cost_single": 800, "monthly_living_cost_couple": 1300, "monthly_living_cost_family": 2600 },
+      "Chiayi": { "zh": "嘉義", "monthly_living_cost_single": 750, "monthly_living_cost_couple": 1200, "monthly_living_cost_family": 2400 },
+      "Hualien": { "zh": "花蓮", "monthly_living_cost_single": 800, "monthly_living_cost_couple": 1300, "monthly_living_cost_family": 2600 }
+    }
+  }
+}

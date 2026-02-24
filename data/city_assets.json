@@ -1,0 +1,10 @@
+{
+  "New York City": { "landmark": "Statue of Liberty", "img": "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9", "zh_landmark": "自由女神像" },
+  "San Francisco": { "landmark": "Golden Gate Bridge", "img": "https://images.unsplash.com/photo-1449034446853-66c86144b0ad", "zh_landmark": "金門大橋" },
+  "San Jose": { "landmark": "Santana Row", "img": "https://images.unsplash.com/photo-1544006659-f0b21f04cb1d", "zh_landmark": "桑塔納大街" },
+  "Tokyo": { "landmark": "Tokyo Tower", "img": "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf", "zh_landmark": "東京鐵塔" },
+  "Osaka": { "landmark": "Osaka Castle", "img": "https://images.unsplash.com/photo-1590559899731-a382839e5549", "zh_landmark": "大阪城" },
+  "Bangkok": { "landmark": "Wat Arun", "img": "https://images.unsplash.com/photo-1563492065599-3520f775eeed", "zh_landmark": "鄭王廟" },
+  "Taipei": { "landmark": "Taipei 101", "img": "https://images.unsplash.com/photo-1563297050-4c7862d050bc", "zh_landmark": "台北 101" },
+  "Chiang Mai": { "landmark": "Wat Phra That Doi Suthep", "img": "https://images.unsplash.com/photo-1598970605070-a38a6ccd3a2d", "zh_landmark": "雙龍寺" }
+}

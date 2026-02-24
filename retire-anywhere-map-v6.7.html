@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retire Anywhere V6.7 - Professional Global Explorer</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-cyan: #00bcd4;
+            --dark-bg: #0f172a;
+            --panel-bg: rgba(15, 23, 42, 0.95);
+            --text-color: #f8fafc;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+            --accent-blue: #3b82f6;
+            --error-red: #ef4444;
+        }
+
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Inter', sans-serif; background-color: var(--dark-bg); color: var(--text-color); overflow: hidden; }
+        #map { height: 100vh; width: 100vw; z-index: 1; background: #0b1120; }
+
+        .ui-panel {
+            position: absolute; top: 20px; right: 20px; width: 340px; background: var(--panel-bg);
+            padding: 24px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            backdrop-filter: blur(16px); z-index: 1000; border: 1px solid rgba(255,255,255,0.1);
+            max-height: 85vh; overflow-y: auto;
+        }
+
+        .lang-switcher { position: absolute; top: 20px; left: 20px; display: flex; gap: 8px; z-index: 1001; }
+        .lang-btn { background: var(--panel-bg); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 16px; border-radius: 12px; cursor: pointer; font-size: 0.85rem; backdrop-filter: blur(12px); transition: 0.3s; }
+        .lang-btn.active { background: var(--primary-cyan); border-color: var(--primary-cyan); font-weight: bold; }
+
+        h1 { font-size: 1.5rem; margin: 0 0 20px 0; font-weight: 900; background: linear-gradient(to right, #60a5fa, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; }
+
+        .nav-tabs { display: flex; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; gap: 10px; }
+        .nav-tab { padding: 10px; cursor: pointer; opacity: 0.5; font-weight: bold; font-size: 0.9rem; }
+        .nav-tab.active { opacity: 1; color: var(--primary-cyan); border-bottom: 2px solid var(--primary-cyan); }
+
+        .input-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.8rem; margin-bottom: 8px; opacity: 0.7; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+        .btn-group { display: flex; gap: 6px; margin-bottom: 10px; }
+        .choice-btn { flex: 1; padding: 10px 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; cursor: pointer; font-size: 0.7rem; transition: 0.3s; }
+        
+        .choice-btn.active[data-type="lifestyle"][data-val="Essential"] { border-color: var(--accent-purple); background: rgba(168, 85, 247, 0.2); }
+        .choice-btn.active[data-type="lifestyle"][data-val="Comfortable"] { border-color: var(--accent-blue); background: rgba(59, 130, 246, 0.2); }
+        .choice-btn.active[data-type="lifestyle"][data-val="Luxury"] { border-color: var(--accent-green); background: rgba(16, 185, 129, 0.2); }
+        .choice-btn.active[data-type="household"] { border-color: var(--primary-cyan); background: rgba(0, 188, 212, 0.2); }
+
+        input[type=range] { width: 100%; height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 5px; outline: none; -webkit-appearance: none; accent-color: var(--primary-cyan); }
+
+        .leaflet-tooltip-custom {
+            background: var(--panel-bg) !important; color: white !important; border: 1px solid rgba(255,255,255,0.2) !important;
+            border-radius: 12px !important; padding: 10px !important; box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
+            backdrop-filter: blur(8px) !important; font-size: 0.9rem !important;
+        }
+        .tooltip-img { width: 140px; height: 80px; border-radius: 8px; object-fit: cover; display: block; margin-top: 8px; }
+
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); justify-content: center; align-items: center; backdrop-filter: blur(15px); }
+        .modal-content { background: #1e293b; border-radius: 32px; width: 500px; max-width: 90%; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); }
+        .city-image { width: 100%; height: 280px; object-fit: cover; }
+        .modal-details { padding: 32px; }
+        .city-title { font-size: 2.2rem; font-weight: 900; margin: 0; }
+        .landmark-tag { background: var(--primary-cyan); color: #000; padding: 5px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 900; margin-top: 10px; display: inline-block; }
+        .city-description { margin-top: 15px; font-size: 0.95rem; opacity: 0.8; line-height: 1.6; }
+        
+        .stat-box { display: flex; justify-content: space-between; padding: 18px; background: rgba(255,255,255,0.03); border-radius: 20px; margin-top: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .stat-item { text-align: center; flex: 1; }
+        .stat-label { font-size: 0.7rem; opacity: 0.5; display: block; margin-bottom: 6px; text-transform: uppercase; }
+        .stat-value { font-size: 1.2rem; font-weight: bold; color: var(--primary-cyan); }
+
+        .reached-badge { display: block; margin-top: 20px; padding: 12px; border-radius: 14px; font-weight: 900; font-size: 0.9rem; text-align: center; }
+        .badge-yes { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
+        .badge-no { background: rgba(239, 68, 68, 0.2); color: var(--error-red); border: 1px solid var(--error-red); }
+
+        .close-modal { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: rgba(0,0,0,0.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; z-index: 10; font-size: 24px; }
+
+        .postcard-editor { display: none; flex-direction: column; gap: 15px; }
+        .postcard-input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; color: white; width: 100%; box-sizing: border-box; }
+        .share-btn { width: 100%; padding: 14px; border-radius: 12px; background: linear-gradient(135deg, #6366f1, #a855f7); color: white; font-weight: bold; border: none; cursor: pointer; font-size: 0.85rem; }
+        .stamp-selector { display: flex; gap: 10px; margin-top: 5px; }
+        .stamp-opt { width: 40px; height: 40px; border: 2px solid transparent; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); font-size: 1.2rem; }
+        .stamp-opt.selected { border-color: var(--primary-cyan); background: rgba(0, 188, 212, 0.2); }
+
+        #postcard-canvas { display: none; }
+        #postcard-img { max-width: 100%; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); cursor: pointer; }
+
+        .legend { position: absolute; bottom: 30px; left: 20px; background: var(--panel-bg); padding: 14px 24px; border-radius: 16px; font-size: 0.8rem; z-index: 1000; display: flex; gap: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        .legend-item { display: flex; align-items: center; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .footer-info { position: absolute; bottom: 20px; right: 20px; z-index: 1000; background: var(--panel-bg); padding: 10px 20px; border-radius: 12px; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body>
+
+    <div class="lang-switcher">
+        <button id="btn-en" class="lang-btn active" onclick="setLang('en')">English</button>
+        <button id="btn-zh" class="lang-btn" onclick="setLang('zh')">繁體中文</button>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="ui-panel">
+        <h1 id="ui-title">Retire Anywhere V6.7</h1>
+        
+        <div class="nav-tabs">
+            <div id="tab-map" class="nav-tab active" onclick="switchTab('map')">Explorer</div>
+            <div id="tab-postcard" class="nav-tab" onclick="switchTab('postcard')">Postcard Studio</div>
+        </div>
+
+        <div id="panel-map">
+            <div class="input-group">
+                <label id="ui-mode-label">Lifestyle</label>
+                <div class="btn-group">
+                    <button class="choice-btn lifestyle-btn active" data-type="lifestyle" data-val="Essential" onclick="setChoice('lifestyle', 'Essential')">🟣 <span id="txt-ess">Essential</span></button>
+                    <button class="choice-btn lifestyle-btn" data-type="lifestyle" data-val="Comfortable" onclick="setChoice('lifestyle', 'Comfortable')">🔵 <span id="txt-com">Comfortable</span></button>
+                    <button class="choice-btn lifestyle-btn" data-type="lifestyle" data-val="Luxury" onclick="setChoice('lifestyle', 'Luxury')">🟢 <span id="txt-lux">Luxury</span></button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label id="ui-household-label">Household</label>
+                <div class="btn-group">
+                    <button class="choice-btn household-btn" data-type="household" data-val="single" onclick="setChoice('household', 'single')">👤 <span id="txt-single">Single</span></button>
+                    <button class="choice-btn household-btn active" data-type="household" data-val="couple" onclick="setChoice('household', 'couple')">👥 <span id="txt-couple">Couple</span></button>
+                    <button class="choice-btn household-btn" data-type="household" data-val="family" onclick="setChoice('household', 'family')">👨‍👩‍👧‍👦 <span id="txt-family">Family</span></button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label><span id="ui-budget-label">Assets (USD)</span>: <span id="budget-display" style="font-weight:bold; color:var(--primary-cyan)">$3,000,000</span></label>
+                <input type="range" id="budget-slider" min="100000" max="10000000" step="50000" value="3000000">
+            </div>
+
+            <div onclick="showMethodology()" style="font-size: 0.75rem; color: var(--primary-cyan); cursor: pointer; text-decoration: underline; margin-top: 10px;" id="ui-meth-link">Methodology & Calculations</div>
+        </div>
+
+        <div id="panel-postcard" class="postcard-editor">
+            <div class="input-group">
+                <label id="ui-pc-msg-label">Handwritten Message</label>
+                <textarea id="postcard-msg" class="postcard-input" rows="3">Wishing you were here in my future retirement!</textarea>
+            </div>
+            <div class="input-group">
+                <label id="ui-pc-stamp-label">Select Stamp</label>
+                <div class="stamp-selector">
+                    <div class="stamp-opt selected" data-stamp="✈️" onclick="setStamp('✈️')">✈️</div>
+                    <div class="stamp-opt" data-stamp="🌴" onclick="setStamp('🌴')">🌴</div>
+                    <div class="stamp-opt" data-stamp="⛩️" onclick="setStamp('⛩️')">⛩️</div>
+                    <div class="stamp-opt" data-stamp="🏙️" onclick="setStamp('🏙️')">🏙️</div>
+                </div>
+            </div>
+            <div class="input-group">
+                <label id="ui-pc-city-label">Select City Photo</label>
+                <select id="postcard-city-select" class="postcard-input"></select>
+            </div>
+            <button class="share-btn" onclick="generatePostcard()">✨ <span id="ui-pc-gen-btn">Generate & Preview</span></button>
+        </div>
+    </div>
+
+    <div class="legend">
+        <div class="legend-item"><div class="dot" style="background:var(--accent-purple)"></div> <span id="leg-ess">Essential</span></div>
+        <div class="legend-item"><div class="dot" style="background:var(--accent-blue)"></div> <span id="leg-com">Comfortable</span></div>
+        <div class="legend-item"><div class="dot" style="background:var(--accent-green)"></div> <span id="leg-lux">Luxury</span></div>
+        <div class="legend-item"><div class="dot" style="background:var(--error-red)"></div> <span id="leg-fail">Needed</span></div>
+    </div>
+
+    <div class="footer-info">
+        <span id="ui-visitor">Visitors</span>: <span id="visitor-val" style="color:var(--primary-cyan)">7,281</span>
+    </div>
+
+    <div id="detail-modal" class="modal">
+        <div class="modal-content">
+            <div class="close-modal" onclick="closeModal()">&times;</div>
+            <img src="" id="city-img" class="city-image">
+            <div class="modal-details">
+                <div id="modal-country" class="country-title"></div>
+                <div id="modal-city" class="city-title"></div>
+                <div id="landmark-tag" class="landmark-tag"></div>
+                <div id="city-desc" class="city-description"></div>
+                <div class="stat-box">
+                    <div class="stat-item"><span class="stat-label" id="lbl-modal-cost">Monthly Cost</span><span id="stat-cost" class="stat-value"></span></div>
+                    <div class="stat-item" style="border-left: 1px solid rgba(255,255,255,0.1);"><span class="stat-label" id="lbl-modal-goal">Goal Assets</span><span id="stat-goal" class="stat-value"></span></div>
+                </div>
+                <div id="reached-badge" class="reached-badge"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="meth-modal" class="modal">
+        <div class="modal-content" style="padding: 32px; max-height: 80vh; overflow-y: auto;">
+            <div class="close-modal" onclick="closeModal()">&times;</div>
+            <h2 id="meth-title" style="color:var(--primary-cyan)">Methodology</h2>
+            <div id="meth-body" style="font-size: 0.95rem; line-height: 1.6; opacity: 0.9;"></div>
+        </div>
+    </div>
+
+    <div id="postcard-modal" class="modal">
+        <div class="modal-content" style="background: #fdf6e3; padding: 20px; width: 840px;">
+            <div class="close-modal" onclick="closeModal()" style="background: rgba(0,0,0,0.1); color: #5c4b37;">&times;</div>
+            <div class="postcard-preview-container">
+                <img id="postcard-img" src="" style="width: 800px; height: 500px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                <p style="margin-top: 15px; font-size: 0.9rem; font-style: italic; color: #5c4b37;">Right-click or long-press to save your retirement dream.</p>
+            </div>
+        </div>
+    </div>
+    <canvas id="postcard-canvas" width="800" height="500"></canvas>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        let currentLang = 'en';
+        let currentMode = 'Essential';
+        let currentHousehold = 'couple';
+        let currentStamp = '✈️';
+        let fullData = {};
+        const markers = [];
+
+        const i18n = {
+            en: {
+                title: "Retire Anywhere V6.7", tabMap: "Explorer", tabPostcard: "Postcard Studio",
+                ess: "Essential", com: "Comfortable", lux: "Luxury", single: "Single", couple: "Couple", family: "Family",
+                reached: "TARGET REACHED", notReached: "ASSETS NEEDED", costLabel: "Monthly Cost", goalLabel: "Goal Assets",
+                fail: "Needed", visitor: "Visitors", methLink: "Methodology & Calculations",
+                pcMsgLabel: "Handwritten Message", pcStampLabel: "Select Stamp", pcCityLabel: "Select City Photo", pcGenBtn: "Generate & Preview",
+                methTitle: "How are these calculated?",
+                methContent: `
+                    <p><b>1. Monthly Living Cost:</b> Derived from 2025-2026 cost-of-living indices (Numbeo, MIT Living Wage). Includes rent, food, transport, and utilities.</p>
+                    <p><b>2. Target Asset:</b> Calculated using the <b>4% Safe Withdrawal Rate (SWR)</b>. Formula: (Annual Cost) ÷ 0.04.</p>
+                    <p><b>3. Lifestyles:</b><br>
+                    • <b>Essential:</b> Covers basic necessities and standard housing.<br>
+                    • <b>Comfortable:</b> Essential + 50% buffer for travel and leisure.<br>
+                    • <b>Luxury:</b> Essential × 2 for premium lifestyle and high-end housing.</p>
+                `
+            },
+            zh: {
+                title: "全球退休夢想圖 V6.7", tabMap: "地圖探索", tabPostcard: "明信片工作室",
+                ess: "基本生活", com: "舒適生活", lux: "奢華生活", single: "單人", couple: "雙人", family: "一家四口",
+                reached: "已達成目標", notReached: "尚需資產", costLabel: "預估月支出", goalLabel: "目標總資產",
+                fail: "尚未達標", visitor: "訪客人數", methLink: "數據與計算基準說明",
+                pcMsgLabel: "手寫心情文字", pcStampLabel: "選擇郵戳", pcCityLabel: "選擇城市照片", pcGenBtn: "生成預覽",
+                methTitle: "數據與計算基準說明",
+                methContent: `
+                    <p><b>1. 每月生活費：</b> 參考 2025-2026 Numbeo 與 MIT Living Wage 最新數據。包含租金、伙食、交通、水電網路等核心支出。</p>
+                    <p><b>2. 目標總資產：</b> 採用國際通用的 <b>4% 提領率 (Safe Withdrawal Rate)</b>。公式為：(年支出) ÷ 0.04。</p>
+                    <p><b>3. 生活水平定義：</b><br>
+                    • <b>基本生活：</b> 涵蓋所有核心需求與平均水準住房。<br>
+                    • <b>舒適生活：</b> 基本支出的 1.5 倍（包含旅遊與娛樂緩衝）。<br>
+                    • <b>奢華生活：</b> 基本支出的 2 倍（高階住房與頂級生活享受）。</p>
+                `
+            }
+        };
+
+        const map = L.map('map', { center: [30, 10], zoom: 3, zoomControl: false });
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; CARTO' }).addTo(map);
+
+        async function loadData() {
+            try {
+                let res = await fetch('world_retirement_data.json');
+                if (!res.ok) res = await fetch('../world_retirement_data.json');
+                fullData = await res.json();
+                populateCitySelect();
+                updateMarkers();
+            } catch (e) { console.error("Load failed", e); }
+        }
+
+        function setLang(lang) {
+            currentLang = lang;
+            const t = i18n[lang];
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.id === 'btn-'+lang));
+            document.getElementById('ui-title').textContent = t.title;
+            document.getElementById('tab-map').textContent = t.tabMap;
+            document.getElementById('tab-postcard').textContent = t.tabPostcard;
+            document.getElementById('ui-pc-msg-label').textContent = t.pcMsgLabel;
+            document.getElementById('ui-pc-stamp-label').textContent = t.pcStampLabel;
+            document.getElementById('ui-pc-city-label').textContent = t.pcCityLabel;
+            document.getElementById('ui-pc-gen-btn').textContent = t.pcGenBtn;
+            document.getElementById('ui-visitor').textContent = t.visitor;
+            document.getElementById('ui-meth-link').textContent = t.methLink;
+            ['ess','com','lux','single','couple','family'].forEach(id => document.getElementById('txt-'+id).textContent = t[id]);
+            ['ess','com','lux','fail'].forEach(id => document.getElementById('leg-'+id).textContent = t[id]);
+            updateMarkers();
+            populateCitySelect();
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-'+tab).classList.add('active');
+            document.getElementById('panel-map').style.display = tab === 'map' ? 'block' : 'none';
+            document.getElementById('panel-postcard').style.display = tab === 'postcard' ? 'flex' : 'none';
+        }
+
+        function setChoice(type, val) {
+            if (type === 'lifestyle') currentMode = val;
+            if (type === 'household') currentHousehold = val;
+            document.querySelectorAll(`.${type}-btn`).forEach(btn => btn.classList.toggle('active', btn.dataset.val === val));
+            updateMarkers();
+        }
+
+        function setStamp(emoji) {
+            currentStamp = emoji;
+            document.querySelectorAll('.stamp-opt').forEach(opt => opt.classList.toggle('selected', opt.dataset.stamp === emoji));
+        }
+
+        function populateCitySelect() {
+            const select = document.getElementById('postcard-city-select');
+            const currentVal = select.value;
+            select.innerHTML = '<option value="">-- Select city --</option>';
+            Object.values(fullData).forEach(country => {
+                Object.entries(country.Cities).forEach(([name, data]) => {
+                    const opt = document.createElement('option');
+                    opt.value = name;
+                    opt.textContent = currentLang === 'zh' ? data.zh : name;
+                    select.appendChild(opt);
+                });
+            });
+            select.value = currentVal;
+        }
+
+        function formatCurrency(val) { return '$' + Math.round(val).toLocaleString('en-US'); }
+
+        function updateMarkers() {
+            const budget = parseFloat(document.getElementById('budget-slider').value);
+            markers.forEach(m => map.removeLayer(m));
+            markers.length = 0;
+            const modeColors = { 'Essential': '#a855f7', 'Comfortable': '#3b82f6', 'Luxury': '#10b981' };
+
+            Object.entries(fullData).forEach(([country, countryData]) => {
+                Object.entries(countryData.Cities).forEach(([cityName, data]) => {
+                    const cost = data[`monthly_living_cost_${currentHousehold}`];
+                    const baseThresh = (cost * 12) / 0.04;
+                    const goal = baseThresh * (currentMode === 'Essential' ? 1 : (currentMode === 'Comfortable' ? 1.5 : 2));
+                    const isReached = budget >= goal;
+                    
+                    const marker = L.circleMarker(data.coords, { radius: isReached ? 16 : 10, fillColor: isReached ? modeColors[currentMode] : '#ef4444', color: "#fff", weight: 2, opacity: 1, fillOpacity: 0.8 }).addTo(map);
+                    const name = currentLang === 'zh' ? data.zh : cityName;
+                    
+                    marker.bindTooltip(`<div style="text-align:center"><b>${name}</b><br><img src="${data.img}" class="tooltip-img"></div>`, { className: 'leaflet-tooltip-custom', direction: 'top', offset: [0, -10] });
+                    
+                    marker.on('click', () => {
+                        const t = i18n[currentLang];
+                        document.getElementById('city-img').src = data.img;
+                        document.getElementById('modal-country').textContent = country;
+                        document.getElementById('modal-city').textContent = name;
+                        document.getElementById('landmark-tag').textContent = (currentLang === 'zh' ? data.zh_landmark : data.landmark);
+                        document.getElementById('city-desc').textContent = (currentLang === 'zh' ? data.zh_desc : data.desc);
+                        document.getElementById('stat-cost').textContent = formatCurrency(cost);
+                        document.getElementById('stat-goal').textContent = formatCurrency(goal);
+                        const badge = document.getElementById('reached-badge');
+                        badge.textContent = isReached ? t.reached : t.notReached;
+                        badge.className = `reached-badge ${isReached ? 'badge-yes' : 'badge-no'}`;
+                        document.getElementById('detail-modal').style.display = 'flex';
+                    });
+                    markers.push(marker);
+                });
+            });
+        }
+
+        async function generatePostcard() {
+            const canvas = document.getElementById('postcard-canvas');
+            const ctx = canvas.getContext('2d');
+            const msg = document.getElementById('postcard-msg').value;
+            const cityName = document.getElementById('postcard-city-select').value;
+            const budgetStr = document.getElementById('budget-display').textContent;
+            
+            ctx.fillStyle = "#fdf6e3"; ctx.fillRect(0, 0, 800, 500);
+            ctx.strokeStyle = "#5c4b37"; ctx.lineWidth = 2; ctx.strokeRect(20, 20, 760, 460);
+            
+            ctx.fillStyle = "#5c4b37";
+            ctx.font = "bold 32px 'Nothing You Could Do', cursive";
+            ctx.fillText(msg.substring(0, 45), 50, 80);
+            if (msg.length > 45) ctx.fillText(msg.substring(45, 90), 50, 125);
+            
+            ctx.font = "bold 20px 'Inter'";
+            ctx.fillText(`My Budget: ${budgetStr}`, 50, 190);
+            ctx.fillText(`Goal: ${currentMode} Lifestyle`, 50, 220);
+            
+            if (cityName) {
+                let cityData = null;
+                Object.values(fullData).forEach(c => { if(c.Cities[cityName]) cityData = c.Cities[cityName]; });
+                const img = new Image(); 
+                img.crossOrigin = "anonymous";
+                img.src = cityData.img;
+                await new Promise((resolve) => { img.onload = resolve; img.onerror = resolve; });
+                ctx.drawImage(img, 50, 250, 320, 180);
+                ctx.strokeStyle = "#fff"; ctx.lineWidth = 8; ctx.strokeRect(50, 250, 320, 180);
+                ctx.fillStyle = "#5c4b37"; ctx.font = "italic 14px 'Inter'";
+                ctx.fillText(currentLang === 'zh' ? cityData.zh : cityName, 50, 450);
+            }
+
+            ctx.setLineDash([5, 5]); ctx.strokeRect(650, 50, 100, 120); ctx.setLineDash([]);
+            ctx.font = "40px 'Inter'"; ctx.fillText(currentStamp, 675, 115);
+            
+            ctx.font = "bold 18px 'Inter'"; ctx.fillText("Top Destinations Reached:", 430, 250);
+            let y = 285; let count = 0;
+            const currentBudget = parseFloat(document.getElementById('budget-slider').value);
+            Object.values(fullData).forEach(cData => {
+                Object.values(cData.Cities).forEach(d => {
+                    const cost = d[`monthly_living_cost_${currentHousehold}`];
+                    const goal = (cost * 12 / 0.04) * (currentMode === 'Essential' ? 1 : (currentMode === 'Comfortable' ? 1.5 : 2));
+                    if (currentBudget >= goal && count < 6) {
+                        ctx.font = "16px 'Inter'";
+                        ctx.fillText(`• ${currentLang === 'zh' ? d.zh : Object.keys(cData.Cities).find(key => cData.Cities[key] === d)}`, 430, y);
+                        y += 28; count++;
+                    }
+                });
+            });
+
+            document.getElementById('postcard-img').src = canvas.toDataURL("image/png");
+            document.getElementById('postcard-modal').style.display = 'flex';
+        }
+
+        function showMethodology() {
+            const t = i18n[currentLang];
+            document.getElementById('meth-title').textContent = t.methTitle;
+            document.getElementById('meth-body').innerHTML = t.methContent;
+            document.getElementById('meth-modal').style.display = 'flex';
+        }
+
+        function closeModal() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
+        document.getElementById('budget-slider').addEventListener('input', (e) => {
+            document.getElementById('budget-display').textContent = formatCurrency(e.target.value);
+            updateMarkers();
+        });
+
+        loadData();
+        setLang('en');
+    </script>
+</body>
+</html>
