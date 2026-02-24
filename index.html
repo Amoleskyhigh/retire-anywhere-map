@@ -260,10 +260,7 @@
 
         async function loadData() {
             try {
-                // IMPORTANT: For GitHub Pages, use relative paths to root.
-                // We've moved photos to map_v3/assets/cities/
                 let res = await fetch('world_retirement_data.json');
-                if (!res.ok) res = await fetch('../world_retirement_data.json');
                 fullData = await res.json();
                 populateCitySelect();
                 updateMarkers();
@@ -326,9 +323,8 @@
         function formatCurrency(val) { return '$' + Math.round(val).toLocaleString('en-US'); }
 
         function getImgPath(path) {
-            // Fix path for GitHub Pages root vs map_v3 subfolder
-            if (window.location.pathname.includes('map_v3')) return path;
-            return 'map_v3/' + path;
+            // Photos are in root assets/cities folder on GitHub
+            return path;
         }
 
         function updateMarkers() {
