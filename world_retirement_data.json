@@ -42,12 +42,12 @@
         "monthly_living_cost_single": 4200,
         "monthly_living_cost_couple": 5800,
         "monthly_living_cost_family": 9200,
-        "landmark": "Tech Museum",
-        "zh_landmark": "創新科技博物館",
+        "landmark": "Downtown San Jose",
+        "zh_landmark": "聖荷西市中心街道",
         "img": "assets/cities/san_jose.jpg",
-        "desc": "The technical heart of Silicon Valley.",
-        "zh_desc": "矽谷科技創新的核心地帶。",
-        "attribution": "Photo by Zir YU via Pexels"
+        "desc": "A vibrant storefront on a sunny street corner.",
+        "zh_desc": "矽谷核心地帶充滿都會氣息的街道景緻。",
+        "attribution": "Photo via Unsplash"
       },
       "Boston": {
         "zh": "波士頓",
@@ -58,12 +58,12 @@
         "monthly_living_cost_single": 4000,
         "monthly_living_cost_couple": 5500,
         "monthly_living_cost_family": 8500,
-        "landmark": "Faneuil Hall",
-        "zh_landmark": "法尼爾大廳",
+        "landmark": "Quincy Market",
+        "zh_landmark": "昆西市場與法尼爾大廳",
         "img": "assets/cities/boston.jpg",
-        "desc": "The 'Cradle of Liberty' in historic Boston.",
-        "zh_desc": "波士頓歷史悠久的自由搖籃市場。",
-        "attribution": "Photo by Aaron Johnson via Pexels"
+        "desc": "Historic brick architecture with a classic dome.",
+        "zh_desc": "波士頓最具歷史意義的集市與社交中心。",
+        "attribution": "Photo via Unsplash"
       },
       "Washington DC": {
         "zh": "華盛頓特區",
@@ -77,9 +77,9 @@
         "landmark": "Capitol Building",
         "zh_landmark": "國會大廈",
         "img": "assets/cities/washington_dc.jpg",
-        "desc": "The seat of American democracy.",
-        "zh_desc": "美國民主制度的權力中心。",
-        "attribution": "Photo by Trev W. Adams via Pexels"
+        "desc": "The majestic dome of the U.S. Capitol.",
+        "zh_desc": "美國民主制度的權力中心與雄偉圓頂建築。",
+        "attribution": "Photo via Unsplash"
       },
       "Seattle": {
         "zh": "西雅圖",
@@ -122,12 +122,12 @@
         "monthly_living_cost_single": 3400,
         "monthly_living_cost_couple": 4700,
         "monthly_living_cost_family": 7300,
-        "landmark": "Balboa Park",
-        "zh_landmark": "巴爾波亞公園",
+        "landmark": "California Tower",
+        "zh_landmark": "巴爾波亞公園與加州塔",
         "img": "assets/cities/san_diego.jpg",
-        "desc": "Lush oasis with museums and gardens.",
-        "zh_desc": "匯集博物館與綠地，充滿文化氣息的綠洲。",
-        "attribution": "Photo by Jon Mangold via Pexels"
+        "desc": "Iconic Spanish Colonial architecture in Balboa Park.",
+        "zh_desc": "聖地牙哥最美的文化公園與標誌性加州塔。",
+        "attribution": "Photo via Unsplash"
       },
       "Miami": {
         "zh": "邁阿密",
@@ -138,12 +138,12 @@
         "monthly_living_cost_single": 3200,
         "monthly_living_cost_couple": 4400,
         "monthly_living_cost_family": 6800,
-        "landmark": "South Beach",
-        "zh_landmark": "南海灘",
+        "landmark": "South Beach Lifeguard Tower",
+        "zh_landmark": "南海灘救生亭",
         "img": "assets/cities/miami.jpg",
-        "desc": "Vibrant beaches and Art Deco architecture.",
-        "zh_desc": "熱情奔放的海灘與裝飾藝術風格建築。",
-        "attribution": "Photo by Abhishek  Navlakha via Pexels"
+        "desc": "Colorful Art Deco lifeguard towers on the sand.",
+        "zh_desc": "邁阿密最著名的彩色救生亭與蔚藍海岸。",
+        "attribution": "Photo via Unsplash"
       },
       "Chicago": {
         "zh": "芝加哥",
@@ -266,12 +266,12 @@
         "monthly_living_cost_single": 2600,
         "monthly_living_cost_couple": 3600,
         "monthly_living_cost_family": 5500,
-        "landmark": "Centennial Olympic Park",
-        "zh_landmark": "百年奧運公園",
+        "landmark": "Atlanta Skyline",
+        "zh_landmark": "亞特蘭大天際線夜景",
         "img": "assets/cities/atlanta.jpg",
-        "desc": "Legacy of 1996 Olympics.",
-        "zh_desc": "1996 年奧運留給亞特蘭大的綠色遺產。",
-        "attribution": "Photo by Kelly via Pexels"
+        "desc": "Busy highway trails leading to the downtown skyline.",
+        "zh_desc": "喬治亞州繁華的交通脈動與現代摩天大樓景觀。",
+        "attribution": "Photo via Unsplash"
       },
       "Charlotte": {
         "zh": "夏洛特",
