@@ -27,8 +27,22 @@
             position: absolute; top: 20px; right: 20px; width: 340px; background: var(--panel-bg);
             padding: 24px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
             backdrop-filter: blur(16px); z-index: 1000; border: 1px solid rgba(255,255,255,0.1);
-            max-height: 85vh; overflow-y: auto;
+            max-height: 85vh; overflow-y: auto; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+        .ui-panel.collapsed {
+            width: 40px; height: 40px; padding: 0; overflow: hidden; border-radius: 12px;
+        }
+        
+        .toggle-panel {
+            position: absolute; top: 12px; right: 12px; cursor: pointer; z-index: 1001;
+            width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.1); border-radius: 6px; font-size: 14px; color: white;
+            transition: 0.3s;
+        }
+        .toggle-panel:hover { background: var(--primary-cyan); color: black; }
+        .collapsed .toggle-panel { top: 8px; right: 8px; }
+        .collapsed h1, .collapsed .nav-tabs, .collapsed #panel-map, .collapsed #panel-postcard { display: none; }
 
         .lang-switcher { position: absolute; top: 20px; left: 20px; display: flex; gap: 8px; z-index: 1001; }
         .lang-btn { background: var(--panel-bg); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 16px; border-radius: 12px; cursor: pointer; font-size: 0.85rem; backdrop-filter: blur(12px); transition: 0.3s; }
@@ -105,7 +119,8 @@
 
     <div id="map"></div>
 
-    <div class="ui-panel">
+    <div class="ui-panel" id="main-panel">
+        <div class="toggle-panel" id="panel-toggle-btn" onclick="togglePanel()" title="Collapse/Expand">−</div>
         <h1 id="ui-title">Retire Anywhere V7.0</h1>
         
         <div class="nav-tabs">
@@ -255,19 +270,26 @@
         };
 
         const map = L.map('map', { 
-            center: [30, 10], 
+            center: [25, 0], 
             zoom: 3, 
             zoomControl: false,
-            worldCopyJump: true,
-            maxBounds: [[-90, -180], [90, 180]],
+            worldCopyJump: false,
+            maxBounds: [[-85, -180], [85, 180]],
             maxBoundsViscosity: 1.0
         });
         L.control.zoom({ position: 'bottomright' }).addTo(map);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { 
             attribution: '&copy; CARTO',
             noWrap: true,
-            bounds: [[-90, -180], [90, 180]]
+            bounds: [[-85, -180], [85, 180]]
         }).addTo(map);
+
+        function togglePanel() {
+            const panel = document.getElementById('main-panel');
+            const btn = document.getElementById('panel-toggle-btn');
+            panel.classList.toggle('collapsed');
+            btn.textContent = panel.classList.contains('collapsed') ? '+' : '−';
+        }
 
         async function updateVisitorCount() {
             try {
