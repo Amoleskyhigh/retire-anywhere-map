@@ -663,5 +663,134 @@
         "attribution": "AI Generated"
       }
     }
+  },
+  "Costa Rica": {
+    "cost_of_living_index": 44.5,
+    "monthly_budget_usd": 2800,
+    "safety_index": 53.2,
+    "healthcare_quality_index": 78.4,
+    "climate_index": 82.0,
+    "visa_options": "Pensionado Visa ($1,000/mo)",
+    "Cities": {
+      "Tamarindo": {
+        "zh": "塔馬林多",
+        "coords": [10.3013, -85.84],
+        "monthly_living_cost_couple": 2800,
+        "landmark": "Tamarindo Beach",
+        "zh_landmark": "塔馬林多海灘",
+        "img": "assets/cities/tamarindo.jpg",
+        "desc": "Surfers paradise and tropical vibes.",
+        "zh_desc": "衝浪者的天堂，充滿熱帶度假風情的蔚藍海岸。",
+        "attribution": "Photo via Unsplash"
+      },
+      "Grecia": {
+        "zh": "格雷西亞",
+        "coords": [10.0734, -84.3123],
+        "monthly_living_cost_couple": 2200,
+        "landmark": "Metal Church",
+        "zh_landmark": "格雷西亞金屬教堂",
+        "img": "assets/cities/grecia.jpg",
+        "desc": "Cleanest city in Latin America with mountain views.",
+        "zh_desc": "拉丁美洲最乾淨的城市，擁有壯麗的山景與宜人氣候。",
+        "attribution": "Photo via Unsplash"
+      },
+      "Puerto Viejo": {
+        "zh": "波多維耶荷",
+        "coords": [9.6553, -82.7538],
+        "monthly_living_cost_couple": 2400,
+        "landmark": "Jaguar Rescue Center",
+        "zh_landmark": "美洲豹救援中心",
+        "img": "assets/cities/puerto_viejo.jpg",
+        "desc": "Lush jungle meeting turquoise Caribbean sea.",
+        "zh_desc": "加勒比海岸的秘境，森林與海洋交織的自然天堂。",
+        "attribution": "Photo via Unsplash"
+      }
+    }
+  },
+  "Mexico": {
+    "cost_of_living_index": 38.2,
+    "monthly_budget_usd": 2500,
+    "safety_index": 46.8,
+    "healthcare_quality_index": 71.5,
+    "climate_index": 88.0,
+    "visa_options": "Temporary Resident Visa",
+    "Cities": {
+      "San Miguel de Allende": {
+        "zh": "聖米格爾",
+        "coords": [20.915, -100.743],
+        "monthly_living_cost_couple": 2500,
+        "landmark": "Parroquia de San Miguel",
+        "zh_landmark": "聖米格爾大教堂",
+        "img": "assets/cities/san_miguel_de_allende.jpg",
+        "desc": "Iconic pink gothic-style colonial church.",
+        "zh_desc": "標誌性的粉紅色哥德式殖民時期教堂，藝術之城地標。",
+        "attribution": "Photo via Unsplash"
+      },
+      "Merida": {
+        "zh": "梅里達",
+        "coords": [20.9674, -89.5926],
+        "monthly_living_cost_couple": 2000,
+        "landmark": "Paseo de Montejo",
+        "zh_landmark": "蒙特霍大道",
+        "img": "assets/cities/merida.jpg",
+        "desc": "Safe White City with Mayan culture influence.",
+        "zh_desc": "全墨最安全的「白色之城」，融合瑪雅與殖民文化。",
+        "attribution": "Photo via Unsplash"
+      },
+      "Puerto Vallarta": {
+        "zh": "瓦雅塔港",
+        "coords": [20.6535, -105.2253],
+        "monthly_living_cost_couple": 2600,
+        "landmark": "The Malecon",
+        "zh_landmark": "瓦雅塔港海濱大道",
+        "img": "assets/cities/puerto_vallarta.jpg",
+        "desc": "Lively ocean boardwalk with Sierra Madre views.",
+        "zh_desc": "熱鬧的海濱長廊，背山面海的絕佳退休地點。",
+        "attribution": "Photo via Unsplash"
+      }
+    }
+  },
+  "Panama": {
+    "cost_of_living_index": 42.1,
+    "monthly_budget_usd": 2600,
+    "safety_index": 55.7,
+    "healthcare_quality_index": 68.9,
+    "climate_index": 75.0,
+    "visa_options": "Pensionado Visa ($1,000/mo)",
+    "Cities": {
+      "Coronado": {
+        "zh": "科羅納多",
+        "coords": [8.5333, -79.9],
+        "monthly_living_cost_couple": 2800,
+        "landmark": "Coronado Beach",
+        "zh_landmark": "科羅納多海灘",
+        "img": "assets/cities/coronado.jpg",
+        "desc": "Expat beachfront hub near Panama City.",
+        "zh_desc": "巴拿馬城近郊最受外籍人士歡迎的奢華海濱社區。",
+        "attribution": "Photo via Unsplash"
+      },
+      "Boquete": {
+        "zh": "波開特",
+        "coords": [8.7733, -82.4333],
+        "monthly_living_cost_couple": 2200,
+        "landmark": "Volcan Baru",
+        "zh_landmark": "巴魯火山",
+        "img": "assets/cities/boquete.jpg",
+        "desc": "Spring-like weather and coffee plantations.",
+        "zh_desc": "四季如春的山城，以頂級咖啡與純淨空氣聞名。",
+        "attribution": "Photo via Unsplash"
+      },
+      "Panama City": {
+        "zh": "巴拿馬城",
+        "coords": [8.9833, -79.5167],
+        "monthly_living_cost_couple": 3000,
+        "landmark": "Casco Viejo",
+        "zh_landmark": "舊城區",
+        "img": "assets/cities/panama_city.jpg",
+        "desc": "Fusion of colonial ruins and modern skyline.",
+        "zh_desc": "融合殖民遺跡與現代摩天大樓的國際大都會。",
+        "attribution": "Photo via Unsplash"
+      }
+    }
   }
 }
