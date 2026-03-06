@@ -397,8 +397,10 @@
             Object.entries(fullData).forEach(([country, countryData]) => {
                 Object.entries(countryData.Cities).forEach(([cityName, data]) => {
                     const cost = data[`monthly_living_cost_${currentHousehold}`];
+                    const multiplier = (currentMode === 'Essential' ? 1 : (currentMode === 'Comfortable' ? 1.5 : 2));
+                    const adjustedCost = cost * multiplier;
                     const baseThresh = (cost * 12) / 0.04;
-                    const goal = baseThresh * (currentMode === 'Essential' ? 1 : (currentMode === 'Comfortable' ? 1.5 : 2));
+                    const goal = baseThresh * multiplier;
                     const isReached = budget >= goal;
                     
                     const marker = L.circleMarker(data.coords, { radius: isReached ? 16 : 10, fillColor: isReached ? modeColors[currentMode] : '#ef4444', color: "#fff", weight: 2, opacity: 1, fillOpacity: 0.8 }).addTo(map);
@@ -414,7 +416,7 @@
                         document.getElementById('modal-city').textContent = name;
                         document.getElementById('landmark-tag').textContent = currentLang === 'zh' ? data.zh_landmark : data.landmark;
                         document.getElementById('city-desc').textContent = currentLang === 'zh' ? data.zh_desc : data.desc;
-                        document.getElementById('stat-cost').textContent = formatCurrency(cost);
+                        document.getElementById('stat-cost').textContent = formatCurrency(adjustedCost);
                         document.getElementById('stat-goal').textContent = formatCurrency(goal);
                         const badge = document.getElementById('reached-badge');
                         badge.textContent = isReached ? t.reached : t.notReached;
