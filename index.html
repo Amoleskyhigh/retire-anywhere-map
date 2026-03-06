@@ -257,7 +257,7 @@
                     <p><b>3. Lifestyles:</b><br>
                     • <b>Essential:</b> Covers basic necessities and standard housing.<br>
                     • <b>Comfortable:</b> Essential + 50% buffer for travel and leisure.<br>
-                    • <b>Luxury:</b> Essential × 2 for premium lifestyle and high-end housing.</p>
+                    • <b>Luxury:</b> Adopts a <b>Non-linear Luxury Multiplier (2.0x - 3.5x)</b>. In expensive cities like NYC or Tokyo, the marginal cost of premium living (prime real estate, private services) is significantly higher than in budget destinations.</p>
                 `
             },
             zh: {
@@ -273,7 +273,7 @@
                     <p><b>3. 生活水平定義：</b><br>
                     • <b>基本生活：</b> 涵蓋所有核心需求與平均水準住房。<br>
                     • <b>舒適生活：</b> 基本支出的 1.5 倍（包含旅遊與娛樂緩衝）。<br>
-                    • <b>奢華生活：</b> 基本支出的 2 倍（高階住房與頂級生活享受）。</p>
+                    • <b>奢華生活：</b> 採用 <b>非線性奢華倍率 (2.0x - 3.5x)</b>。昂貴城市（如紐約、東京）的奢華生活邊際成本更高（頂級地段租金、私人服務等），因此倍率更高以符合真實市場現況。</p>
                 `
             }
         };
@@ -397,7 +397,7 @@
             Object.entries(fullData).forEach(([country, countryData]) => {
                 Object.entries(countryData.Cities).forEach(([cityName, data]) => {
                     const cost = data[`monthly_living_cost_${currentHousehold}`];
-                    const multiplier = (currentMode === 'Essential' ? 1 : (currentMode === 'Comfortable' ? 1.5 : 2));
+                    const multiplier = (currentMode === 'Essential' ? 1 : (currentMode === 'Comfortable' ? 1.5 : (data.luxury_multiplier || 2)));
                     const adjustedCost = cost * multiplier;
                     const baseThresh = (cost * 12) / 0.04;
                     const goal = baseThresh * multiplier;
@@ -468,7 +468,7 @@
             Object.values(fullData).forEach(cData => {
                 Object.values(cData.Cities).forEach(d => {
                     const cost = d[`monthly_living_cost_${currentHousehold}`];
-                    const goal = (cost * 12 / 0.04) * (currentMode === 'Essential' ? 1 : (currentMode === 'Comfortable' ? 1.5 : 2));
+                    const goal = (cost * 12 / 0.04) * (currentMode === 'Essential' ? 1 : (currentMode === 'Comfortable' ? 1.5 : (d.luxury_multiplier || 2)));
                     if (currentBudget >= goal && count < 6) {
                         ctx.font = "16px 'Inter'";
                         ctx.fillText(`• ${currentLang === 'zh' ? d.zh : Object.keys(cData.Cities).find(key => cData.Cities[key] === d)}`, 430, y);

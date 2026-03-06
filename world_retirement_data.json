@@ -12,7 +12,8 @@
         "img": "assets/cities/new_york_city.jpg",
         "desc": "The soaring Art Deco symbol of NYC.",
         "zh_desc": "紐約天際線上最著名的裝飾藝術風格摩天大樓。",
-        "attribution": "Photo via Pexels"
+        "attribution": "Photo via Pexels",
+        "luxury_multiplier": 3.5
       },
       "San Francisco": {
         "zh": "舊金山",
@@ -25,7 +26,8 @@
         "img": "assets/cities/san_francisco.jpg",
         "desc": "The iconic orange suspension bridge.",
         "zh_desc": "舉世聞名的橘紅色懸索大橋，舊金山的象徵。",
-        "attribution": "Photo via Pexels"
+        "attribution": "Photo via Pexels",
+        "luxury_multiplier": 3.5
       },
       "San Jose": {
         "zh": "聖荷西",
@@ -38,7 +40,8 @@
         "img": "assets/cities/san_jose.jpg",
         "desc": "A vibrant storefront on a sunny street corner.",
         "zh_desc": "矽谷核心地帶充滿都會氣息的街道景緻。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 3.0
       },
       "Boston": {
         "zh": "波士頓",
@@ -51,7 +54,8 @@
         "img": "assets/cities/boston.jpg",
         "desc": "Historic brick architecture with a classic dome.",
         "zh_desc": "波士頓最具歷史意義的集市與社交中心。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 3.0
       },
       "Washington DC": {
         "zh": "華盛頓特區",
@@ -64,7 +68,8 @@
         "img": "assets/cities/washington_dc.jpg",
         "desc": "The majestic dome of the U.S. Capitol.",
         "zh_desc": "美國民主制度的權力中心與雄偉圓頂建築。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 3.0
       },
       "Seattle": {
         "zh": "西雅圖",
@@ -77,7 +82,8 @@
         "img": "assets/cities/seattle.jpg",
         "desc": "Observation tower with panoramic bay views.",
         "zh_desc": "擁有絕美海灣全景的高科技景觀塔。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 3.0
       },
       "Los Angeles": {
         "zh": "洛杉磯",
@@ -90,7 +96,8 @@
         "img": "assets/cities/los_angeles.jpg",
         "desc": "The world symbol of the film industry.",
         "zh_desc": "全球電影工業的終極文化象徵。",
-        "attribution": "Photo via Pexels"
+        "attribution": "Photo via Pexels",
+        "luxury_multiplier": 3.5
       },
       "San Diego": {
         "zh": "聖地牙哥",
@@ -103,7 +110,8 @@
         "img": "assets/cities/san_diego.jpg",
         "desc": "Iconic Spanish Colonial architecture in Balboa Park.",
         "zh_desc": "聖地牙哥最美的文化公園與標誌性加州塔。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 3.0
       },
       "Miami": {
         "zh": "邁阿密",
@@ -116,7 +124,8 @@
         "img": "assets/cities/miami.jpg",
         "desc": "Colorful Art Deco lifeguard towers on the sand.",
         "zh_desc": "邁阿密最著名的彩色救生亭與蔚藍海岸。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 3.5
       },
       "Chicago": {
         "zh": "芝加哥",
@@ -129,7 +138,8 @@
         "img": "assets/cities/chicago.jpg",
         "desc": "The 'Bean' sculpture in Millennium Park.",
         "zh_desc": "千禧公園內最具代表性的反射藝術裝置。",
-        "attribution": "Photo via Pexels"
+        "attribution": "Photo via Pexels",
+        "luxury_multiplier": 2.5
       },
       "Houston": {
         "zh": "休士頓",
@@ -142,7 +152,8 @@
         "img": "assets/cities/houston.jpg",
         "desc": "Primary center for human space flight.",
         "zh_desc": "人類探索宇宙夢想的重要科研核心。",
-        "attribution": "Photo via Pexels"
+        "attribution": "Photo via Pexels",
+        "luxury_multiplier": 2.5
       },
       "Phoenix": {
         "zh": "鳳凰城",
@@ -155,7 +166,8 @@
         "img": "assets/cities/phoenix.jpg",
         "desc": "Collection of arid desert flora.",
         "zh_desc": "匯集亞利桑那州獨特乾旱地帶植物的花園。",
-        "attribution": "Photo via Pexels"
+        "attribution": "Photo via Pexels",
+        "luxury_multiplier": 2.5
       },
       "Philadelphia": {
         "zh": "費城",
@@ -168,7 +180,8 @@
         "img": "assets/cities/philadelphia.jpg",
         "desc": "Historic symbol of American freedom.",
         "zh_desc": "象徵美國獨立與自由精神的歷史之鐘。",
-        "attribution": "Photo via Google"
+        "attribution": "Photo via Google",
+        "luxury_multiplier": 2.5
       },
       "Austin": {
         "zh": "奧斯丁",
@@ -181,7 +194,8 @@
         "img": "assets/cities/austin.jpg",
         "desc": "The center of Texas governance.",
         "zh_desc": "德州最具權威與歷史感的建築景觀。",
-        "attribution": "Photo via Google"
+        "attribution": "Photo via Google",
+        "luxury_multiplier": 2.5
       },
       "Denver": {
         "zh": "丹佛",
@@ -194,7 +208,8 @@
         "img": "assets/cities/denver.jpg",
         "desc": "Historic downtown transit hub.",
         "zh_desc": "丹佛市中心重煥生機的歷史地標。",
-        "attribution": "Photo via Pexels"
+        "attribution": "Photo via Pexels",
+        "luxury_multiplier": 2.5
       },
       "Portland": {
         "zh": "波特蘭",
@@ -207,7 +222,8 @@
         "img": "assets/cities/portland.jpg",
         "desc": "Fragrant urban garden with colorful blooms.",
         "zh_desc": "玫瑰之城波特蘭最具芬芳的城市綠洲與花園。",
-        "attribution": "Photo via Google"
+        "attribution": "Photo via Google",
+        "luxury_multiplier": 2.5
       },
       "Atlanta": {
         "zh": "亞特蘭大",
@@ -220,7 +236,8 @@
         "img": "assets/cities/atlanta.jpg",
         "desc": "Busy highway trails leading to the downtown skyline.",
         "zh_desc": "喬治亞州繁華的交通脈動與現代摩天大樓景觀。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.5
       },
       "Charlotte": {
         "zh": "夏洛特",
@@ -233,7 +250,8 @@
         "img": "assets/cities/charlotte.jpg",
         "desc": "Birds-eye view of the city's banking hub.",
         "zh_desc": "鳥瞰南方繁榮的銀行業與商業中心建築群。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.5
       },
       "Nashville": {
         "zh": "納許維爾",
@@ -246,7 +264,8 @@
         "img": "assets/cities/nashville.jpg",
         "desc": "The home of country music.",
         "zh_desc": "霓虹閃耀的音樂之都，現場演奏聖地。",
-        "attribution": "Photo via Pexels"
+        "attribution": "Photo via Pexels",
+        "luxury_multiplier": 2.5
       },
       "Dallas": {
         "zh": "達拉斯",
@@ -259,7 +278,8 @@
         "img": "assets/cities/dallas.jpg",
         "desc": "Iconic glowing landmark.",
         "zh_desc": "達拉斯天際線上最顯眼的標誌建築。",
-        "attribution": "Photo via Pexels"
+        "attribution": "Photo via Pexels",
+        "luxury_multiplier": 2.5
       }
     }
   },
@@ -276,7 +296,8 @@
         "img": "assets/cities/tokyo.jpg",
         "desc": "The red and white tower framed by city buildings.",
         "zh_desc": "在繁忙都市建築群中格外顯眼的東京鐵塔。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 3.5
       },
       "Yokohama": {
         "zh": "橫濱",
@@ -289,7 +310,8 @@
         "img": "assets/cities/yokohama.jpg",
         "desc": "Seaside business and leisure district.",
         "zh_desc": "橫濱充滿未來感的海濱港灣中心。",
-        "attribution": "Photo via Pexels"
+        "attribution": "Photo via Pexels",
+        "luxury_multiplier": 3.0
       },
       "Osaka": {
         "zh": "大阪",
@@ -302,7 +324,8 @@
         "img": "assets/cities/osaka.jpg",
         "desc": "A magnificent samurai fortress and historical icon.",
         "zh_desc": "大阪最具代表性的武士城堡建築與公園。",
-        "attribution": "Photo via Pexels"
+        "attribution": "Photo via Pexels",
+        "luxury_multiplier": 2.5
       },
       "Nagoya": {
         "zh": "名古屋",
@@ -315,7 +338,8 @@
         "img": "assets/cities/nagoya.jpg",
         "desc": "Modern skyscrapers against a clear blue sky.",
         "zh_desc": "名古屋市中心現代化建築與清澈天空的景緻。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.5
       },
       "Kyoto": {
         "zh": "京都",
@@ -328,7 +352,8 @@
         "img": "assets/cities/kyoto.jpg",
         "desc": "Zen temple covered in gold leaf.",
         "zh_desc": "閃耀奪目、表面貼滿金箔的世界遺產禪寺。",
-        "attribution": "Photo via Pexels"
+        "attribution": "Photo via Pexels",
+        "luxury_multiplier": 3.0
       },
       "Fukuoka": {
         "zh": "福岡",
@@ -341,7 +366,8 @@
         "img": "assets/cities/fukuoka.jpg",
         "desc": "White boat on the river near downtown buildings.",
         "zh_desc": "福岡中洲地區停泊在河邊的白船與城市夜色。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.5
       },
       "Kawasaki": {
         "zh": "川崎",
@@ -354,7 +380,8 @@
         "img": "assets/cities/kawasaki.jpg",
         "desc": "Traditional Japanese Buddhist temple architecture.",
         "zh_desc": "川崎大師境內精美的傳統佛教寺廟工藝。",
-        "attribution": "Photo via Pexels"
+        "attribution": "Photo via Pexels",
+        "luxury_multiplier": 2.5
       },
       "Kobe": {
         "zh": "神戶",
@@ -367,7 +394,8 @@
         "img": "assets/cities/kobe.jpg",
         "desc": "Seaside park with modern monuments.",
         "zh_desc": "充滿異國風情、景色優美的海濱港灣公園。",
-        "attribution": "Photo via Pexels"
+        "attribution": "Photo via Pexels",
+        "luxury_multiplier": 2.5
       },
       "Sapporo": {
         "zh": "札幌",
@@ -380,7 +408,8 @@
         "img": "assets/cities/sapporo.jpg",
         "desc": "Red and white tower against the city sky.",
         "zh_desc": "札幌市中心著名的電視塔與大通公園景緻。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.5
       },
       "Saitama": {
         "zh": "埼玉",
@@ -393,7 +422,8 @@
         "img": "assets/cities/saitama.jpg",
         "desc": "A group of people walking through a peaceful district.",
         "zh_desc": "埼玉縣內宜居、寧靜且充滿生活感的街道。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.5
       }
     }
   },
@@ -410,7 +440,8 @@
         "img": "assets/cities/taipei.jpg",
         "desc": "Architectural icon of modern Taiwan.",
         "zh_desc": "台北最亮眼的世界級摩天大樓建築。",
-        "attribution": "Photo via Wikipedia"
+        "attribution": "Photo via Wikipedia",
+        "luxury_multiplier": 3.5
       },
       "New Taipei": {
         "zh": "新北",
@@ -423,7 +454,8 @@
         "img": "assets/cities/new_taipei.jpg",
         "desc": "People walking through the historic Jiufen district.",
         "zh_desc": "九份山城內充滿韻味的老街巷弄與階梯。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.5
       },
       "Taichung": {
         "zh": "台中",
@@ -436,7 +468,8 @@
         "img": "assets/cities/taichung.jpg",
         "desc": "Modern architectural masterpiece in Taichung.",
         "zh_desc": "由大師設計、展現曲面建築之美的藝術殿堂。",
-        "attribution": "Photo via Wikipedia"
+        "attribution": "Photo via Wikipedia",
+        "luxury_multiplier": 2.5
       },
       "Kaohsiung": {
         "zh": "高雄",
@@ -449,7 +482,8 @@
         "img": "assets/cities/kaohsiung.jpg",
         "desc": "Giant yellow rubber duck floating in the bay.",
         "zh_desc": "高雄港愛河灣內最具療癒感的黃色小鴨景緻。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.5
       },
       "Tainan": {
         "zh": "台南",
@@ -462,7 +496,8 @@
         "img": "assets/cities/tainan.jpg",
         "desc": "Panoramic night view of Tainan city lights.",
         "zh_desc": "從高處俯瞰台南府城靜謐而閃耀的都市夜色。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.5
       }
     }
   },
@@ -479,7 +514,8 @@
         "img": "assets/cities/bangkok.jpg",
         "desc": "Vibrant city skyline across the water.",
         "zh_desc": "曼谷昭披耶河畔充滿動感的現代建築群景觀。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.5
       },
       "Chiang Mai": {
         "zh": "清邁",
@@ -492,7 +528,8 @@
         "img": "assets/cities/chiang_mai.jpg",
         "desc": "Large traditional building in a lush field.",
         "zh_desc": "清邁綠意盎然的田野中獨具風格的傳統建築。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.0
       },
       "Phuket": {
         "zh": "普吉島",
@@ -505,7 +542,8 @@
         "img": "assets/cities/phuket.jpg",
         "desc": "Golden shores and crystal clear waters.",
         "zh_desc": "普吉島熱鬧且充滿熱帶氣息的海邊沙灘景觀。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.5
       },
       "Pattaya": {
         "zh": "芭達雅",
@@ -518,7 +556,8 @@
         "img": "assets/cities/pattaya.jpg",
         "desc": "Majestic wooden architectural wonder by the sea.",
         "zh_desc": "芭達雅海邊矗立、純木打造的宏偉真理寺建築。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.0
       },
       "Koh Samui": {
         "zh": "蘇美島",
@@ -530,8 +569,9 @@
         "zh_landmark": "蘇美島水岸",
         "img": "assets/cities/koh_samui.jpg",
         "desc": "Boats docked near lush tropical shores.",
-        "zh_desc": "蘇美島清澈海水、椰林與岸邊白船的度假風情。",
-        "attribution": "Photo via Unsplash"
+        "zh_desc": "蘇美島清邊清澈海水、椰林與岸邊白船的度假風情。",
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.5
       }
     }
   },
@@ -552,7 +592,8 @@
         "img": "assets/cities/valencia.jpg",
         "desc": "Futuristic architectural masterpiece.",
         "zh_desc": "地中海畔充滿未來感的藝術與科學殿堂。",
-        "attribution": "AI Generated"
+        "attribution": "AI Generated",
+        "luxury_multiplier": 2.5
       },
       "Malaga": {
         "zh": "馬拉加",
@@ -563,7 +604,8 @@
         "img": "assets/cities/malaga.jpg",
         "desc": "Vibrant coastal promenade and historic fortress.",
         "zh_desc": "陽光海岸的門戶，融合歷史古蹟與蔚藍海景。",
-        "attribution": "AI Generated"
+        "attribution": "AI Generated",
+        "luxury_multiplier": 2.5
       },
       "Bilbao": {
         "zh": "畢爾包",
@@ -574,7 +616,8 @@
         "img": "assets/cities/bilbao.jpg",
         "desc": "Cultural center and food paradise.",
         "zh_desc": "北西班牙的美食天堂，以現代藝術建築聞名於世。",
-        "attribution": "AI Generated"
+        "attribution": "AI Generated",
+        "luxury_multiplier": 2.5
       }
     }
   },
@@ -595,7 +638,8 @@
         "img": "assets/cities/lagos.jpg",
         "desc": "Stunning sea cliffs and turquoise water.",
         "zh_desc": "阿爾加維海岸最壯麗的海蝕洞與奇岩景觀。",
-        "attribution": "AI Generated"
+        "attribution": "AI Generated",
+        "luxury_multiplier": 2.5
       },
       "Lisbon": {
         "zh": "里斯本",
@@ -606,7 +650,8 @@
         "img": "assets/cities/lisbon.jpg",
         "desc": "Historic charm with urban convenience.",
         "zh_desc": "穿梭在老城區窄巷間的標誌性黃色復古電車。",
-        "attribution": "AI Generated"
+        "attribution": "AI Generated",
+        "luxury_multiplier": 3.0
       },
       "Porto": {
         "zh": "波爾圖",
@@ -617,7 +662,8 @@
         "img": "assets/cities/porto.jpg",
         "desc": "Picturesque riverside cultural hub.",
         "zh_desc": "杜羅河畔如畫般的彩色房舍與著名的波特酒鄉。",
-        "attribution": "AI Generated"
+        "attribution": "AI Generated",
+        "luxury_multiplier": 2.5
       }
     }
   },
@@ -638,7 +684,8 @@
         "img": "assets/cities/george_town.jpg",
         "desc": "Medical tourism hub and food capital.",
         "zh_desc": "融合英殖民建築與世界級美食的醫療重鎮。",
-        "attribution": "AI Generated"
+        "attribution": "AI Generated",
+        "luxury_multiplier": 2.0
       },
       "Kuala Lumpur": {
         "zh": "吉隆坡",
@@ -649,7 +696,8 @@
         "img": "assets/cities/kuala_lumpur.jpg",
         "desc": "High-value modern metropolitan living.",
         "zh_desc": "現代感十足、具備高品質奢華設施的熱帶都會。",
-        "attribution": "AI Generated"
+        "attribution": "AI Generated",
+        "luxury_multiplier": 2.5
       },
       "Melaka": {
         "zh": "馬六甲",
@@ -660,7 +708,8 @@
         "img": "assets/cities/melaka.jpg",
         "desc": "Laid-back historic city with a slow pace.",
         "zh_desc": "節奏悠閒、充滿文化底蘊與燈火浪漫的歷史古城。",
-        "attribution": "AI Generated"
+        "attribution": "AI Generated",
+        "luxury_multiplier": 2.0
       }
     }
   },
@@ -681,7 +730,8 @@
         "img": "assets/cities/tamarindo.jpg",
         "desc": "Surfers paradise and tropical vibes.",
         "zh_desc": "衝浪者的天堂，充滿熱帶度假風情的蔚藍海岸。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.5
       },
       "Grecia": {
         "zh": "格雷西亞",
@@ -692,7 +742,8 @@
         "img": "assets/cities/grecia.jpg",
         "desc": "Cleanest city in Latin America with mountain views.",
         "zh_desc": "拉丁美洲最乾淨的城市，擁有壯麗的山景與宜人氣候。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.0
       },
       "Puerto Viejo": {
         "zh": "波多維耶荷",
@@ -703,7 +754,8 @@
         "img": "assets/cities/puerto_viejo.jpg",
         "desc": "Lush jungle meeting turquoise Caribbean sea.",
         "zh_desc": "加勒比海岸的秘境，森林與海洋交織的自然天堂。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.0
       }
     }
   },
@@ -724,7 +776,8 @@
         "img": "assets/cities/san_miguel_de_allende.jpg",
         "desc": "Iconic pink gothic-style colonial church.",
         "zh_desc": "標誌性的粉紅色哥德式殖民時期教堂，藝術之城地標。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.5
       },
       "Merida": {
         "zh": "梅里達",
@@ -735,7 +788,8 @@
         "img": "assets/cities/merida.jpg",
         "desc": "Safe White City with Mayan culture influence.",
         "zh_desc": "全墨最安全的「白色之城」，融合瑪雅與殖民文化。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.0
       },
       "Puerto Vallarta": {
         "zh": "瓦雅塔港",
@@ -746,7 +800,8 @@
         "img": "assets/cities/puerto_vallarta.jpg",
         "desc": "Lively ocean boardwalk with Sierra Madre views.",
         "zh_desc": "熱鬧的海濱長廊，背山面海的絕佳退休地點。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.5
       }
     }
   },
@@ -767,7 +822,8 @@
         "img": "assets/cities/coronado.jpg",
         "desc": "Expat beachfront hub near Panama City.",
         "zh_desc": "巴拿馬城近郊最受外籍人士歡迎的奢華海濱社區。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 3.0
       },
       "Boquete": {
         "zh": "波開特",
@@ -778,7 +834,8 @@
         "img": "assets/cities/boquete.jpg",
         "desc": "Spring-like weather and coffee plantations.",
         "zh_desc": "四季如春的山城，以頂級咖啡與純淨空氣聞名。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 2.0
       },
       "Panama City": {
         "zh": "巴拿馬城",
@@ -789,7 +846,8 @@
         "img": "assets/cities/panama_city.jpg",
         "desc": "Fusion of colonial ruins and modern skyline.",
         "zh_desc": "融合殖民遺跡與現代摩天大樓的國際大都會。",
-        "attribution": "Photo via Unsplash"
+        "attribution": "Photo via Unsplash",
+        "luxury_multiplier": 3.0
       }
     }
   }
