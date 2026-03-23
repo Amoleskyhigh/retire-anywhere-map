@@ -3,50 +3,57 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Retire Anywhere Lab v1（實驗版）</title>
+  <title>Retire Anywhere Lab v2（地圖優先實驗版）</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     body{font-family:Inter,system-ui,-apple-system,sans-serif;margin:0;background:#0b1220;color:#e8edf7}
-    .wrap{max-width:1100px;margin:0 auto;padding:20px}
-    h1{margin:0 0 6px;font-size:28px}
+    .wrap{max-width:1180px;margin:0 auto;padding:16px}
+    h1{margin:0 0 6px;font-size:26px}
     .muted{color:#98a6c4}
-    .card{background:#121b2f;border:1px solid #243252;border-radius:14px;padding:16px;margin:14px 0}
-    .chips{display:flex;flex-wrap:wrap;gap:8px}
-    .chip{padding:6px 10px;border-radius:999px;font-size:13px;border:1px solid #2d3f67}
-    .chip.ok{background:#10331f;color:#7de3a5;border-color:#2f7d51}
-    .chip.todo{background:#3a1e22;color:#ff9da9;border-color:#7b3c46}
-    select,button,input{background:#0d1527;color:#fff;border:1px solid #30456e;border-radius:10px;padding:8px}
+    .card{background:#121b2f;border:1px solid #243252;border-radius:14px;padding:14px;margin:12px 0}
+    #map{height:58vh;min-height:380px;border-radius:12px;border:1px solid #2b416d}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    select,button{background:#0d1527;color:#fff;border:1px solid #30456e;border-radius:10px;padding:8px}
     button{cursor:pointer}
     table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}
     th,td{border-bottom:1px solid #23365c;padding:10px;text-align:left}
     th{color:#a9b7d4}
-    .row{display:flex;gap:10px;flex-wrap:wrap}
     .score{font-weight:700;color:#66e0ff}
     .small{font-size:12px;color:#93a5ca}
+    .chips{display:flex;flex-wrap:wrap;gap:8px}
+    .chip{padding:6px 10px;border-radius:999px;font-size:13px;border:1px solid #2d3f67}
+    .chip.ok{background:#10331f;color:#7de3a5;border-color:#2f7d51}
+    .chip.todo{background:#3a1e22;color:#ff9da9;border-color:#7b3c46}
+    .selected-list{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .selected-item{background:#0e1a31;border:1px solid #2f4a78;border-radius:999px;padding:6px 10px;font-size:13px}
     a{color:#7bc3ff}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>Retire Anywhere Lab v1（實驗版）</h1>
-    <div class="muted">先在實驗版驗證功能，確認沒問題後再換 production。這頁目前不會覆蓋正式首頁。</div>
+    <h1>Retire Anywhere Lab v2（地圖優先）</h1>
+    <div class="muted">你的建議已套用：先看地圖，再用「洲→國家→城市」選擇，最後做 2-3 地點比較。此頁仍是實驗版，不影響 production。</div>
 
     <div class="card">
-      <h2>1) 2025 熱門退休國家 Top 15 與缺口盤點</h2>
-      <div class="small">來源：Global Citizen Solutions《2025 Global Retirement Report》（頁尾附來源連結）</div>
-      <div id="countryGap" class="chips" style="margin-top:10px"></div>
-      <div id="missingSummary" class="muted" style="margin-top:10px"></div>
+      <div id="map"></div>
     </div>
 
     <div class="card">
-      <h2>2) 2–3 地點退休比較工具（實驗）</h2>
+      <h2>城市選擇（洲 → 國家 → 城市）</h2>
       <div class="row">
-        <select id="cityA"></select>
-        <select id="cityB"></select>
-        <select id="cityC"></select>
-        <button id="compareBtn">開始比較</button>
+        <select id="continentSel"><option value="">先選洲</option></select>
+        <select id="countrySel" disabled><option value="">再選國家</option></select>
+        <select id="citySel" disabled><option value="">最後選城市</option></select>
+        <button id="addCompareBtn" disabled>加入比較</button>
+        <button id="clearCompareBtn">清空比較</button>
       </div>
-      <div class="small" style="margin-top:8px">比較維度：資金需求、氣候、簽證取得、醫療品質、安全、稅務友善、外國人友善、英文友善。</div>
+      <div class="small">最多加入 3 個城市比較。點地圖 marker 也可快速加入。</div>
+      <div id="selectedList" class="selected-list"></div>
+    </div>
 
+    <div class="card">
+      <h2>2–3 地點退休比較</h2>
+      <div class="small">比較基準：資金需求、天氣、簽證取得滿意度、醫療品質、安全、稅務友善、外國人友善、英文友善。</div>
       <table id="compareTable" style="display:none">
         <thead>
           <tr>
@@ -61,12 +68,13 @@
     </div>
 
     <div class="card">
-      <h2>3) 下一步（你確認後我做）</h2>
-      <ul>
-        <li>把缺口國家（例如：希臘、馬爾他、烏拉圭、塞浦路斯等）先加「國家層級」資料。</li>
-        <li>再補進每國 2–4 個城市座標與成本，加入地圖 marker。</li>
-        <li>比較工具加上「權重調整」（例如你重視醫療>天氣）。</li>
-      </ul>
+      <h2>2025 Top15 缺口盤點（已含第一批 6 國）</h2>
+      <div class="small">來源：Global Citizen Solutions《2025 Global Retirement Report》</div>
+      <div id="countryGap" class="chips" style="margin-top:10px"></div>
+      <div id="missingSummary" class="muted" style="margin-top:10px"></div>
+      <div class="small" style="margin-top:10px">
+        第一批已新增 6 國：Greece、Malta、Uruguay、Cyprus、Italy、Chile（每國 2–4 代表城市，AI輔助整理後人工校正）。
+      </div>
     </div>
 
     <div class="small">資料來源：
@@ -74,10 +82,16 @@
     </div>
   </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 const top15_2025 = [
   'Portugal','Mauritius','Spain','Uruguay','Austria','Italy','Slovenia','Malta','Latvia','Chile','Costa Rica','Greece','Paraguay','Cyprus','Seychelles'
 ];
+
+const countryContinent = {
+  USA:'North America', Japan:'Asia', Taiwan:'Asia', Thailand:'Asia', Spain:'Europe', Portugal:'Europe', Malaysia:'Asia', 'Costa Rica':'North America', Mexico:'North America', Panama:'North America',
+  Greece:'Europe', Malta:'Europe', Uruguay:'South America', Cyprus:'Europe', Italy:'Europe', Chile:'South America'
+};
 
 const countryMeta = {
   USA:{climate:7,visa:4,healthcare:8,safety:7,tax:5,expat:8,english:10},
@@ -90,97 +104,185 @@ const countryMeta = {
   'Costa Rica':{climate:9,visa:8,healthcare:8,safety:8,tax:7,expat:9,english:7},
   Mexico:{climate:8,visa:7,healthcare:7,safety:6,tax:7,expat:9,english:6},
   Panama:{climate:9,visa:8,healthcare:7,safety:7,tax:8,expat:8,english:6},
-  Mauritius:{climate:9,visa:7,healthcare:7,safety:8,tax:8,expat:7,english:8},
-  Uruguay:{climate:8,visa:7,healthcare:8,safety:8,tax:8,expat:7,english:5},
-  Austria:{climate:6,visa:6,healthcare:9,safety:9,tax:6,expat:7,english:7},
-  Italy:{climate:8,visa:7,healthcare:8,safety:7,tax:6,expat:8,english:6},
-  Slovenia:{climate:7,visa:7,healthcare:8,safety:9,tax:7,expat:6,english:6},
-  Malta:{climate:9,visa:8,healthcare:8,safety:8,tax:8,expat:9,english:10},
-  Latvia:{climate:5,visa:7,healthcare:7,safety:8,tax:7,expat:5,english:6},
-  Chile:{climate:7,visa:7,healthcare:8,safety:7,tax:7,expat:7,english:5},
   Greece:{climate:9,visa:7,healthcare:7,safety:7,tax:8,expat:8,english:7},
-  Paraguay:{climate:7,visa:8,healthcare:6,safety:6,tax:9,expat:6,english:4},
+  Malta:{climate:9,visa:8,healthcare:8,safety:8,tax:8,expat:9,english:10},
+  Uruguay:{climate:8,visa:7,healthcare:8,safety:8,tax:8,expat:7,english:5},
   Cyprus:{climate:9,visa:8,healthcare:8,safety:8,tax:8,expat:8,english:9},
-  Seychelles:{climate:9,visa:6,healthcare:6,safety:8,tax:7,expat:6,english:8},
+  Italy:{climate:8,visa:7,healthcare:8,safety:7,tax:6,expat:8,english:6},
+  Chile:{climate:7,visa:7,healthcare:8,safety:7,tax:7,expat:7,english:5},
+  Mauritius:{climate:9,visa:7,healthcare:7,safety:8,tax:8,expat:7,english:8},
+  Austria:{climate:6,visa:6,healthcare:9,safety:9,tax:6,expat:7,english:7},
+  Slovenia:{climate:7,visa:7,healthcare:8,safety:9,tax:7,expat:6,english:6},
+  Latvia:{climate:5,visa:7,healthcare:7,safety:8,tax:7,expat:5,english:6},
+  Paraguay:{climate:7,visa:8,healthcare:6,safety:6,tax:9,expat:6,english:4},
+  Seychelles:{climate:9,visa:6,healthcare:6,safety:8,tax:7,expat:6,english:8}
+};
+
+const batch6 = {
+  Greece: { Cities: {
+    Athens:{coords:[37.9838,23.7275],monthly_living_cost_single:1700,monthly_living_cost_couple:2500,monthly_living_cost_family:3900},
+    Thessaloniki:{coords:[40.6401,22.9444],monthly_living_cost_single:1400,monthly_living_cost_couple:2100,monthly_living_cost_family:3300},
+    Heraklion:{coords:[35.3387,25.1442],monthly_living_cost_single:1500,monthly_living_cost_couple:2200,monthly_living_cost_family:3400}
+  }},
+  Malta: { Cities: {
+    Valletta:{coords:[35.8989,14.5146],monthly_living_cost_single:1900,monthly_living_cost_couple:2800,monthly_living_cost_family:4300},
+    Sliema:{coords:[35.9122,14.5044],monthly_living_cost_single:2000,monthly_living_cost_couple:3000,monthly_living_cost_family:4600},
+    Gozo:{coords:[36.0443,14.2512],monthly_living_cost_single:1700,monthly_living_cost_couple:2500,monthly_living_cost_family:3900}
+  }},
+  Uruguay: { Cities: {
+    Montevideo:{coords:[-34.9011,-56.1645],monthly_living_cost_single:1600,monthly_living_cost_couple:2300,monthly_living_cost_family:3600},
+    Punta_del_Este:{coords:[-34.9689,-54.9446],monthly_living_cost_single:1800,monthly_living_cost_couple:2600,monthly_living_cost_family:4100},
+    Colonia:{coords:[-34.4698,-57.8433],monthly_living_cost_single:1400,monthly_living_cost_couple:2100,monthly_living_cost_family:3300}
+  }},
+  Cyprus: { Cities: {
+    Nicosia:{coords:[35.1856,33.3823],monthly_living_cost_single:1800,monthly_living_cost_couple:2600,monthly_living_cost_family:4000},
+    Limassol:{coords:[34.7071,33.0226],monthly_living_cost_single:2000,monthly_living_cost_couple:2900,monthly_living_cost_family:4500},
+    Paphos:{coords:[34.7720,32.4297],monthly_living_cost_single:1700,monthly_living_cost_couple:2500,monthly_living_cost_family:3900}
+  }},
+  Italy: { Cities: {
+    Rome:{coords:[41.9028,12.4964],monthly_living_cost_single:2100,monthly_living_cost_couple:3000,monthly_living_cost_family:4700},
+    Florence:{coords:[43.7696,11.2558],monthly_living_cost_single:1900,monthly_living_cost_couple:2800,monthly_living_cost_family:4400},
+    Palermo:{coords:[38.1157,13.3615],monthly_living_cost_single:1500,monthly_living_cost_couple:2200,monthly_living_cost_family:3400}
+  }},
+  Chile: { Cities: {
+    Santiago:{coords:[-33.4489,-70.6693],monthly_living_cost_single:1600,monthly_living_cost_couple:2300,monthly_living_cost_family:3600},
+    Valparaiso:{coords:[-33.0472,-71.6127],monthly_living_cost_single:1400,monthly_living_cost_couple:2100,monthly_living_cost_family:3300},
+    Vina_del_Mar:{coords:[-33.0245,-71.5518],monthly_living_cost_single:1500,monthly_living_cost_couple:2200,monthly_living_cost_family:3500}
+  }}
 };
 
 const weights = {fund:0.30, climate:0.10, visa:0.15, healthcare:0.15, safety:0.10, tax:0.10, expat:0.05, english:0.05};
 let cityList = [];
+let selectedCompare = [];
+let map, markerLayer;
 
-function toFundScore(annualNeed){
-  if(!annualNeed) return 5;
-  if(annualNeed <= 30000) return 10;
-  if(annualNeed <= 45000) return 8;
-  if(annualNeed <= 60000) return 6;
-  if(annualNeed <= 80000) return 4;
-  return 2;
-}
-
+function toFundScore(annualNeed){ if(annualNeed<=30000) return 10; if(annualNeed<=45000) return 8; if(annualNeed<=60000) return 6; if(annualNeed<=80000) return 4; return 2; }
 function cityScore(c){
   const m = countryMeta[c.country] || {climate:6,visa:6,healthcare:6,safety:6,tax:6,expat:6,english:6};
   const annualNeed = c.monthly_living_cost_couple * 12;
   const fundScore = toFundScore(annualNeed);
-  const total =
-    fundScore*weights.fund + m.climate*weights.climate + m.visa*weights.visa +
-    m.healthcare*weights.healthcare + m.safety*weights.safety + m.tax*weights.tax +
-    m.expat*weights.expat + m.english*weights.english;
+  const total = fundScore*weights.fund + m.climate*weights.climate + m.visa*weights.visa + m.healthcare*weights.healthcare + m.safety*weights.safety + m.tax*weights.tax + m.expat*weights.expat + m.english*weights.english;
   return {annualNeed,fundScore,total: total.toFixed(2), ...m};
 }
 
 function renderGap(countriesInData){
   const el = document.getElementById('countryGap');
-  const missing = [];
+  el.innerHTML='';
+  const missing=[];
   top15_2025.forEach(c=>{
     const ok = countriesInData.includes(c);
     if(!ok) missing.push(c);
-    const span = document.createElement('span');
-    span.className = 'chip '+(ok?'ok':'todo');
-    span.textContent = ok ? `✅ ${c}` : `🟡 ${c}`;
+    const span=document.createElement('span');
+    span.className='chip '+(ok?'ok':'todo');
+    span.textContent=(ok?'✅ ':'🟡 ')+c;
     el.appendChild(span);
   });
-  document.getElementById('missingSummary').textContent = `尚未納入（${missing.length} 國）：${missing.join('、')}`;
+  document.getElementById('missingSummary').textContent=`尚未納入（${missing.length} 國）：${missing.join('、') || '已全數納入'}。`;
 }
 
-function fillSelect(id){
-  const sel = document.getElementById(id);
-  sel.innerHTML = '<option value="">請選城市</option>';
+function initMap(){
+  map = L.map('map').setView([20, 10], 2);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'&copy; OpenStreetMap'}).addTo(map);
+  markerLayer = L.layerGroup().addTo(map);
+}
+
+function drawMarkers(){
+  markerLayer.clearLayers();
   cityList.forEach((c,idx)=>{
-    const op = document.createElement('option');
-    op.value = idx;
-    op.textContent = `${c.country} - ${c.city}`;
-    sel.appendChild(op);
+    const score = cityScore(c);
+    const marker = L.marker(c.coords).addTo(markerLayer);
+    marker.bindPopup(`<b>${c.country} - ${c.city}</b><br/>雙人月生活費：約 $${c.monthly_living_cost_couple.toLocaleString()}<br/>比較加權分數：<b>${score.total}</b><br/><button onclick="addCompareByIndex(${idx})">加入比較</button>`);
   });
 }
+
+function buildSelectors(){
+  const continentSel=document.getElementById('continentSel');
+  const countrySel=document.getElementById('countrySel');
+  const citySel=document.getElementById('citySel');
+
+  const continents=[...new Set(cityList.map(c=>c.continent))].sort();
+  continentSel.innerHTML='<option value="">先選洲</option>'+continents.map(c=>`<option>${c}</option>`).join('');
+
+  continentSel.onchange=()=>{
+    const cont=continentSel.value;
+    const countries=[...new Set(cityList.filter(c=>c.continent===cont).map(c=>c.country))].sort();
+    countrySel.innerHTML='<option value="">再選國家</option>'+countries.map(c=>`<option>${c}</option>`).join('');
+    countrySel.disabled=!cont;
+    citySel.innerHTML='<option value="">最後選城市</option>';
+    citySel.disabled=true;
+    document.getElementById('addCompareBtn').disabled=true;
+  };
+
+  countrySel.onchange=()=>{
+    const country=countrySel.value;
+    const cities=cityList.filter(c=>c.country===country).map(c=>c.city).sort();
+    citySel.innerHTML='<option value="">最後選城市</option>'+cities.map(c=>`<option>${c}</option>`).join('');
+    citySel.disabled=!country;
+    document.getElementById('addCompareBtn').disabled=true;
+  };
+
+  citySel.onchange=()=>{ document.getElementById('addCompareBtn').disabled=!citySel.value; };
+}
+
+function addCompareByIndex(idx){
+  const c = cityList[idx];
+  if(!c) return;
+  if(selectedCompare.find(x=>x.country===c.country && x.city===c.city)) return;
+  if(selectedCompare.length>=3){ alert('最多比較 3 個城市'); return; }
+  selectedCompare.push(c);
+  renderSelected();
+  renderCompare();
+}
+window.addCompareByIndex = addCompareByIndex;
+
+function addFromSelectors(){
+  const cont=document.getElementById('continentSel').value;
+  const country=document.getElementById('countrySel').value;
+  const city=document.getElementById('citySel').value;
+  const idx=cityList.findIndex(c=>c.continent===cont && c.country===country && c.city===city);
+  addCompareByIndex(idx);
+}
+
+function renderSelected(){
+  const el=document.getElementById('selectedList');
+  el.innerHTML='';
+  selectedCompare.forEach(c=>{
+    const d=document.createElement('div');
+    d.className='selected-item';
+    d.textContent=`${c.continent} / ${c.country} / ${c.city}`;
+    el.appendChild(d);
+  });
+}
+
+function clearCompare(){ selectedCompare=[]; renderSelected(); document.getElementById('compareTable').style.display='none'; }
 
 function fmtUSD(v){return '$'+v.toLocaleString();}
 
 function renderCompare(){
-  const ids=['cityA','cityB','cityC'].map(i=>document.getElementById(i).value).filter(v=>v!=='');
-  if(ids.length < 2){ alert('請至少選 2 個城市'); return; }
-  const selected = [...new Set(ids)].map(i=>cityList[Number(i)]);
-  if(selected.length<2){ alert('請選不同城市'); return; }
-
+  if(selectedCompare.length<2){ document.getElementById('compareTable').style.display='none'; return; }
+  const selected = selectedCompare;
+  const metrics = selected.map(cityScore);
   const table = document.getElementById('compareTable');
   table.style.display='table';
+
   document.getElementById('hA').textContent = selected[0] ? `${selected[0].country}-${selected[0].city}` : '-';
   document.getElementById('hB').textContent = selected[1] ? `${selected[1].country}-${selected[1].city}` : '-';
   document.getElementById('hC').textContent = selected[2] ? `${selected[2].country}-${selected[2].city}` : '-';
 
-  const metrics = selected.map(cityScore);
   const rows = [
     ['每年資金需求(雙人)', ...metrics.map(m=>fmtUSD(m.annualNeed))],
     ['資金友善分數(10高)', ...metrics.map(m=>m.fundScore)],
-    ['氣候(10高)', ...metrics.map(m=>m.climate)],
+    ['天氣(10高)', ...metrics.map(m=>m.climate)],
     ['簽證取得滿意度(10高)', ...metrics.map(m=>m.visa)],
     ['醫療品質(10高)', ...metrics.map(m=>m.healthcare)],
     ['安全(10高)', ...metrics.map(m=>m.safety)],
     ['稅務友善(10高)', ...metrics.map(m=>m.tax)],
     ['外國人友善(10高)', ...metrics.map(m=>m.expat)],
     ['英文友善(10高)', ...metrics.map(m=>m.english)],
-    ['加權總分', ...metrics.map(m=>m.total)],
+    ['加權總分', ...metrics.map(m=>m.total)]
   ];
 
-  const tbody = table.querySelector('tbody');
+  const tbody=table.querySelector('tbody');
   tbody.innerHTML='';
   rows.forEach((r,ri)=>{
     const tr=document.createElement('tr');
@@ -195,23 +297,28 @@ function renderCompare(){
 }
 
 async function init(){
-  const data = await fetch('./world_retirement_data.json').then(r=>r.json());
-  const countries = Object.keys(data);
-  renderGap(countries);
+  initMap();
+  const base = await fetch('./world_retirement_data.json').then(r=>r.json());
+  const merged = {...base, ...batch6};
 
+  const countries = Object.keys(merged);
   cityList=[];
   countries.forEach(country=>{
-    Object.entries(data[country].Cities || {}).forEach(([city,info])=>{
-      cityList.push({country,city,...info});
+    Object.entries((merged[country].Cities||{})).forEach(([city,info])=>{
+      const continent = countryContinent[country] || 'Other';
+      cityList.push({continent,country,city,...info});
     });
   });
-  fillSelect('cityA'); fillSelect('cityB'); fillSelect('cityC');
-  document.getElementById('compareBtn').addEventListener('click', renderCompare);
+
+  renderGap(countries);
+  drawMarkers();
+  buildSelectors();
+
+  document.getElementById('addCompareBtn').addEventListener('click', addFromSelectors);
+  document.getElementById('clearCompareBtn').addEventListener('click', clearCompare);
 }
 
-init().catch(err=>{
-  alert('載入資料失敗：'+err.message);
-});
+init().catch(err=>alert('初始化失敗：'+err.message));
 </script>
 </body>
 </html>
