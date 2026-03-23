@@ -3,222 +3,279 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Retire Anywhere Lab v4</title>
+  <title>Retire Anywhere Lab v5</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
-    :root{--cyan:#00bcd4;--bg:#0f172a;--panel:rgba(15,23,42,.93);--txt:#f8fafc;--g:#10b981;--p:#a855f7;--b:#3b82f6;--r:#ef4444}
-    *{box-sizing:border-box} body,html{margin:0;height:100%;font-family:Inter,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--txt)}
+    :root{--cyan:#00bcd4;--bg:#0f172a;--panel:rgba(15,23,42,.94);--txt:#f8fafc;--g:#10b981;--p:#a855f7;--b:#3b82f6;--r:#ef4444}
+    *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--txt);font-family:Inter,system-ui,-apple-system,sans-serif}
+    .container{max-width:1180px;margin:0 auto;padding:12px}
     #map{height:68vh;min-height:420px}
     .mapWrap{position:relative}
-    .ui-panel{position:absolute;top:16px;right:16px;z-index:1000;width:330px;background:var(--panel);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:14px;backdrop-filter:blur(10px)}
+
+    .topline{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 12px}
+    h1{font-size:22px;margin:0}.sub{opacity:.78;font-size:13px}
+    .lang-btn{background:#0d1527;color:#fff;border:1px solid #30456e;border-radius:8px;padding:6px 10px;cursor:pointer}
+
+    .ui-panel{position:absolute;top:14px;right:14px;z-index:1000;width:334px;background:var(--panel);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:12px;backdrop-filter:blur(8px)}
     .ui-panel.collapsed{width:auto;padding:8px 10px}
     .ui-panel.collapsed .panel-body{display:none}
-    .panel-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
-    .toggle-btn,.lang-btn{background:#0d1527;color:#fff;border:1px solid #30456e;border-radius:8px;padding:6px 8px;font-size:12px;cursor:pointer}
-    .legend{position:absolute;left:16px;bottom:16px;z-index:1000;display:flex;gap:14px;background:var(--panel);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 12px;font-size:12px;flex-wrap:wrap}
-    .dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px}
-    h1{font-size:22px;margin:0 0 8px}.sub{opacity:.75;font-size:13px;margin-bottom:8px}
-    .group{margin:10px 0} label{font-size:12px;opacity:.85;display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px}
-    .btns{display:flex;gap:6px}.btn{flex:1;padding:8px 6px;border-radius:9px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.04);color:#fff;cursor:pointer;font-size:12px}
-    .btn.active[data-type="lifestyle"][data-val="Essential"]{border-color:var(--p);background:rgba(168,85,247,.22)}
-    .btn.active[data-type="lifestyle"][data-val="Comfortable"]{border-color:var(--b);background:rgba(59,130,246,.22)}
-    .btn.active[data-type="lifestyle"][data-val="Luxury"]{border-color:var(--g);background:rgba(16,185,129,.22)}
+    .panel-top{display:flex;justify-content:space-between;align-items:center}
+    .btn-mini{background:#0d1527;color:#fff;border:1px solid #30456e;border-radius:8px;padding:6px 8px;cursor:pointer}
+    .group{margin:10px 0} label{font-size:12px;opacity:.86;display:block;margin-bottom:6px}
+    .btns{display:flex;gap:6px}
+    .btn{flex:1;padding:8px 6px;border-radius:9px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.04);color:#fff;cursor:pointer;font-size:12px}
+    .btn.active[data-type="lifestyle"][data-val="Essential"]{border-color:var(--p);background:rgba(168,85,247,.24)}
+    .btn.active[data-type="lifestyle"][data-val="Comfortable"]{border-color:var(--b);background:rgba(59,130,246,.24)}
+    .btn.active[data-type="lifestyle"][data-val="Luxury"]{border-color:var(--g);background:rgba(16,185,129,.24)}
     .btn.active[data-type="household"]{border-color:var(--cyan);background:rgba(0,188,212,.2)}
-    input[type=range]{width:100%;accent-color:var(--cyan)}
-    .budget{font-weight:700;color:var(--cyan)}
-    .container{padding:14px;max-width:1180px;margin:0 auto}
+    input[type=range]{width:100%;accent-color:var(--cyan)} .budget{font-weight:700;color:var(--cyan)}
+
+    .legend{position:absolute;left:14px;bottom:14px;z-index:1000;background:var(--panel);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 12px;font-size:12px;display:flex;gap:14px;flex-wrap:wrap}
+    .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+    .footer-info{position:absolute;right:14px;bottom:14px;z-index:1000;background:var(--panel);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px 10px;font-size:12px}
+
     .card{background:#121b2f;border:1px solid #243252;border-radius:14px;padding:14px;margin:12px 0}
     .row{display:flex;gap:10px;flex-wrap:wrap} select,button{background:#0d1527;color:#fff;border:1px solid #30456e;border-radius:10px;padding:8px}
     table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px} th,td{border-bottom:1px solid #23365c;padding:10px;text-align:left} th{color:#a9b7d4}
-    .score{font-weight:700;color:#66e0ff}.chip{display:inline-block;padding:5px 9px;border-radius:999px;font-size:12px;margin:4px;border:1px solid #2d3f67}
-    .ok{background:#10331f;border-color:#2f7d51;color:#7de3a5}.todo{background:#3a1e22;border-color:#7b3c46;color:#ff9da9}
-    .photo{width:150px;height:85px;object-fit:cover;border-radius:8px;margin-top:8px;border:1px solid rgba(255,255,255,.16)}
-    @media(max-width:760px){.ui-panel{left:10px;right:auto;width:calc(100% - 20px);top:10px;max-width:330px}.legend{left:10px;right:10px;bottom:10px;justify-content:space-between;font-size:11px}}
+    .score{font-weight:700;color:#66e0ff}
+
+    .modal{display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.7);align-items:center;justify-content:center;padding:14px}
+    .modal.show{display:flex}
+    .modal-box{width:min(760px,96vw);max-height:88vh;overflow:auto;background:#0f1a30;border:1px solid #29416e;border-radius:14px;padding:14px}
+    .close{float:right;cursor:pointer;font-size:20px;padding:4px 8px}
+    .city-img{width:100%;max-height:320px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,.16)}
+
+    .mobile-fab{display:none;position:absolute;left:14px;top:14px;z-index:1200;background:#0d1527;border:1px solid #30456e;color:#fff;padding:8px 10px;border-radius:10px}
+    .mobile-sheet{display:none;position:fixed;left:0;right:0;bottom:0;z-index:2500;background:#0f1a30;border-top:1px solid #29416e;border-radius:14px 14px 0 0;padding:12px;max-height:70vh;overflow:auto}
+    .mobile-sheet.show{display:block}
+    .sheet-head{display:flex;justify-content:space-between;align-items:center}
+    .sheet-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+
+    @media(max-width:760px){
+      .ui-panel{display:none}
+      .mobile-fab{display:block}
+      .legend{left:10px;right:10px;bottom:52px;gap:8px;font-size:11px}
+      .footer-info{right:10px;bottom:10px}
+    }
   </style>
 </head>
 <body>
-<div class="container">
-  <h1 id="t_title">Retire Anywhere Lab v4</h1>
-  <div class="sub" id="t_sub">保留 production 控制器與色彩語意，新增可收合面板與中英切換。</div>
-</div>
-
-<div class="mapWrap">
-  <div id="map"></div>
-
-  <div class="ui-panel" id="panel">
-    <div class="panel-top">
-      <strong id="t_panel">Filters</strong>
-      <div>
-        <button class="lang-btn" id="langBtn">EN</button>
-        <button class="toggle-btn" id="toggleBtn">收合</button>
-      </div>
+  <div class="topline">
+    <div>
+      <h1 id="t_title">Retire Anywhere Lab v5</h1>
+      <div class="sub" id="t_sub">第一眼先回答：多少資產可以在哪裡退休。</div>
     </div>
-    <div class="panel-body">
-      <div class="group">
-        <label id="t_lifestyle">Life Style</label>
-        <div class="btns">
-          <button class="btn active" data-type="lifestyle" data-val="Essential" onclick="setChoice('lifestyle','Essential')" id="t_life_ess">Essential</button>
-          <button class="btn" data-type="lifestyle" data-val="Comfortable" onclick="setChoice('lifestyle','Comfortable')" id="t_life_com">Comfortable</button>
-          <button class="btn" data-type="lifestyle" data-val="Luxury" onclick="setChoice('lifestyle','Luxury')" id="t_life_lux">Luxury</button>
+    <button class="lang-btn" id="langBtn">EN</button>
+  </div>
+
+  <div class="mapWrap">
+    <div id="map"></div>
+
+    <button class="mobile-fab" id="mobileFab">⚙ <span id="t_filters">篩選</span></button>
+
+    <div class="ui-panel" id="panel">
+      <div class="panel-top">
+        <strong id="t_panel">Filters</strong>
+        <div>
+          <button class="btn-mini" id="methodBtn">Method</button>
+          <button class="btn-mini" id="toggleBtn">收合</button>
         </div>
       </div>
-      <div class="group">
-        <label id="t_household">Household</label>
-        <div class="btns">
-          <button class="btn active" data-type="household" data-val="single" onclick="setChoice('household','single')" id="t_house_single">Single</button>
-          <button class="btn" data-type="household" data-val="couple" onclick="setChoice('household','couple')" id="t_house_couple">Couple</button>
-          <button class="btn" data-type="household" data-val="family" onclick="setChoice('household','family')" id="t_house_family">Family</button>
-        </div>
-      </div>
-      <div class="group">
-        <label><span id="t_assets">Assets (USD)</span>: <span class="budget" id="budgetTxt">$3,000,000</span></label>
-        <input id="assetSlider" type="range" min="100000" max="10000000" step="50000" value="3000000" />
-      </div>
-      <div class="group" style="font-size:12px;opacity:.85" id="t_rule">顯示所有城市：可退休用紫/藍/綠；不可退休用紅色。</div>
+      <div class="panel-body" id="panelBody"></div>
+    </div>
+
+    <div class="legend">
+      <div><span class="dot" style="background:var(--g)"></span><span id="t_lg_lux">Luxury 可負擔</span></div>
+      <div><span class="dot" style="background:var(--b)"></span><span id="t_lg_com">Comfortable 可負擔</span></div>
+      <div><span class="dot" style="background:var(--p)"></span><span id="t_lg_ess">Essential 可負擔</span></div>
+      <div><span class="dot" style="background:var(--r)"></span><span id="t_lg_no">超出資產</span></div>
+    </div>
+
+    <div class="footer-info"><span id="t_visitors">Visitors</span>: <span id="visitor-val" style="color:var(--cyan)">-</span></div>
+  </div>
+
+  <div class="mobile-sheet" id="mobileSheet">
+    <div class="sheet-head">
+      <strong id="t_mobile_filters">篩選條件</strong>
+      <button class="btn-mini" id="closeSheetBtn">✕</button>
+    </div>
+    <div id="mobileSheetBody"></div>
+    <div class="sheet-actions">
+      <button id="resetBtn">Reset</button>
+      <button id="applyBtn">Apply</button>
     </div>
   </div>
 
-  <div class="legend" id="legend">
-    <div><span class="dot" style="background:var(--g)"></span><span id="t_lg_lux">Luxury 可負擔</span></div>
-    <div><span class="dot" style="background:var(--b)"></span><span id="t_lg_com">Comfortable 可負擔</span></div>
-    <div><span class="dot" style="background:var(--p)"></span><span id="t_lg_ess">Essential 可負擔</span></div>
-    <div><span class="dot" style="background:var(--r)"></span><span id="t_lg_no">超出資產</span></div>
-  </div>
-</div>
-
-<div class="container">
-  <div class="card">
-    <h3 id="t_cmp_title">城市選擇（洲 → 國家 → 城市）＋比較</h3>
-    <div class="row">
-      <select id="continentSel"><option value="">先選洲</option></select>
-      <select id="countrySel" disabled><option value="">再選國家</option></select>
-      <select id="citySel" disabled><option value="">最後選城市</option></select>
-      <button onclick="addFromSelectors()" id="t_add_cmp">加入比較</button>
-      <button onclick="clearCompare()" id="t_clear_cmp">清空比較</button>
+  <div class="container">
+    <div class="card">
+      <h3 id="t_cmp_title">城市選擇（洲 → 國家 → 城市）＋比較</h3>
+      <div class="row">
+        <select id="continentSel"><option value="">先選洲</option></select>
+        <select id="countrySel" disabled><option value="">再選國家</option></select>
+        <select id="citySel" disabled><option value="">最後選城市</option></select>
+        <button id="addCmpBtn">加入比較</button>
+        <button id="clearCmpBtn">清空比較</button>
+      </div>
+      <div id="selected" style="margin-top:8px;font-size:13px;opacity:.85"></div>
+      <table id="cmp" style="display:none"><thead><tr><th id="t_dim">維度</th><th id="h1"></th><th id="h2"></th><th id="h3"></th></tr></thead><tbody></tbody></table>
     </div>
-    <div id="selected" style="margin-top:8px;font-size:13px;opacity:.85"></div>
-    <table id="cmp" style="display:none"><thead><tr><th id="t_dim">維度</th><th id="h1"></th><th id="h2"></th><th id="h3"></th></tr></thead><tbody></tbody></table>
   </div>
 
-  <div class="card">
-    <h3 id="t_gap_title">2025 Top 15 缺口盤點（已補第一批6國）</h3>
-    <div id="gap"></div>
-    <div id="gapSummary" style="opacity:.8;margin-top:6px"></div>
-  </div>
-</div>
+  <div class="modal" id="cityModal"><div class="modal-box"><span class="close" id="closeCityModal">✕</span><div id="cityModalBody"></div></div></div>
+  <div class="modal" id="methodModal"><div class="modal-box"><span class="close" id="closeMethodModal">✕</span><h3 id="t_meth_title">Methodology</h3><p id="t_meth_body"></p></div></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-const top15=['Portugal','Mauritius','Spain','Uruguay','Austria','Italy','Slovenia','Malta','Latvia','Chile','Costa Rica','Greece','Paraguay','Cyprus','Seychelles'];
 const countryCont={USA:'North America',Japan:'Asia',Taiwan:'Asia',Thailand:'Asia',Spain:'Europe',Portugal:'Europe',Malaysia:'Asia','Costa Rica':'North America',Mexico:'North America',Panama:'North America',Greece:'Europe',Malta:'Europe',Uruguay:'South America',Cyprus:'Europe',Italy:'Europe',Chile:'South America'};
-const photos={Athens:'https://images.unsplash.com/photo-1555992828-ca4dbe41d294?auto=format&fit=crop&w=500&q=60',Thessaloniki:'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=500&q=60',Heraklion:'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=500&q=60',Valletta:'https://images.unsplash.com/photo-1578926375605-eaf7559b1458?auto=format&fit=crop&w=500&q=60',Sliema:'https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=500&q=60',Gozo:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=500&q=60',Montevideo:'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=500&q=60',Punta_del_Este:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=500&q=60',Colonia:'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=500&q=60',Nicosia:'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=500&q=60',Limassol:'https://images.unsplash.com/photo-1441829266145-b7a6f00aa15f?auto=format&fit=crop&w=500&q=60',Paphos:'https://images.unsplash.com/photo-1505764706515-aa95265c5abc?auto=format&fit=crop&w=500&q=60',Rome:'https://images.unsplash.com/photo-1529260830199-42c24126f198?auto=format&fit=crop&w=500&q=60',Florence:'https://images.unsplash.com/photo-1471623817296-aa07ae5c9f47?auto=format&fit=crop&w=500&q=60',Palermo:'https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=500&q=60',Santiago:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=500&q=60',Valparaiso:'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=500&q=60',Vina_del_Mar:'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&w=500&q=60'};
 const meta={USA:[7,4,8,7,5,8,10],Japan:[6,5,9,10,6,6,4],Taiwan:[7,6,9,9,6,7,5],Thailand:[8,7,8,7,7,9,6],Spain:[9,8,9,8,7,9,7],Portugal:[9,8,8,9,8,9,8],Malaysia:[8,7,8,7,7,8,7],'Costa Rica':[9,8,8,8,7,9,7],Mexico:[8,7,7,6,7,9,6],Panama:[9,8,7,7,8,8,6],Greece:[9,7,7,7,8,8,7],Malta:[9,8,8,8,8,9,10],Uruguay:[8,7,8,8,8,7,5],Cyprus:[9,8,8,8,8,8,9],Italy:[8,7,8,7,6,8,6],Chile:[7,7,8,7,7,7,5]};
-const batch6={Greece:{Cities:{Athens:{coords:[37.9838,23.7275],monthly_living_cost_single:1700,monthly_living_cost_couple:2500,monthly_living_cost_family:3900},Thessaloniki:{coords:[40.6401,22.9444],monthly_living_cost_single:1400,monthly_living_cost_couple:2100,monthly_living_cost_family:3300},Heraklion:{coords:[35.3387,25.1442],monthly_living_cost_single:1500,monthly_living_cost_couple:2200,monthly_living_cost_family:3400}}},Malta:{Cities:{Valletta:{coords:[35.8989,14.5146],monthly_living_cost_single:1900,monthly_living_cost_couple:2800,monthly_living_cost_family:4300},Sliema:{coords:[35.9122,14.5044],monthly_living_cost_single:2000,monthly_living_cost_couple:3000,monthly_living_cost_family:4600},Gozo:{coords:[36.0443,14.2512],monthly_living_cost_single:1700,monthly_living_cost_couple:2500,monthly_living_cost_family:3900}}},Uruguay:{Cities:{Montevideo:{coords:[-34.9011,-56.1645],monthly_living_cost_single:1600,monthly_living_cost_couple:2300,monthly_living_cost_family:3600},Punta_del_Este:{coords:[-34.9689,-54.9446],monthly_living_cost_single:1800,monthly_living_cost_couple:2600,monthly_living_cost_family:4100},Colonia:{coords:[-34.4698,-57.8433],monthly_living_cost_single:1400,monthly_living_cost_couple:2100,monthly_living_cost_family:3300}}},Cyprus:{Cities:{Nicosia:{coords:[35.1856,33.3823],monthly_living_cost_single:1800,monthly_living_cost_couple:2600,monthly_living_cost_family:4000},Limassol:{coords:[34.7071,33.0226],monthly_living_cost_single:2000,monthly_living_cost_couple:2900,monthly_living_cost_family:4500},Paphos:{coords:[34.772,32.4297],monthly_living_cost_single:1700,monthly_living_cost_couple:2500,monthly_living_cost_family:3900}}},Italy:{Cities:{Rome:{coords:[41.9028,12.4964],monthly_living_cost_single:2100,monthly_living_cost_couple:3000,monthly_living_cost_family:4700},Florence:{coords:[43.7696,11.2558],monthly_living_cost_single:1900,monthly_living_cost_couple:2800,monthly_living_cost_family:4400},Palermo:{coords:[38.1157,13.3615],monthly_living_cost_single:1500,monthly_living_cost_couple:2200,monthly_living_cost_family:3400}}},Chile:{Cities:{Santiago:{coords:[-33.4489,-70.6693],monthly_living_cost_single:1600,monthly_living_cost_couple:2300,monthly_living_cost_family:3600},Valparaiso:{coords:[-33.0472,-71.6127],monthly_living_cost_single:1400,monthly_living_cost_couple:2100,monthly_living_cost_family:3300},Vina_del_Mar:{coords:[-33.0245,-71.5518],monthly_living_cost_single:1500,monthly_living_cost_couple:2200,monthly_living_cost_family:3500}}}};
-
-const i18n={
-  zh:{panel:'篩選',collapse:'收合',expand:'展開',title:'Retire Anywhere Lab v4',sub:'保留 production 控制器與色彩語意，新增可收合面板與中英切換。',lifestyle:'生活型態',household:'家庭型態',assets:'資產 (USD)',rule:'顯示所有城市：可退休用紫/藍/綠；不可退休用紅色。',lgLux:'Luxury 可負擔',lgCom:'Comfortable 可負擔',lgEss:'Essential 可負擔',lgNo:'超出資產',cmpTitle:'城市選擇（洲 → 國家 → 城市）＋比較',addCmp:'加入比較',clearCmp:'清空比較',dim:'維度',gapTitle:'2025 Top 15 缺口盤點（已補第一批6國）',selNone:'尚未加入比較城市',selPrefix:'已選：',pickCont:'先選洲',pickCountry:'再選國家',pickCity:'最後選城市',max3:'最多3個',need2:'至少選2個城市',afford:'可負擔等級',annual:'每年資金需求',fund:'資金友善分數',cl:'天氣',vi:'簽證滿意度',he:'醫療品質',sa:'安全',ta:'稅務友善',ex:'外國人友善',en:'英文友善',total:'加權總分',gapLeft:'尚缺'},
-  en:{panel:'Filters',collapse:'Collapse',expand:'Expand',title:'Retire Anywhere Lab v4',sub:'Keep production-style controls and colors, with collapsible panel + bilingual UI.',lifestyle:'Life Style',household:'Household',assets:'Assets (USD)',rule:'Show all cities: affordable in purple/blue/green, unaffordable in red.',lgLux:'Luxury affordable',lgCom:'Comfortable affordable',lgEss:'Essential affordable',lgNo:'Over budget',cmpTitle:'City Selector (Continent → Country → City) + Compare',addCmp:'Add to compare',clearCmp:'Clear',dim:'Metric',gapTitle:'2025 Top 15 Gap Check (first 6 added)',selNone:'No city selected for compare',selPrefix:'Selected: ',pickCont:'Select continent',pickCountry:'Select country',pickCity:'Select city',max3:'Max 3 cities',need2:'Pick at least 2 cities',afford:'Affordability',annual:'Annual need',fund:'Funding score',cl:'Climate',vi:'Visa satisfaction',he:'Healthcare',sa:'Safety',ta:'Tax friendliness',ex:'Expat friendliness',en:'English friendliness',total:'Weighted score',gapLeft:'Missing'}
+const batch6={
+  Greece:{Cities:{Athens:{zh:'雅典',coords:[37.9838,23.7275],monthly_living_cost_single:1700,monthly_living_cost_couple:2500,monthly_living_cost_family:3900,landmark:'Acropolis',zh_landmark:'雅典衛城',img:'https://images.pexels.com/photos/772689/pexels-photo-772689.jpeg',desc:'Historic capital with strong amenities.',zh_desc:'歷史文化濃厚、生活機能完整。'},Thessaloniki:{zh:'塞薩洛尼基',coords:[40.6401,22.9444],monthly_living_cost_single:1400,monthly_living_cost_couple:2100,monthly_living_cost_family:3300,landmark:'White Tower',zh_landmark:'白塔',img:'https://images.pexels.com/photos/338515/pexels-photo-338515.jpeg',desc:'Lower cost coastal city.',zh_desc:'海港城市，生活成本相對較低。'},Heraklion:{zh:'伊拉克利翁',coords:[35.3387,25.1442],monthly_living_cost_single:1500,monthly_living_cost_couple:2200,monthly_living_cost_family:3400,landmark:'Crete Coast',zh_landmark:'克里特海岸',img:'https://images.pexels.com/photos/210186/pexels-photo-210186.jpeg',desc:'Warm island lifestyle.',zh_desc:'氣候溫暖，島嶼生活步調。'}}},
+  Malta:{Cities:{Valletta:{zh:'瓦萊塔',coords:[35.8989,14.5146],monthly_living_cost_single:1900,monthly_living_cost_couple:2800,monthly_living_cost_family:4300,landmark:'Grand Harbour',zh_landmark:'大港',img:'https://images.pexels.com/photos/237272/pexels-photo-237272.jpeg',desc:'Compact and expat friendly.',zh_desc:'國際化高、英語友善。'},Sliema:{zh:'斯利馬',coords:[35.9122,14.5044],monthly_living_cost_single:2000,monthly_living_cost_couple:3000,monthly_living_cost_family:4600,landmark:'Sliema Front',zh_landmark:'海濱長廊',img:'https://images.pexels.com/photos/1450340/pexels-photo-1450340.jpeg',desc:'Modern waterfront living.',zh_desc:'海濱生活便利，房租較高。'},Gozo:{zh:'戈佐',coords:[36.0443,14.2512],monthly_living_cost_single:1700,monthly_living_cost_couple:2500,monthly_living_cost_family:3900,landmark:'Azure Coast',zh_landmark:'藍海岸',img:'https://images.pexels.com/photos/1032650/pexels-photo-1032650.jpeg',desc:'Quieter island option.',zh_desc:'節奏慢，適合安靜退休。'}}},
+  Uruguay:{Cities:{Montevideo:{zh:'蒙特維多',coords:[-34.9011,-56.1645],monthly_living_cost_single:1600,monthly_living_cost_couple:2300,monthly_living_cost_family:3600,landmark:'Rambla',zh_landmark:'海濱大道',img:'https://images.pexels.com/photos/1619317/pexels-photo-1619317.jpeg',desc:'Stable and walkable capital.',zh_desc:'社會穩定、步行友善。'},Punta_del_Este:{zh:'埃斯特角城',coords:[-34.9689,-54.9446],monthly_living_cost_single:1800,monthly_living_cost_couple:2600,monthly_living_cost_family:4100,landmark:'La Mano',zh_landmark:'手掌雕塑',img:'https://images.pexels.com/photos/753626/pexels-photo-753626.jpeg',desc:'Premium beach city.',zh_desc:'高品質海濱城市，成本較高。'},Colonia:{zh:'科洛尼亞',coords:[-34.4698,-57.8433],monthly_living_cost_single:1400,monthly_living_cost_couple:2100,monthly_living_cost_family:3300,landmark:'Historic Quarter',zh_landmark:'古城區',img:'https://images.pexels.com/photos/139321/pexels-photo-139321.jpeg',desc:'Historic and affordable.',zh_desc:'歷史小城，生活成本友善。'}}},
+  Cyprus:{Cities:{Nicosia:{zh:'尼古西亞',coords:[35.1856,33.3823],monthly_living_cost_single:1800,monthly_living_cost_couple:2600,monthly_living_cost_family:4000,landmark:'Old City',zh_landmark:'古城',img:'https://images.pexels.com/photos/338515/pexels-photo-338515.jpeg',desc:'Administrative center.',zh_desc:'行政中心、機能完整。'},Limassol:{zh:'利馬索爾',coords:[34.7071,33.0226],monthly_living_cost_single:2000,monthly_living_cost_couple:2900,monthly_living_cost_family:4500,landmark:'Marina',zh_landmark:'碼頭',img:'https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg',desc:'International seaside city.',zh_desc:'國際化海濱城市。'},Paphos:{zh:'帕福斯',coords:[34.772,32.4297],monthly_living_cost_single:1700,monthly_living_cost_couple:2500,monthly_living_cost_family:3900,landmark:'Harbour',zh_landmark:'港區',img:'https://images.pexels.com/photos/1032650/pexels-photo-1032650.jpeg',desc:'Relaxed retirement pace.',zh_desc:'生活節奏悠閒，退休友善。'}}},
+  Italy:{Cities:{Rome:{zh:'羅馬',coords:[41.9028,12.4964],monthly_living_cost_single:2100,monthly_living_cost_couple:3000,monthly_living_cost_family:4700,landmark:'Colosseum',zh_landmark:'羅馬競技場',img:'https://images.pexels.com/photos/532263/pexels-photo-532263.jpeg',desc:'Global city with top amenities.',zh_desc:'資源完整，成本偏高。'},Florence:{zh:'佛羅倫斯',coords:[43.7696,11.2558],monthly_living_cost_single:1900,monthly_living_cost_couple:2800,monthly_living_cost_family:4400,landmark:'Duomo',zh_landmark:'聖母百花大教堂',img:'https://images.pexels.com/photos/2087391/pexels-photo-2087391.jpeg',desc:'Art city, premium lifestyle.',zh_desc:'藝術文化濃厚，品質高。'},Palermo:{zh:'巴勒莫',coords:[38.1157,13.3615],monthly_living_cost_single:1500,monthly_living_cost_couple:2200,monthly_living_cost_family:3400,landmark:'Palermo Cathedral',zh_landmark:'巴勒莫主教座堂',img:'https://images.pexels.com/photos/460672/pexels-photo-460672.jpeg',desc:'Lower-cost southern option.',zh_desc:'南義成本較低，生活慢。'}}},
+  Chile:{Cities:{Santiago:{zh:'聖地牙哥',coords:[-33.4489,-70.6693],monthly_living_cost_single:1600,monthly_living_cost_couple:2300,monthly_living_cost_family:3600,landmark:'Andes View',zh_landmark:'安地斯山景',img:'https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg',desc:'Balanced urban choice.',zh_desc:'都市機能與成本相對平衡。'},Valparaiso:{zh:'瓦爾帕萊索',coords:[-33.0472,-71.6127],monthly_living_cost_single:1400,monthly_living_cost_couple:2100,monthly_living_cost_family:3300,landmark:'Colorful Hills',zh_landmark:'彩色山城',img:'https://images.pexels.com/photos/1619317/pexels-photo-1619317.jpeg',desc:'Artistic coastal city.',zh_desc:'港都氣息強，生活感好。'},Vina_del_Mar:{zh:'比尼亞德爾馬',coords:[-33.0245,-71.5518],monthly_living_cost_single:1500,monthly_living_cost_couple:2200,monthly_living_cost_family:3500,landmark:'Beachfront',zh_landmark:'海濱',img:'https://images.pexels.com/photos/1450353/pexels-photo-1450353.jpeg',desc:'Seaside and comfortable.',zh_desc:'濱海舒適，退休常見選項。'}}}
 };
 
-let state={lifestyle:'Essential',household:'single',asset:3000000,lang:'zh'},cities=[],selected=[]; let map,layer;
-const lifeMul={Essential:0.85,Comfortable:1,Luxury:1.25};
-const markerColor={Luxury:'#10b981',Comfortable:'#3b82f6',Essential:'#a855f7',None:'#ef4444'};
-const affordOrder=['None','Essential','Comfortable','Luxury'];
+const i18n={zh:{title:'Retire Anywhere Lab v5',sub:'第一眼先回答：多少資產可以在哪裡退休。',filters:'篩選',panel:'篩選條件',lifestyle:'生活型態',household:'家庭型態',assets:'資產(USD)',rule:'紅點代表目前資產不足以在該城市退休。',lux:'Luxury 可負擔',com:'Comfortable 可負擔',ess:'Essential 可負擔',no:'超出資產',cmp:'城市選擇（洲 → 國家 → 城市）＋比較',add:'加入比較',clear:'清空比較',vis:'訪客數',collapse:'收合',expand:'展開',mobileFilters:'篩選條件',apply:'套用',reset:'重設',pickCont:'先選洲',pickCountry:'再選國家',pickCity:'最後選城市',selNone:'尚未加入比較城市',selPrefix:'已選：',dim:'維度',annual:'每年資金需求',fund:'資金友善分數',cl:'天氣',vi:'簽證滿意度',he:'醫療品質',sa:'安全',ta:'稅務友善',ex:'外國人友善',en:'英文友善',total:'加權總分',methTitle:'Methodology 計算邏輯',methBody:'退休資產門檻使用 25x 年支出（4% 提領率），並依 Lifestyle 套用係數（Essential 0.85 / Comfortable 1.0 / Luxury 1.25）。地圖顏色一眼顯示可負擔程度，詳細資訊在城市卡與比較表。',cityDetail:'城市詳情',afford:'可負擔等級',needAsset:'建議退休資產',max3:'最多比較 3 個城市'},en:{title:'Retire Anywhere Lab v5',sub:'First glance answer: where you can retire with your assets.',filters:'Filters',panel:'Filters',lifestyle:'Life Style',household:'Household',assets:'Assets (USD)',rule:'Red means your current assets are not enough for retirement there.',lux:'Luxury affordable',com:'Comfortable affordable',ess:'Essential affordable',no:'Over budget',cmp:'City Selector (Continent → Country → City) + Compare',add:'Add to compare',clear:'Clear',vis:'Visitors',collapse:'Collapse',expand:'Expand',mobileFilters:'Filters',apply:'Apply',reset:'Reset',pickCont:'Select continent',pickCountry:'Select country',pickCity:'Select city',selNone:'No city selected',selPrefix:'Selected: ',dim:'Metric',annual:'Annual need',fund:'Funding score',cl:'Climate',vi:'Visa satisfaction',he:'Healthcare',sa:'Safety',ta:'Tax friendliness',ex:'Expat friendliness',en:'English friendliness',total:'Weighted score',methTitle:'Methodology',methBody:'Retirement asset threshold uses 25x annual spending (4% withdrawal rate), then applies lifestyle multipliers (Essential 0.85 / Comfortable 1.0 / Luxury 1.25). Map colors show affordability at a glance; details are in city card and comparison table.',cityDetail:'City Detail',afford:'Affordability',needAsset:'Suggested retirement asset',max3:'Max 3 cities'}};
 
-function t(k){return i18n[state.lang][k]||k}
-function usd(n){return '$'+Math.round(n).toLocaleString();}
+let state={lifestyle:'Essential',household:'single',asset:3000000,lang:'zh'},draftMobile={...state};
+let cities=[],selected=[]; let map,layer;
+const lifeMul={Essential:0.85,Comfortable:1,Luxury:1.25}; const markerColor={Luxury:'#10b981',Comfortable:'#3b82f6',Essential:'#a855f7',None:'#ef4444'};
+function t(k){return i18n[state.lang][k]||k} function usd(n){return '$'+Math.round(n).toLocaleString();}
 function annualNeed(c,house){const m=house==='single'?c.monthly_living_cost_single:house==='couple'?c.monthly_living_cost_couple:c.monthly_living_cost_family; return m*12;}
-function assetNeed(c,house,life){return annualNeed(c,house)*25*lifeMul[life];}
-function level(c,house,asset){const e=assetNeed(c,house,'Essential'),k=assetNeed(c,house,'Comfortable'),l=assetNeed(c,house,'Luxury'); if(asset>=l) return 'Luxury'; if(asset>=k) return 'Comfortable'; if(asset>=e) return 'Essential'; return 'None';}
-function pin(color){return L.divIcon({className:'',html:`<div style="width:14px;height:14px;border-radius:50%;background:${color};border:2px solid #fff;box-shadow:0 0 0 2px rgba(0,0,0,.35)"></div>`,iconSize:[14,14]});}
+function assetNeed(c,house,life){return annualNeed(c,house)*25*lifeMul[life]}
+function level(c,house,asset){const e=assetNeed(c,house,'Essential'),k=assetNeed(c,house,'Comfortable'),l=assetNeed(c,house,'Luxury'); if(asset>=l)return'Luxury'; if(asset>=k)return'Comfortable'; if(asset>=e)return'Essential'; return'None'}
+function pin(color){return L.divIcon({className:'',html:`<div style="width:14px;height:14px;border-radius:50%;background:${color};border:2px solid #fff;box-shadow:0 0 0 2px rgba(0,0,0,.35)"></div>`,iconSize:[14,14]})}
+function score(c){const [cl,vi,he,sa,ta,ex,en]=meta[c.country]||[6,6,6,6,6,6,6]; const annual=annualNeed(c,state.household)*lifeMul[state.lifestyle]; const fund=annual<=30000?10:annual<=45000?8:annual<=60000?6:annual<=80000?4:2; const total=(fund*.3+cl*.1+vi*.15+he*.15+sa*.1+ta*.1+ex*.05+en*.05).toFixed(2); return {annual,fund,cl,vi,he,sa,ta,ex,en,total}}
 
-function setChoice(type,val){state[type]=val; document.querySelectorAll(`.btn[data-type='${type}']`).forEach(b=>b.classList.toggle('active',b.dataset.val===val)); draw(); renderCmp();}
+function controlHtml(prefix=''){
+  return `
+  <div class="group"><label>${t('lifestyle')}</label><div class="btns">
+    <button class="btn ${state.lifestyle==='Essential'?'active':''}" data-type="lifestyle" data-val="Essential" onclick="setChoice('${prefix}','lifestyle','Essential')">Essential</button>
+    <button class="btn ${state.lifestyle==='Comfortable'?'active':''}" data-type="lifestyle" data-val="Comfortable" onclick="setChoice('${prefix}','lifestyle','Comfortable')">Comfortable</button>
+    <button class="btn ${state.lifestyle==='Luxury'?'active':''}" data-type="lifestyle" data-val="Luxury" onclick="setChoice('${prefix}','lifestyle','Luxury')">Luxury</button>
+  </div></div>
+  <div class="group"><label>${t('household')}</label><div class="btns">
+    <button class="btn ${state.household==='single'?'active':''}" data-type="household" data-val="single" onclick="setChoice('${prefix}','household','single')">Single</button>
+    <button class="btn ${state.household==='couple'?'active':''}" data-type="household" data-val="couple" onclick="setChoice('${prefix}','household','couple')">Couple</button>
+    <button class="btn ${state.household==='family'?'active':''}" data-type="household" data-val="family" onclick="setChoice('${prefix}','household','family')">Family</button>
+  </div></div>
+  <div class="group"><label>${t('assets')}: <span class="budget" id="${prefix}budgetTxt">${usd(state.asset)}</span></label>
+  <input type="range" id="${prefix}assetSlider" min="100000" max="10000000" step="50000" value="${state.asset}" /></div>
+  <div class="group" style="font-size:12px;opacity:.84">${t('rule')}</div>`;
+}
 
-function score(c){const [cl,vi,he,sa,ta,ex,en]=meta[c.country]||[6,6,6,6,6,6,6]; const annual=annualNeed(c,state.household)*lifeMul[state.lifestyle]; const fund=annual<=30000?10:annual<=45000?8:annual<=60000?6:annual<=80000?4:2; const total=(fund*.3+cl*.1+vi*.15+he*.15+sa*.1+ta*.1+ex*.05+en*.05).toFixed(2); return {annual,fund,cl,vi,he,sa,ta,ex,en,total};}
+function setChoice(prefix,type,val){ if(prefix==='m_'){draftMobile[type]=val; updateMobileSheetUI(); return;} state[type]=val; renderControls(); draw(); renderCmp(); }
+window.setChoice=setChoice;
+
+function renderControls(){
+  document.getElementById('panelBody').innerHTML=controlHtml('');
+  document.getElementById('mobileSheetBody').innerHTML=controlHtml('m_');
+  const s1=document.getElementById('assetSlider'); if(s1) s1.oninput=()=>{state.asset=+s1.value; renderControls(); draw(); renderCmp();};
+  const s2=document.getElementById('m_assetSlider'); if(s2) s2.oninput=()=>{draftMobile.asset=+s2.value; document.getElementById('m_budgetTxt').textContent=usd(draftMobile.asset)};
+}
+
+function updateMobileSheetUI(){
+  const box=document.getElementById('mobileSheetBody');
+  box.querySelectorAll(".btn[data-type='lifestyle']").forEach(b=>b.classList.toggle('active',b.dataset.val===draftMobile.lifestyle));
+  box.querySelectorAll(".btn[data-type='household']").forEach(b=>b.classList.toggle('active',b.dataset.val===draftMobile.household));
+  document.getElementById('m_assetSlider').value=draftMobile.asset; document.getElementById('m_budgetTxt').textContent=usd(draftMobile.asset);
+}
 
 function draw(){
   layer.clearLayers();
   cities.forEach((c,i)=>{
-    const lv=level(c,state.household,state.asset);
-    const color=markerColor[lv];
-    const s=score(c),img=photos[c.city]||'https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=500&q=60';
+    const lv=level(c,state.household,state.asset),color=markerColor[lv],s=score(c);
+    const label=state.lang==='zh'?(c.zh||c.city):c.city;
     const mk=L.marker(c.coords,{icon:pin(color)}).addTo(layer);
-    mk.bindPopup(`<b>${c.country} - ${c.city}</b><br/>${t('afford')}: <b style='color:${color}'>${lv}</b><br/>${t('annual')}（${state.household}/${state.lifestyle}）：${usd(s.annual)}<br/>${t('assets')}：${usd(assetNeed(c,state.household,state.lifestyle))}<br/><button onclick="addCmp(${i})">${t('addCmp')}</button><br/><img class='photo' src='${img}' alt='${c.city}'/>`);
+    mk.bindPopup(`<b>${c.country} - ${label}</b><br/>${t('afford')}: <b style='color:${color}'>${lv}</b><br/>${t('annual')}: ${usd(s.annual)}<br/><button onclick="openCityDetail(${i})">${t('cityDetail')}</button> <button onclick="addCmp(${i})">${t('add')}</button>`);
   });
 }
 
+function openCityDetail(i){
+  const c=cities[i],s=score(c),lv=level(c,state.household,state.asset);
+  const name=state.lang==='zh'?(c.zh||c.city):c.city, lm=state.lang==='zh'?(c.zh_landmark||c.landmark||''):(c.landmark||''), desc=state.lang==='zh'?(c.zh_desc||c.desc||''):(c.desc||'');
+  document.getElementById('cityModalBody').innerHTML=`<h3>${c.country} - ${name}</h3><img class='city-img' src='${c.img||'https://images.pexels.com/photos/1450353/pexels-photo-1450353.jpeg'}'/><p>${lm}</p><p>${desc}</p><p>${t('afford')}: <b style='color:${markerColor[lv]}'>${lv}</b></p><p>${t('annual')}: ${usd(s.annual)}</p><p>${t('needAsset')}: ${usd(assetNeed(c,state.household,state.lifestyle))}</p>`;
+  document.getElementById('cityModal').classList.add('show');
+}
+window.openCityDetail=openCityDetail;
+
 function buildSelectors(){
-  const cont=[...new Set(cities.map(c=>c.continent))].sort();
   const c1=document.getElementById('continentSel'),c2=document.getElementById('countrySel'),c3=document.getElementById('citySel');
-  c1.innerHTML=`<option value="">${t('pickCont')}</option>`+cont.map(v=>`<option>${v}</option>`).join('');
-  c2.innerHTML=`<option value="">${t('pickCountry')}</option>`;
-  c3.innerHTML=`<option value="">${t('pickCity')}</option>`;
-  c1.onchange=()=>{const cc=[...new Set(cities.filter(c=>c.continent===c1.value).map(c=>c.country))].sort(); c2.innerHTML=`<option value="">${t('pickCountry')}</option>`+cc.map(v=>`<option>${v}</option>`).join(''); c2.disabled=!c1.value; c3.innerHTML=`<option value="">${t('pickCity')}</option>`; c3.disabled=true;};
-  c2.onchange=()=>{const ci=cities.filter(c=>c.country===c2.value).map(c=>c.city).sort(); c3.innerHTML=`<option value="">${t('pickCity')}</option>`+ci.map(v=>`<option>${v}</option>`).join(''); c3.disabled=!c2.value;};
+  const cont=[...new Set(cities.map(c=>c.continent))].sort();
+  c1.innerHTML=`<option value=''>${t('pickCont')}</option>`+cont.map(v=>`<option>${v}</option>`).join('');
+  c2.innerHTML=`<option value=''>${t('pickCountry')}</option>`; c3.innerHTML=`<option value=''>${t('pickCity')}</option>`;
+  c1.onchange=()=>{const cc=[...new Set(cities.filter(c=>c.continent===c1.value).map(c=>c.country))].sort(); c2.innerHTML=`<option value=''>${t('pickCountry')}</option>`+cc.map(v=>`<option>${v}</option>`).join(''); c2.disabled=!c1.value; c3.innerHTML=`<option value=''>${t('pickCity')}</option>`; c3.disabled=true;};
+  c2.onchange=()=>{const ci=cities.filter(c=>c.country===c2.value).map(c=>state.lang==='zh'?(c.zh||c.city):c.city); const orig=cities.filter(c=>c.country===c2.value).map(c=>c.city); c3.innerHTML=`<option value=''>${t('pickCity')}</option>`+orig.map((v,idx)=>`<option value='${v}'>${ci[idx]}</option>`).join(''); c3.disabled=!c2.value;};
 }
-
-function addFromSelectors(){const c1=document.getElementById('continentSel').value,c2=document.getElementById('countrySel').value,c3=document.getElementById('citySel').value; const i=cities.findIndex(c=>c.continent===c1&&c.country===c2&&c.city===c3); if(i>=0)addCmp(i)}
-function addCmp(i){const c=cities[i]; if(!c) return; if(selected.find(x=>x.country===c.country&&x.city===c.city)) return; if(selected.length>=3) return alert(t('max3')); selected.push(c); renderCmp();}
-window.addCmp=addCmp;
-function clearCompare(){selected=[];renderCmp()} window.clearCompare=clearCompare;
-
+function addFromSelectors(){const c1=continentSel.value,c2=countrySel.value,c3=citySel.value; const i=cities.findIndex(c=>c.continent===c1&&c.country===c2&&c.city===c3); if(i>=0)addCmp(i)}
+function addCmp(i){const c=cities[i]; if(!c)return; if(selected.find(x=>x.country===c.country&&x.city===c.city))return; if(selected.length>=3)return alert(t('max3')); selected.push(c); renderCmp()} window.addCmp=addCmp;
+function clearCompare(){selected=[]; renderCmp()} 
 function renderCmp(){
-  document.getElementById('selected').textContent=selected.length?(t('selPrefix')+selected.map(c=>`${c.continent}/${c.country}/${c.city}`).join('、')):t('selNone');
-  const tcmp=document.getElementById('cmp'); if(selected.length<2){tcmp.style.display='none';return;} tcmp.style.display='table';
-  ['h1','h2','h3'].forEach((id,idx)=>document.getElementById(id).textContent=selected[idx]?`${selected[idx].country}-${selected[idx].city}`:'-');
+  selected=document.getElementById('selected')?selected:selected;
+  document.getElementById('selected').textContent=selected.length?`${t('selPrefix')}${selected.map(c=>`${c.country}/${state.lang==='zh'?(c.zh||c.city):c.city}`).join('、')}`:t('selNone');
+  const tbl=document.getElementById('cmp'); if(selected.length<2){tbl.style.display='none'; return;} tbl.style.display='table';
+  ['h1','h2','h3'].forEach((id,idx)=>document.getElementById(id).textContent=selected[idx]?`${selected[idx].country}-${state.lang==='zh'?(selected[idx].zh||selected[idx].city):selected[idx].city}`:'-');
   const m=selected.map(score),rows=[[t('annual'),...m.map(x=>usd(x.annual))],[t('fund'),...m.map(x=>x.fund)],[t('cl'),...m.map(x=>x.cl)],[t('vi'),...m.map(x=>x.vi)],[t('he'),...m.map(x=>x.he)],[t('sa'),...m.map(x=>x.sa)],[t('ta'),...m.map(x=>x.ta)],[t('ex'),...m.map(x=>x.ex)],[t('en'),...m.map(x=>x.en)],[t('total'),...m.map(x=>x.total)]];
-  const tb=tcmp.querySelector('tbody'); tb.innerHTML=''; rows.forEach((r,ri)=>{const tr=document.createElement('tr'); r.forEach((v,ci)=>{const td=document.createElement('td'); td.textContent=v; if(ri===rows.length-1&&ci>0) td.className='score'; tr.appendChild(td)}); tb.appendChild(tr)});
+  const tb=tbl.querySelector('tbody'); tb.innerHTML=''; rows.forEach((r,ri)=>{const tr=document.createElement('tr'); r.forEach((v,ci)=>{const td=document.createElement('td'); td.textContent=v; if(ri===rows.length-1&&ci>0)td.className='score'; tr.appendChild(td)}); tb.appendChild(tr)});
 }
 
-function renderGap(countries){
-  const g=document.getElementById('gap'); g.innerHTML=''; const miss=[];
-  top15.forEach(c=>{const ok=countries.includes(c); if(!ok) miss.push(c); const s=document.createElement('span'); s.className='chip '+(ok?'ok':'todo'); s.textContent=(ok?'✅ ':'🟡 ')+c; g.appendChild(s)});
-  document.getElementById('gapSummary').textContent=`${t('gapLeft')} ${miss.length}：${miss.join('、')||'0'}`;
+async function updateVisitorCount(){
+  try{
+    const res=await fetch('https://api.countapi.xyz/hit/amoleskyhigh.github.io/retire-map-lab-v5');
+    const data=await res.json();
+    if(data && typeof data.value==='number'){
+      document.getElementById('visitor-val').textContent=data.value.toLocaleString();
+      return;
+    }
+  }catch(e){}
+  const key='retire_lab_v5_local_visits';
+  let v=parseInt(localStorage.getItem(key)||'0',10)+1;
+  localStorage.setItem(key,String(v));
+  document.getElementById('visitor-val').textContent=v.toLocaleString();
 }
 
 function applyLang(){
-  document.documentElement.lang = state.lang==='zh'?'zh-Hant':'en';
-  document.getElementById('t_title').textContent=t('title');
-  document.getElementById('t_sub').textContent=t('sub');
-  document.getElementById('t_panel').textContent=t('panel');
-  document.getElementById('t_lifestyle').textContent=t('lifestyle');
-  document.getElementById('t_household').textContent=t('household');
-  document.getElementById('t_assets').textContent=t('assets');
-  document.getElementById('t_rule').textContent=t('rule');
-  document.getElementById('t_lg_lux').textContent=t('lgLux');
-  document.getElementById('t_lg_com').textContent=t('lgCom');
-  document.getElementById('t_lg_ess').textContent=t('lgEss');
-  document.getElementById('t_lg_no').textContent=t('lgNo');
-  document.getElementById('t_cmp_title').textContent=t('cmpTitle');
-  document.getElementById('t_add_cmp').textContent=t('addCmp');
-  document.getElementById('t_clear_cmp').textContent=t('clearCmp');
-  document.getElementById('t_dim').textContent=t('dim');
-  document.getElementById('t_gap_title').textContent=t('gapTitle');
-  document.getElementById('langBtn').textContent=state.lang==='zh'?'EN':'中文';
-  const panel=document.getElementById('panel');
-  document.getElementById('toggleBtn').textContent=panel.classList.contains('collapsed')?t('expand'):t('collapse');
-  buildSelectors(); renderCmp(); draw();
+  document.documentElement.lang=state.lang==='zh'?'zh-Hant':'en';
+  t_title.textContent=t('title'); t_sub.textContent=t('sub'); t_filters.textContent=t('filters'); t_panel.textContent=t('panel');
+  t_lg_lux.textContent=t('lux'); t_lg_com.textContent=t('com'); t_lg_ess.textContent=t('ess'); t_lg_no.textContent=t('no');
+  t_cmp_title.textContent=t('cmp'); addCmpBtn.textContent=t('add'); clearCmpBtn.textContent=t('clear'); t_visitors.textContent=t('vis');
+  t_mobile_filters.textContent=t('mobileFilters'); applyBtn.textContent=t('apply'); resetBtn.textContent=t('reset'); t_dim.textContent=t('dim');
+  toggleBtn.textContent=panel.classList.contains('collapsed')?t('expand'):t('collapse'); methodBtn.textContent='Method';
+  t_meth_title.textContent=t('methTitle'); t_meth_body.textContent=t('methBody'); langBtn.textContent=state.lang==='zh'?'EN':'中文';
+  renderControls(); buildSelectors(); draw(); renderCmp();
 }
 
 async function init(){
-  map=L.map('map',{worldCopyJump:true,maxBounds:[[-85,-360],[85,360]],maxBoundsViscosity:1.0,minZoom:2}).setView([20,10],2);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'&copy; OpenStreetMap'}).addTo(map);
-  layer=L.layerGroup().addTo(map);
+  map=L.map('map',{worldCopyJump:true,maxBounds:[[-85,-270],[85,270]],maxBoundsViscosity:1,minZoom:2}).setView([20,10],2);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'&copy; OpenStreetMap'}).addTo(map); layer=L.layerGroup().addTo(map);
 
   const base=await fetch('./world_retirement_data.json').then(r=>r.json());
-  const merged={...base,...batch6}; const countries=Object.keys(merged);
-  cities=[]; countries.forEach(country=>Object.entries(merged[country].Cities||{}).forEach(([city,info])=>cities.push({continent:countryCont[country]||'Other',country,city,...info})));
+  const merged={...base,...batch6};
+  cities=[];
+  Object.keys(merged).forEach(country=>{
+    Object.entries(merged[country].Cities||{}).forEach(([city,info])=>cities.push({continent:countryCont[country]||'Other',country,city,...info}));
+  });
 
-  renderGap(countries); buildSelectors(); draw(); renderCmp();
+  renderControls(); buildSelectors(); draw(); renderCmp(); updateVisitorCount(); applyLang();
 
-  const slider=document.getElementById('assetSlider');
-  slider.oninput=()=>{state.asset=Number(slider.value); document.getElementById('budgetTxt').textContent=usd(state.asset); draw(); renderCmp();};
+  addCmpBtn.onclick=addFromSelectors; clearCmpBtn.onclick=clearCompare;
+  toggleBtn.onclick=()=>{panel.classList.toggle('collapsed'); toggleBtn.textContent=panel.classList.contains('collapsed')?t('expand'):t('collapse')};
+  langBtn.onclick=()=>{state.lang=state.lang==='zh'?'en':'zh'; applyLang();};
 
-  document.getElementById('toggleBtn').onclick=()=>{const p=document.getElementById('panel'); p.classList.toggle('collapsed'); document.getElementById('toggleBtn').textContent=p.classList.contains('collapsed')?t('expand'):t('collapse');};
-  document.getElementById('langBtn').onclick=()=>{state.lang=state.lang==='zh'?'en':'zh'; applyLang();};
-  applyLang();
+  mobileFab.onclick=()=>{draftMobile={...state}; mobileSheet.classList.add('show'); renderControls(); updateMobileSheetUI();};
+  closeSheetBtn.onclick=()=>mobileSheet.classList.remove('show');
+  resetBtn.onclick=()=>{draftMobile={lifestyle:'Essential',household:'single',asset:3000000,lang:state.lang}; updateMobileSheetUI();};
+  applyBtn.onclick=()=>{state={...draftMobile}; mobileSheet.classList.remove('show'); applyLang();};
+
+  methodBtn.onclick=()=>methodModal.classList.add('show'); closeMethodModal.onclick=()=>methodModal.classList.remove('show');
+  closeCityModal.onclick=()=>cityModal.classList.remove('show');
+  cityModal.onclick=(e)=>{if(e.target.id==='cityModal')cityModal.classList.remove('show')};
+  methodModal.onclick=(e)=>{if(e.target.id==='methodModal')methodModal.classList.remove('show')};
 }
-init().catch(e=>alert('初始化失敗：'+e.message));
+
+init().catch(e=>alert('Init failed: '+e.message));
 </script>
 </body>
 </html>
