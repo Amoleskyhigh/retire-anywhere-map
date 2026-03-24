@@ -3,7 +3,10 @@
     "Cities": {
       "New York City": {
         "zh": "紐約市",
-        "coords": [40.7128, -74.006],
+        "coords": [
+          40.7128,
+          -74.006
+        ],
         "monthly_living_cost_single": 4800,
         "monthly_living_cost_couple": 6800,
         "monthly_living_cost_family": 10500,
@@ -17,7 +20,10 @@
       },
       "San Francisco": {
         "zh": "舊金山",
-        "coords": [37.7749, -122.4194],
+        "coords": [
+          37.7749,
+          -122.4194
+        ],
         "monthly_living_cost_single": 4500,
         "monthly_living_cost_couple": 6200,
         "monthly_living_cost_family": 9800,
@@ -31,7 +37,10 @@
       },
       "San Jose": {
         "zh": "聖荷西",
-        "coords": [37.3382, -121.8863],
+        "coords": [
+          37.3382,
+          -121.8863
+        ],
         "monthly_living_cost_single": 4200,
         "monthly_living_cost_couple": 5800,
         "monthly_living_cost_family": 9200,
@@ -45,7 +54,10 @@
       },
       "Boston": {
         "zh": "波士頓",
-        "coords": [42.3601, -71.0589],
+        "coords": [
+          42.3601,
+          -71.0589
+        ],
         "monthly_living_cost_single": 4000,
         "monthly_living_cost_couple": 5500,
         "monthly_living_cost_family": 8500,
@@ -59,7 +71,10 @@
       },
       "Washington DC": {
         "zh": "華盛頓特區",
-        "coords": [38.9072, -77.0369],
+        "coords": [
+          38.9072,
+          -77.0369
+        ],
         "monthly_living_cost_single": 3800,
         "monthly_living_cost_couple": 5200,
         "monthly_living_cost_family": 8000,
@@ -73,7 +88,10 @@
       },
       "Seattle": {
         "zh": "西雅圖",
-        "coords": [47.6062, -122.3321],
+        "coords": [
+          47.6062,
+          -122.3321
+        ],
         "monthly_living_cost_single": 3500,
         "monthly_living_cost_couple": 4800,
         "monthly_living_cost_family": 7500,
@@ -87,7 +105,10 @@
       },
       "Los Angeles": {
         "zh": "洛杉磯",
-        "coords": [34.0522, -118.2437],
+        "coords": [
+          34.0522,
+          -118.2437
+        ],
         "monthly_living_cost_single": 3400,
         "monthly_living_cost_couple": 4600,
         "monthly_living_cost_family": 7200,
@@ -101,7 +122,10 @@
       },
       "San Diego": {
         "zh": "聖地牙哥",
-        "coords": [32.7157, -117.1611],
+        "coords": [
+          32.7157,
+          -117.1611
+        ],
         "monthly_living_cost_single": 3400,
         "monthly_living_cost_couple": 4700,
         "monthly_living_cost_family": 7300,
@@ -115,13 +139,16 @@
       },
       "Miami": {
         "zh": "邁阿密",
-        "coords": [25.7617, -80.1918],
+        "coords": [
+          25.7617,
+          -80.1918
+        ],
         "monthly_living_cost_single": 3200,
         "monthly_living_cost_couple": 4400,
         "monthly_living_cost_family": 6800,
         "landmark": "South Beach Lifeguard Tower",
         "zh_landmark": "南海灘救生亭",
-        "img": "assets/cities/miami.jpg",
+        "img": "assets/cities/miami_citymatch_v3.jpg",
         "desc": "Colorful Art Deco lifeguard towers on the sand.",
         "zh_desc": "邁阿密最著名的彩色救生亭與蔚藍海岸。",
         "attribution": "Photo via Unsplash",
@@ -129,7 +156,10 @@
       },
       "Chicago": {
         "zh": "芝加哥",
-        "coords": [41.8781, -87.6298],
+        "coords": [
+          41.8781,
+          -87.6298
+        ],
         "monthly_living_cost_single": 2600,
         "monthly_living_cost_couple": 3500,
         "monthly_living_cost_family": 5400,
@@ -143,7 +173,10 @@
       },
       "Houston": {
         "zh": "休士頓",
-        "coords": [29.7604, -95.3698],
+        "coords": [
+          29.7604,
+          -95.3698
+        ],
         "monthly_living_cost_single": 2200,
         "monthly_living_cost_couple": 3000,
         "monthly_living_cost_family": 4600,
@@ -157,7 +190,10 @@
       },
       "Phoenix": {
         "zh": "鳳凰城",
-        "coords": [33.4484, -112.074],
+        "coords": [
+          33.4484,
+          -112.074
+        ],
         "monthly_living_cost_single": 2200,
         "monthly_living_cost_couple": 3000,
         "monthly_living_cost_family": 4600,
@@ -171,7 +207,10 @@
       },
       "Philadelphia": {
         "zh": "費城",
-        "coords": [39.9526, -75.1652],
+        "coords": [
+          39.9526,
+          -75.1652
+        ],
         "monthly_living_cost_single": 2800,
         "monthly_living_cost_couple": 3800,
         "monthly_living_cost_family": 5800,
@@ -185,7 +224,10 @@
       },
       "Austin": {
         "zh": "奧斯丁",
-        "coords": [30.2672, -97.7431],
+        "coords": [
+          30.2672,
+          -97.7431
+        ],
         "monthly_living_cost_single": 2400,
         "monthly_living_cost_couple": 3300,
         "monthly_living_cost_family": 4900,
@@ -199,7 +241,10 @@
       },
       "Denver": {
         "zh": "丹佛",
-        "coords": [39.7392, -104.9903],
+        "coords": [
+          39.7392,
+          -104.9903
+        ],
         "monthly_living_cost_single": 2800,
         "monthly_living_cost_couple": 3800,
         "monthly_living_cost_family": 5700,
@@ -213,7 +258,10 @@
       },
       "Portland": {
         "zh": "波特蘭",
-        "coords": [45.5152, -122.6784],
+        "coords": [
+          45.5152,
+          -122.6784
+        ],
         "monthly_living_cost_single": 2700,
         "monthly_living_cost_couple": 3700,
         "monthly_living_cost_family": 5600,
@@ -227,7 +275,10 @@
       },
       "Atlanta": {
         "zh": "亞特蘭大",
-        "coords": [33.749, -84.388],
+        "coords": [
+          33.749,
+          -84.388
+        ],
         "monthly_living_cost_single": 2600,
         "monthly_living_cost_couple": 3600,
         "monthly_living_cost_family": 5500,
@@ -241,7 +292,10 @@
       },
       "Charlotte": {
         "zh": "夏洛特",
-        "coords": [35.2271, -80.8431],
+        "coords": [
+          35.2271,
+          -80.8431
+        ],
         "monthly_living_cost_single": 2500,
         "monthly_living_cost_couple": 3400,
         "monthly_living_cost_family": 5200,
@@ -255,7 +309,10 @@
       },
       "Nashville": {
         "zh": "納許維爾",
-        "coords": [36.1627, -86.7816],
+        "coords": [
+          36.1627,
+          -86.7816
+        ],
         "monthly_living_cost_single": 2400,
         "monthly_living_cost_couple": 3300,
         "monthly_living_cost_family": 5000,
@@ -269,7 +326,10 @@
       },
       "Dallas": {
         "zh": "達拉斯",
-        "coords": [32.7767, -96.797],
+        "coords": [
+          32.7767,
+          -96.797
+        ],
         "monthly_living_cost_single": 2300,
         "monthly_living_cost_couple": 3200,
         "monthly_living_cost_family": 4800,
@@ -287,7 +347,10 @@
     "Cities": {
       "Tokyo": {
         "zh": "東京",
-        "coords": [35.6762, 139.6503],
+        "coords": [
+          35.6762,
+          139.6503
+        ],
         "monthly_living_cost_single": 1200,
         "monthly_living_cost_couple": 1867,
         "monthly_living_cost_family": 3667,
@@ -301,7 +364,10 @@
       },
       "Yokohama": {
         "zh": "橫濱",
-        "coords": [35.4437, 139.638],
+        "coords": [
+          35.4437,
+          139.638
+        ],
         "monthly_living_cost_single": 1067,
         "monthly_living_cost_couple": 1600,
         "monthly_living_cost_family": 3200,
@@ -315,7 +381,10 @@
       },
       "Osaka": {
         "zh": "大阪",
-        "coords": [34.6937, 135.5023],
+        "coords": [
+          34.6937,
+          135.5023
+        ],
         "monthly_living_cost_single": 967,
         "monthly_living_cost_couple": 1400,
         "monthly_living_cost_family": 2800,
@@ -329,7 +398,10 @@
       },
       "Nagoya": {
         "zh": "名古屋",
-        "coords": [35.1815, 136.9066],
+        "coords": [
+          35.1815,
+          136.9066
+        ],
         "monthly_living_cost_single": 900,
         "monthly_living_cost_couple": 1267,
         "monthly_living_cost_family": 2667,
@@ -343,7 +415,10 @@
       },
       "Kyoto": {
         "zh": "京都",
-        "coords": [35.0116, 135.7681],
+        "coords": [
+          35.0116,
+          135.7681
+        ],
         "monthly_living_cost_single": 933,
         "monthly_living_cost_couple": 1300,
         "monthly_living_cost_family": 2667,
@@ -357,7 +432,10 @@
       },
       "Fukuoka": {
         "zh": "福岡",
-        "coords": [33.5902, 130.4017],
+        "coords": [
+          33.5902,
+          130.4017
+        ],
         "monthly_living_cost_single": 867,
         "monthly_living_cost_couple": 1200,
         "monthly_living_cost_family": 2467,
@@ -371,7 +449,10 @@
       },
       "Kawasaki": {
         "zh": "川崎",
-        "coords": [35.5308, 139.7029],
+        "coords": [
+          35.5308,
+          139.7029
+        ],
         "monthly_living_cost_single": 1000,
         "monthly_living_cost_couple": 1467,
         "monthly_living_cost_family": 3000,
@@ -385,7 +466,10 @@
       },
       "Kobe": {
         "zh": "神戶",
-        "coords": [34.6901, 135.1955],
+        "coords": [
+          34.6901,
+          135.1955
+        ],
         "monthly_living_cost_single": 900,
         "monthly_living_cost_couple": 1233,
         "monthly_living_cost_family": 2533,
@@ -399,7 +483,10 @@
       },
       "Sapporo": {
         "zh": "札幌",
-        "coords": [43.0618, 141.3545],
+        "coords": [
+          43.0618,
+          141.3545
+        ],
         "monthly_living_cost_single": 833,
         "monthly_living_cost_couple": 1133,
         "monthly_living_cost_family": 2333,
@@ -413,7 +500,10 @@
       },
       "Saitama": {
         "zh": "埼玉",
-        "coords": [35.8617, 139.6455],
+        "coords": [
+          35.8617,
+          139.6455
+        ],
         "monthly_living_cost_single": 933,
         "monthly_living_cost_couple": 1267,
         "monthly_living_cost_family": 2733,
@@ -431,7 +521,10 @@
     "Cities": {
       "Taipei": {
         "zh": "台北",
-        "coords": [25.033, 121.5654],
+        "coords": [
+          25.033,
+          121.5654
+        ],
         "monthly_living_cost_single": 1300,
         "monthly_living_cost_couple": 2200,
         "monthly_living_cost_family": 4200,
@@ -445,7 +538,10 @@
       },
       "New Taipei": {
         "zh": "新北",
-        "coords": [25.0123, 121.4657],
+        "coords": [
+          25.0123,
+          121.4657
+        ],
         "monthly_living_cost_single": 1100,
         "monthly_living_cost_couple": 1800,
         "monthly_living_cost_family": 3500,
@@ -459,7 +555,10 @@
       },
       "Taichung": {
         "zh": "台中",
-        "coords": [24.1477, 120.6736],
+        "coords": [
+          24.1477,
+          120.6736
+        ],
         "monthly_living_cost_single": 1000,
         "monthly_living_cost_couple": 1600,
         "monthly_living_cost_family": 3200,
@@ -473,7 +572,10 @@
       },
       "Kaohsiung": {
         "zh": "高雄",
-        "coords": [22.6273, 120.3014],
+        "coords": [
+          22.6273,
+          120.3014
+        ],
         "monthly_living_cost_single": 900,
         "monthly_living_cost_couple": 1450,
         "monthly_living_cost_family": 2900,
@@ -487,7 +589,10 @@
       },
       "Tainan": {
         "zh": "台南",
-        "coords": [22.9997, 120.227],
+        "coords": [
+          22.9997,
+          120.227
+        ],
         "monthly_living_cost_single": 850,
         "monthly_living_cost_couple": 1350,
         "monthly_living_cost_family": 2700,
@@ -505,7 +610,10 @@
     "Cities": {
       "Bangkok": {
         "zh": "曼谷",
-        "coords": [13.7563, 100.5018],
+        "coords": [
+          13.7563,
+          100.5018
+        ],
         "monthly_living_cost_single": 1100,
         "monthly_living_cost_couple": 1800,
         "monthly_living_cost_family": 3500,
@@ -519,7 +627,10 @@
       },
       "Chiang Mai": {
         "zh": "清邁",
-        "coords": [18.7883, 98.9853],
+        "coords": [
+          18.7883,
+          98.9853
+        ],
         "monthly_living_cost_single": 700,
         "monthly_living_cost_couple": 1100,
         "monthly_living_cost_family": 2200,
@@ -533,7 +644,10 @@
       },
       "Phuket": {
         "zh": "普吉島",
-        "coords": [7.8804, 98.3923],
+        "coords": [
+          7.8804,
+          98.3923
+        ],
         "monthly_living_cost_single": 900,
         "monthly_living_cost_couple": 1500,
         "monthly_living_cost_family": 3000,
@@ -547,7 +661,10 @@
       },
       "Pattaya": {
         "zh": "芭達雅",
-        "coords": [12.9236, 100.8825],
+        "coords": [
+          12.9236,
+          100.8825
+        ],
         "monthly_living_cost_single": 800,
         "monthly_living_cost_couple": 1300,
         "monthly_living_cost_family": 2600,
@@ -561,7 +678,10 @@
       },
       "Koh Samui": {
         "zh": "蘇美島",
-        "coords": [9.512, 100.0136],
+        "coords": [
+          9.512,
+          100.0136
+        ],
         "monthly_living_cost_single": 1000,
         "monthly_living_cost_couple": 1600,
         "monthly_living_cost_family": 3200,
@@ -585,7 +705,10 @@
     "Cities": {
       "Valencia": {
         "zh": "瓦倫西亞",
-        "coords": [39.4699, -0.3763],
+        "coords": [
+          39.4699,
+          -0.3763
+        ],
         "monthly_living_cost_couple": 3200,
         "landmark": "City of Arts and Sciences",
         "zh_landmark": "藝術科學城",
@@ -597,7 +720,10 @@
       },
       "Malaga": {
         "zh": "馬拉加",
-        "coords": [36.7213, -4.4214],
+        "coords": [
+          36.7213,
+          -4.4214
+        ],
         "monthly_living_cost_couple": 3000,
         "landmark": "Alcazaba",
         "zh_landmark": "阿爾卡薩巴堡壘",
@@ -609,11 +735,14 @@
       },
       "Bilbao": {
         "zh": "畢爾包",
-        "coords": [43.263, -2.935],
+        "coords": [
+          43.263,
+          -2.935
+        ],
         "monthly_living_cost_couple": 2900,
         "landmark": "Guggenheim Museum",
         "zh_landmark": "古根漢美術館",
-        "img": "assets/cities/bilbao.jpg",
+        "img": "assets/cities/bilbao_citymatch_v3.jpg",
         "desc": "Cultural center and food paradise.",
         "zh_desc": "北西班牙的美食天堂，以現代藝術建築聞名於世。",
         "attribution": "AI Generated",
@@ -631,7 +760,10 @@
     "Cities": {
       "Lagos": {
         "zh": "拉古什",
-        "coords": [37.1028, -8.673],
+        "coords": [
+          37.1028,
+          -8.673
+        ],
         "monthly_living_cost_couple": 2800,
         "landmark": "Ponta da Piedade",
         "zh_landmark": "佩達德角",
@@ -643,7 +775,10 @@
       },
       "Lisbon": {
         "zh": "里斯本",
-        "coords": [38.7223, -9.1393],
+        "coords": [
+          38.7223,
+          -9.1393
+        ],
         "monthly_living_cost_couple": 3500,
         "landmark": "Alfama Tram",
         "zh_landmark": "阿爾法瑪黃色電車",
@@ -655,7 +790,10 @@
       },
       "Porto": {
         "zh": "波爾圖",
-        "coords": [41.1579, -8.6291],
+        "coords": [
+          41.1579,
+          -8.6291
+        ],
         "monthly_living_cost_couple": 2700,
         "landmark": "Dom Luís I Bridge",
         "zh_landmark": "路易一世大橋",
@@ -677,7 +815,10 @@
     "Cities": {
       "George Town": {
         "zh": "喬治市",
-        "coords": [5.4141, 100.3288],
+        "coords": [
+          5.4141,
+          100.3288
+        ],
         "monthly_living_cost_couple": 1800,
         "landmark": "Heritage Streets",
         "zh_landmark": "檳城老街",
@@ -689,7 +830,10 @@
       },
       "Kuala Lumpur": {
         "zh": "吉隆坡",
-        "coords": [3.139, 101.6869],
+        "coords": [
+          3.139,
+          101.6869
+        ],
         "monthly_living_cost_couple": 2200,
         "landmark": "Petronas Twin Towers",
         "zh_landmark": "雙子星大樓",
@@ -701,7 +845,10 @@
       },
       "Melaka": {
         "zh": "馬六甲",
-        "coords": [2.1896, 102.2501],
+        "coords": [
+          2.1896,
+          102.2501
+        ],
         "monthly_living_cost_couple": 1500,
         "landmark": "Melaka River Walk",
         "zh_landmark": "馬六甲河畔",
@@ -723,7 +870,10 @@
     "Cities": {
       "Tamarindo": {
         "zh": "塔馬林多",
-        "coords": [10.3013, -85.84],
+        "coords": [
+          10.3013,
+          -85.84
+        ],
         "monthly_living_cost_couple": 2800,
         "landmark": "Tamarindo Beach",
         "zh_landmark": "塔馬林多海灘",
@@ -735,7 +885,10 @@
       },
       "Grecia": {
         "zh": "格雷西亞",
-        "coords": [10.0734, -84.3123],
+        "coords": [
+          10.0734,
+          -84.3123
+        ],
         "monthly_living_cost_couple": 2200,
         "landmark": "Metal Church",
         "zh_landmark": "格雷西亞金屬教堂",
@@ -747,7 +900,10 @@
       },
       "Puerto Viejo": {
         "zh": "波多維耶荷",
-        "coords": [9.6553, -82.7538],
+        "coords": [
+          9.6553,
+          -82.7538
+        ],
         "monthly_living_cost_couple": 2400,
         "landmark": "Jaguar Rescue Center",
         "zh_landmark": "美洲豹救援中心",
@@ -769,11 +925,14 @@
     "Cities": {
       "San Miguel de Allende": {
         "zh": "聖米格爾",
-        "coords": [20.915, -100.743],
+        "coords": [
+          20.915,
+          -100.743
+        ],
         "monthly_living_cost_couple": 2500,
         "landmark": "Parroquia de San Miguel",
         "zh_landmark": "聖米格爾大教堂",
-        "img": "assets/cities/san_miguel_de_allende.jpg",
+        "img": "assets/cities/san_miguel_de_allende_citymatch_v3.jpg",
         "desc": "Iconic pink gothic-style colonial church.",
         "zh_desc": "標誌性的粉紅色哥德式殖民時期教堂，藝術之城地標。",
         "attribution": "Photo via Unsplash",
@@ -781,7 +940,10 @@
       },
       "Merida": {
         "zh": "梅里達",
-        "coords": [20.9674, -89.5926],
+        "coords": [
+          20.9674,
+          -89.5926
+        ],
         "monthly_living_cost_couple": 2000,
         "landmark": "Paseo de Montejo",
         "zh_landmark": "蒙特霍大道",
@@ -793,7 +955,10 @@
       },
       "Puerto Vallarta": {
         "zh": "瓦雅塔港",
-        "coords": [20.6535, -105.2253],
+        "coords": [
+          20.6535,
+          -105.2253
+        ],
         "monthly_living_cost_couple": 2600,
         "landmark": "The Malecon",
         "zh_landmark": "瓦雅塔港海濱大道",
@@ -815,7 +980,10 @@
     "Cities": {
       "Coronado": {
         "zh": "科羅納多",
-        "coords": [8.5333, -79.9],
+        "coords": [
+          8.5333,
+          -79.9
+        ],
         "monthly_living_cost_couple": 2800,
         "landmark": "Coronado Beach",
         "zh_landmark": "科羅納多海灘",
@@ -827,7 +995,10 @@
       },
       "Boquete": {
         "zh": "波開特",
-        "coords": [8.7733, -82.4333],
+        "coords": [
+          8.7733,
+          -82.4333
+        ],
         "monthly_living_cost_couple": 2200,
         "landmark": "Volcan Baru",
         "zh_landmark": "巴魯火山",
@@ -839,7 +1010,10 @@
       },
       "Panama City": {
         "zh": "巴拿馬城",
-        "coords": [8.9833, -79.5167],
+        "coords": [
+          8.9833,
+          -79.5167
+        ],
         "monthly_living_cost_couple": 3000,
         "landmark": "Casco Viejo",
         "zh_landmark": "舊城區",
