@@ -512,6 +512,7 @@
             const ml3 = document.getElementById('m-ui-budget-label'); if (ml3) ml3.textContent = document.getElementById('ui-budget-label').textContent;
             updateMarkers();
             populateCitySelect();
+            if (typeof window.refreshLabEntryCTA === 'function') window.refreshLabEntryCTA();
         }
 
         function switchTab(tab) {
@@ -710,47 +711,68 @@
         function setupLabEntryCTA() {
             if (document.getElementById('lab-ab-entry')) return;
 
-            const collapsed = localStorage.getItem('lab_ab_entry_collapsed') === '1';
             const box = document.createElement('div');
             box.id = 'lab-ab-entry';
-            box.style.cssText = 'position:fixed;right:14px;top:84px;z-index:2000;background:rgba(15,23,42,.96);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:10px 12px;max-width:230px;box-shadow:0 6px 22px rgba(0,0,0,.35);font-size:12px;';
-
-            const renderExpanded = () => {
-                box.style.padding = '10px 12px';
-                box.style.maxWidth = '230px';
-                box.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;"><div style="font-weight:700;">✨ 新版城市資料</div><button id="lab-ab-min" style="background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:8px;padding:2px 7px;cursor:pointer;">－</button></div><div style="opacity:.86;line-height:1.45;margin-bottom:8px;">新版提供更多城市資料、地標圖文與跨城市比較功能，幫你更快找到合適的退休地點。</div><a id="lab-ab-link" href="./retire-anywhere-lab-v1.html?ab=B&from=index" style="display:inline-block;background:#10b981;color:#fff;text-decoration:none;padding:7px 10px;border-radius:8px;font-weight:600;">查看新版地圖</a>';
-
-                const minBtn = document.getElementById('lab-ab-min');
-                if (minBtn) {
-                    minBtn.addEventListener('click', () => {
-                        localStorage.setItem('lab_ab_entry_collapsed', '1');
-                        renderCollapsed();
-                    });
-                }
-
-                const link = document.getElementById('lab-ab-link');
-                if (link) {
-                    link.addEventListener('click', () => {
-                        trackABEvent('ab_click_entry', { version: 'B', entry_slot: 'index_floating_cta' });
-                    });
-                }
-            };
-
-            const renderCollapsed = () => {
-                box.style.padding = '8px 10px';
-                box.style.maxWidth = 'fit-content';
-                box.innerHTML = '<button id="lab-ab-expand" style="display:flex;align-items:center;gap:6px;background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:9px;padding:6px 10px;cursor:pointer;"><span>✨ 新版地圖</span><span style="opacity:.8;font-size:11px;">展開</span></button>';
-                const expandBtn = document.getElementById('lab-ab-expand');
-                if (expandBtn) {
-                    expandBtn.addEventListener('click', () => {
-                        localStorage.setItem('lab_ab_entry_collapsed', '0');
-                        renderExpanded();
-                    });
-                }
-            };
-
+            box.style.cssText = 'position:fixed;right:12px;top:126px;z-index:2200;background:rgba(15,23,42,.96);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:10px 12px;max-width:230px;box-shadow:0 6px 22px rgba(0,0,0,.35);font-size:12px;';
             document.body.appendChild(box);
-            collapsed ? renderCollapsed() : renderExpanded();
+
+            const ui = {
+                en: {
+                    title: '✨ New City Data',
+                    body: 'The new map includes more cities, richer landmark context, and cross-city comparison to help you evaluate retirement options faster.',
+                    cta: 'View New Map',
+                    expand: 'Expand',
+                    collapse: 'Minimize'
+                },
+                zh: {
+                    title: '✨ 新版城市資料',
+                    body: '新版提供更多城市資料、地標圖文與跨城市比較功能，幫你更快找到合適的退休地點。',
+                    cta: '查看新版地圖',
+                    expand: '展開',
+                    collapse: '縮小'
+                }
+            };
+
+            const renderCTA = () => {
+                const collapsed = localStorage.getItem('lab_ab_entry_collapsed') === '1';
+                const lang = (typeof currentLang !== 'undefined' && currentLang === 'zh') ? 'zh' : 'en';
+                const t = ui[lang];
+
+                if (!collapsed) {
+                    box.style.padding = '10px 12px';
+                    box.style.maxWidth = '230px';
+                    box.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;"><div style="font-weight:700;">${t.title}</div><button id="lab-ab-min" aria-label="${t.collapse}" style="background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:8px;padding:2px 7px;cursor:pointer;">－</button></div><div style="opacity:.86;line-height:1.45;margin-bottom:8px;">${t.body}</div><a id="lab-ab-link" href="./retire-anywhere-lab-v1.html?ab=B&from=index" style="display:inline-block;background:#10b981;color:#fff;text-decoration:none;padding:7px 10px;border-radius:8px;font-weight:600;">${t.cta}</a>`;
+
+                    const minBtn = document.getElementById('lab-ab-min');
+                    if (minBtn) {
+                        minBtn.addEventListener('click', () => {
+                            localStorage.setItem('lab_ab_entry_collapsed', '1');
+                            renderCTA();
+                        });
+                    }
+
+                    const link = document.getElementById('lab-ab-link');
+                    if (link) {
+                        link.addEventListener('click', () => {
+                            trackABEvent('ab_click_entry', { version: 'B', entry_slot: 'index_floating_cta' });
+                        });
+                    }
+                } else {
+                    box.style.padding = '8px 10px';
+                    box.style.maxWidth = 'fit-content';
+                    box.innerHTML = `<button id="lab-ab-expand" style="display:flex;align-items:center;gap:6px;background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:9px;padding:6px 10px;cursor:pointer;"><span>✨ ${lang==='zh'?'新版地圖':'New Map'}</span><span style="opacity:.8;font-size:11px;">${t.expand}</span></button>`;
+                    const expandBtn = document.getElementById('lab-ab-expand');
+                    if (expandBtn) {
+                        expandBtn.addEventListener('click', () => {
+                            localStorage.setItem('lab_ab_entry_collapsed', '0');
+                            renderCTA();
+                        });
+                    }
+                }
+            };
+
+            window.refreshLabEntryCTA = renderCTA;
+            renderCTA();
         }
 
         function closeModal() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
