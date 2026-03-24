@@ -734,7 +734,8 @@
             };
 
             const renderCTA = () => {
-                const collapsed = localStorage.getItem('lab_ab_entry_collapsed') === '1';
+                const saved = localStorage.getItem('lab_ab_entry_collapsed');
+                const collapsed = saved === null ? true : saved === '1';
                 const lang = (typeof currentLang !== 'undefined' && currentLang === 'zh') ? 'zh' : 'en';
                 const t = ui[lang];
 
