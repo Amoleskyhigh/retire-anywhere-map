@@ -155,6 +155,26 @@ const i18n={zh:{title:'Retire Anywhere Lab v6.3',sub:'一起規劃夢想退休�
 
 let state={lifestyle:'Comfortable',household:'couple',asset:3000000,currency:'USD',lang:'zh'},draftMobile={...state};
 let cities=[],selected=[]; let map,layer;
+
+function trackAB(eventName, params={}){
+  try{ if(typeof gtag==='function'){ gtag('event', eventName, params); } }catch(e){}
+}
+function abState(){
+  const k='retire_ab_state';
+  let s={cityOpen:0,filterChange:0,taskDone:false};
+  try{ s=JSON.parse(sessionStorage.getItem(k)||JSON.stringify(s)); }catch(e){}
+  return {k,s};
+}
+function saveAbState(s){ try{ sessionStorage.setItem('retire_ab_state', JSON.stringify(s)); }catch(e){} }
+function maybeTaskComplete(rule){
+  const {s}=abState();
+  if(s.taskDone) return;
+  if(rule==='compare_add' || (s.cityOpen>=2 && s.filterChange>=1)){
+    trackAB('retire_task_complete',{version:'B',rule});
+    s.taskDone=true; saveAbState(s);
+  }
+}
+
 const markerColor={Luxury:'#10b981',Comfortable:'#3b82f6',Essential:'#a855f7',None:'#ef4444'};
 const fx={USD:1,NTD:32};
 function t(k){return i18n[state.lang][k]||k}
@@ -221,15 +241,15 @@ function controlHtml(prefix=''){
   <div class="group" style="font-size:12px;opacity:.84">${t('rule')}</div>`;
 }
 
-function setChoice(prefix,type,val){ if(prefix==='m_'){draftMobile[type]=val; state[type]=val; updateMobileSheetUI(); renderControls(); draw(); renderCmp(); return;} state[type]=val; renderControls(); draw(); renderCmp(); }
-function setCurrency(prefix,val){ if(prefix==='m_'){draftMobile.currency=val; state.currency=val; updateMobileSheetUI(); renderControls(); draw(); renderCmp(); return;} state.currency=val; renderControls(); draw(); renderCmp(); }
+function setChoice(prefix,type,val){ trackAB('filter_change',{version:'B',filter_type:type,value:String(val)}); const st=abState(); st.s.filterChange+=1; saveAbState(st.s); maybeTaskComplete('city_filter_path'); if(prefix==='m_'){draftMobile[type]=val; state[type]=val; updateMobileSheetUI(); renderControls(); draw(); renderCmp(); return;} state[type]=val; renderControls(); draw(); renderCmp(); }
+function setCurrency(prefix,val){ trackAB('filter_change',{version:'B',filter_type:'currency',value:String(val)}); const st=abState(); st.s.filterChange+=1; saveAbState(st.s); maybeTaskComplete('city_filter_path'); if(prefix==='m_'){draftMobile.currency=val; state.currency=val; updateMobileSheetUI(); renderControls(); draw(); renderCmp(); return;} state.currency=val; renderControls(); draw(); renderCmp(); }
 window.setChoice=setChoice;
 
 function renderControls(){
   document.getElementById('panelBody').innerHTML=controlHtml('');
   document.getElementById('mobileSheetBody').innerHTML=controlHtml('m_');
-  const s1=document.getElementById('assetSlider'); if(s1) s1.oninput=()=>{state.asset=sliderValToUsd(s1.value); renderControls(); draw(); renderCmp();};
-  const s2=document.getElementById('m_assetSlider'); if(s2) s2.oninput=()=>{draftMobile.asset=sliderValToUsd(s2.value); state.asset=draftMobile.asset; document.getElementById('m_budgetTxt').textContent=money(draftMobile.asset); draw(); renderCmp();};
+  const s1=document.getElementById('assetSlider'); if(s1) s1.oninput=()=>{ trackAB('filter_change',{version:'B',filter_type:'asset',value:String(s1.value)}); const st=abState(); st.s.filterChange+=1; saveAbState(st.s); maybeTaskComplete('city_filter_path'); state.asset=sliderValToUsd(s1.value); renderControls(); draw(); renderCmp();};
+  const s2=document.getElementById('m_assetSlider'); if(s2) s2.oninput=()=>{ trackAB('filter_change',{version:'B',filter_type:'asset_mobile',value:String(s2.value)}); const st=abState(); st.s.filterChange+=1; saveAbState(st.s); maybeTaskComplete('city_filter_path'); draftMobile.asset=sliderValToUsd(s2.value); state.asset=draftMobile.asset; document.getElementById('m_budgetTxt').textContent=money(draftMobile.asset); draw(); renderCmp();};
 }
 
 function updateMobileSheetUI(){
@@ -258,6 +278,7 @@ function openCityDetail(i){
   const name=state.lang==='zh'?(c.zh||c.city):c.city, lm=state.lang==='zh'?(c.zh_landmark||c.landmark||''):(c.landmark||''), desc=state.lang==='zh'?(c.zh_desc||c.desc||''):(c.desc||'');
   const need=assetNeed(c,state.household,state.lifestyle), estTag=s.estimated?(' '+t('estTag')):'';
   document.getElementById('cityModalBody').innerHTML=`<h3>${labelCountry(c.country)} - ${name}</h3><img class='city-img' src='${c.img||'https://images.pexels.com/photos/1450353/pexels-photo-1450353.jpeg'}'/><p>${lm}</p><p>${desc}</p><p>${t('currentFilter')}: ${labelLifestyle(state.lifestyle)} / ${labelHousehold(state.household)}</p><p>${t('afford')}: <b style='color:${markerColor[lv]}'>${labelLevel(lv)}</b></p><p>${t('annual')}: ${money(s.annual)}${estTag}</p><p>${t('needAsset')}: ${money(need.asset)}${estTag}</p>`;
+  trackAB('city_modal_open',{version:'B',city:c.city,country:c.country}); const st=abState(); st.s.cityOpen+=1; saveAbState(st.s); maybeTaskComplete('city_filter_path');
   document.getElementById('cityModal').classList.add('show');
 }
 window.openCityDetail=openCityDetail;
@@ -271,7 +292,7 @@ function buildSelectors(){
   c2.onchange=()=>{const ci=cities.filter(c=>c.country===c2.value).map(c=>state.lang==='zh'?(c.zh||c.city):c.city); const orig=cities.filter(c=>c.country===c2.value).map(c=>c.city); c3.innerHTML=`<option value=''>${t('pickCity')}</option>`+orig.map((v,idx)=>`<option value='${v}'>${ci[idx]}</option>`).join(''); c3.disabled=!c2.value;};
 }
 function addFromSelectors(){const c1=continentSel.value,c2=countrySel.value,c3=citySel.value; const i=cities.findIndex(c=>c.continent===c1&&c.country===c2&&c.city===c3); if(i>=0)addCmp(i)}
-function addCmp(i){const c=cities[i]; if(!c)return; if(selected.find(x=>x.country===c.country&&x.city===c.city))return; if(selected.length>=3)return alert(t('max3')); selected.push(c); renderCmp(); if(selected.length===1){document.getElementById('selected').scrollIntoView({behavior:'smooth',block:'center'});} } window.addCmp=addCmp;
+function addCmp(i){const c=cities[i]; if(!c)return; if(selected.find(x=>x.country===c.country&&x.city===c.city))return; if(selected.length>=3)return alert(t('max3')); selected.push(c); trackAB('compare_add',{version:'B',city:c.city,country:c.country}); maybeTaskComplete('compare_add'); renderCmp(); if(selected.length===1){document.getElementById('selected').scrollIntoView({behavior:'smooth',block:'center'});} } window.addCmp=addCmp;
 function removeCmp(idx){ selected.splice(idx,1); renderCmp(); } window.removeCmp=removeCmp;
 function clearCompare(){selected=[]; renderCmp()} 
 function renderCmp(){
@@ -324,6 +345,7 @@ async function init(){
   });
 
   renderControls(); buildSelectors(); draw(); renderCmp(); updateVisitorCount(); applyLang();
+  trackAB('ab_view',{version:'B',page_path:location.pathname});
 
   addCmpBtn.onclick=addFromSelectors; clearCmpBtn.onclick=clearCompare;
   toggleBtn.onclick=()=>{panel.classList.toggle('collapsed'); toggleBtn.textContent=panel.classList.contains('collapsed')?t('expand'):t('collapse')};
@@ -334,7 +356,7 @@ async function init(){
   resetBtn.onclick=()=>{draftMobile={lifestyle:'Comfortable',household:'couple',asset:3000000,currency:'USD',lang:state.lang}; state={...draftMobile}; renderControls(); draw(); renderCmp();};
   applyBtn.onclick=()=>{state={...draftMobile}; mobileSheet.classList.remove('show'); applyLang();};
 
-  methodBtn.onclick=()=>methodModal.classList.add('show'); closeMethodModal.onclick=()=>methodModal.classList.remove('show');
+  methodBtn.onclick=()=>{ trackAB('methodology_open',{version:'B'}); methodModal.classList.add('show'); }; closeMethodModal.onclick=()=>methodModal.classList.remove('show');
   closeCityModal.onclick=()=>cityModal.classList.remove('show');
   cityModal.onclick=(e)=>{if(e.target.id==='cityModal')cityModal.classList.remove('show')};
   methodModal.onclick=(e)=>{if(e.target.id==='methodModal')methodModal.classList.remove('show')};
