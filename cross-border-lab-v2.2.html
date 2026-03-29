@@ -126,6 +126,16 @@
         <thead><tr><th id="thCountry"></th><th id="thVisa"></th><th id="thHealth"></th><th id="thTax"></th><th id="thCost"></th><th id="thSafe"></th><th id="thLang"></th><th id="thMonthly"></th></tr></thead>
         <tbody id="compareRows"></tbody>
       </table>
+      <div id="compareMoreWrap" style="margin-top:10px;display:none">
+        <button id="compareMoreBtn" class="btn dark" style="padding:10px 18px" onclick="toggleCompareMore()"></button>
+        <table id="compareMoreTable" style="display:none;margin-top:10px">
+          <tbody id="compareMoreRows"></tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:18px">
+        <button id="resetBtn" class="btn primary" style="padding:10px 18px" onclick="resetQuiz()">重新設定條件</button>
+      </div>
     </div>
   </section>
 
@@ -139,8 +149,8 @@
 const FX=31.5; // 1 USD = 31.5 TWD (display only)
 let lang='zh';
 const i18n={
-  zh:{heroTitle:'你的退休<br><em>理想國</em><br>在哪裡？',heroSub:'不是資料庫，是一次對話。<br>3 個問題，找到最適合你的地方。',heroBtn:'開始探索 →',tagStep:'Step 01 · 了解你',quizTitle:'先告訴我你是誰',quizSub:'只要 3 個問題，不用填表格',q1:'退休後，你最嚮往哪種生活感？',h1:'選一個最接近你心裡那個畫面的',q2:'你打算帶家人一起去嗎？',h2:'這會影響簽證方式與生活選擇',q3:'每個月大概願意花多少？',h3:'以雙人月生活費（含住宿）估算',budgetUnit:'TWD / 月（雙人）',next:'下一題 →',back:'← 上一題',show:'看我的推薦 ✦',recTag:'為你推薦（Top 3）',compareTitle:'10 國完整比較',moreShow:'查看其他 {n} 個國家',moreHide:'收合其他國家',thCountry:'國家',thVisa:'簽證',thHealth:'醫療',thTax:'稅務',thCost:'生活成本',thSafe:'治安',thLang:'語言障礙',thMonthly:'雙人月費',lineCost:'預估雙人月費',lineScore:'匹配分數',detail:'深入了解 →',modalScene:'生活畫面',modalCost:'預估雙人月費',modalChecklist:'落地前檢查清單',modalNote:'提醒',note:'簽證與稅務規則會變動，請在決策前確認官方最新資訊與專業意見。',foot:'v2.2 · 僅供研究參考，非法律或稅務建議。資料需以官方最新公告為準。'},
-  en:{heroTitle:'Where is your<br><em>ideal retirement</em><br>country?',heroSub:'Not a cold database — a guided conversation.<br>3 questions to find your best-fit place.',heroBtn:'Start Exploring →',tagStep:'Step 01 · About You',quizTitle:'Tell me who you are',quizSub:'Just 3 quick questions',q1:'What lifestyle do you want after retirement?',h1:'Pick the closest vibe',q2:'Who will move with you?',h2:'This impacts visa and daily life choices',q3:'What monthly budget do you prefer?',h3:'Estimated monthly cost for a couple (incl. housing)',budgetUnit:'USD / month (couple)',next:'Next →',back:'← Back',show:'Show My Matches ✦',recTag:'Top 3 Matches',compareTitle:'10-Country Comparison',moreShow:'Show other {n} countries',moreHide:'Hide other countries',thCountry:'Country',thVisa:'Visa',thHealth:'Healthcare',thTax:'Tax',thCost:'Cost of Living',thSafe:'Safety',thLang:'Language Barrier',thMonthly:'Monthly (Couple)',lineCost:'Estimated Monthly (Couple)',lineScore:'Match Score',detail:'See Details →',modalScene:'Lifestyle Snapshot',modalCost:'Estimated Monthly (Couple)',modalChecklist:'Pre-Move Checklist',modalNote:'Note',note:'Visa/tax rules can change. Always verify with official sources and professionals.',foot:'v2.2 · For research reference only. Not legal or tax advice.'}
+  zh:{heroTitle:'你的退休<br><em>理想國</em><br>在哪裡？',heroSub:'不是資料庫，是一次對話。<br>3 個問題，找到最適合你的地方。',heroBtn:'開始探索 →',tagStep:'Step 01 · 了解你',quizTitle:'先告訴我你是誰',quizSub:'只要 3 個問題，不用填表格',q1:'退休後，你最嚮往哪種生活感？',h1:'選一個最接近你心裡那個畫面的',q2:'你打算帶家人一起去嗎？',h2:'這會影響簽證方式與生活選擇',q3:'每個月大概願意花多少？',h3:'以雙人月生活費（含住宿）估算',budgetUnit:'TWD / 月（雙人）',next:'下一題 →',back:'← 上一題',show:'看我的推薦 ✦',recTag:'為你推薦（Top 3）',compareTitle:'10 國完整比較（10分位）',moreShow:'查看其他 {n} 個國家',moreHide:'收合其他國家',compareMoreShow:'展開比較表其餘 {n} 國',compareMoreHide:'收合比較表其餘國家',reset:'重新設定條件',thCountry:'國家',thVisa:'簽證',thHealth:'醫療',thTax:'稅務',thCost:'生活成本',thSafe:'治安',thLang:'語言障礙',thMonthly:'雙人月費',lineCost:'預估雙人月費',lineScore:'匹配分數',detail:'深入了解 →',modalScene:'生活畫面',modalCost:'預估雙人月費',modalChecklist:'落地前檢查清單',modalNote:'提醒',note:'簽證與稅務規則會變動，請在決策前確認官方最新資訊與專業意見。',foot:'v2.2 · 僅供研究參考，非法律或稅務建議。資料需以官方最新公告為準。'},
+  en:{heroTitle:'Where is your<br><em>ideal retirement</em><br>country?',heroSub:'Not a cold database — a guided conversation.<br>3 questions to find your best-fit place.',heroBtn:'Start Exploring →',tagStep:'Step 01 · About You',quizTitle:'Tell me who you are',quizSub:'Just 3 quick questions',q1:'What lifestyle do you want after retirement?',h1:'Pick the closest vibe',q2:'Who will move with you?',h2:'This impacts visa and daily life choices',q3:'What monthly budget do you prefer?',h3:'Estimated monthly cost for a couple (incl. housing)',budgetUnit:'USD / month (couple)',next:'Next →',back:'← Back',show:'Show My Matches ✦',recTag:'Top 3 Matches',compareTitle:'10-Country Comparison (Decile 10)',moreShow:'Show other {n} countries',moreHide:'Hide other countries',compareMoreShow:'Expand table: other {n} countries',compareMoreHide:'Hide table extra countries',reset:'Reset Conditions',thCountry:'Country',thVisa:'Visa',thHealth:'Healthcare',thTax:'Tax',thCost:'Cost of Living',thSafe:'Safety',thLang:'Language Barrier',thMonthly:'Monthly (Couple)',lineCost:'Estimated Monthly (Couple)',lineScore:'Match Score',detail:'See Details →',modalScene:'Lifestyle Snapshot',modalCost:'Estimated Monthly (Couple)',modalChecklist:'Pre-Move Checklist',modalNote:'Note',note:'Visa/tax rules can change. Always verify with official sources and professionals.',foot:'v2.2 · For research reference only. Not legal or tax advice.'}
 };
 
 const countries={
@@ -191,6 +201,7 @@ function setLang(l){
   document.getElementById('recTag').textContent=t.recTag;
   document.getElementById('compareTitle').textContent=t.compareTitle;
   document.getElementById('thCountry').textContent=t.thCountry;document.getElementById('thVisa').textContent=t.thVisa;document.getElementById('thHealth').textContent=t.thHealth;document.getElementById('thTax').textContent=t.thTax;document.getElementById('thCost').textContent=t.thCost;document.getElementById('thSafe').textContent=t.thSafe;document.getElementById('thLang').textContent=t.thLang;document.getElementById('thMonthly').textContent=t.thMonthly;
+  document.getElementById('resetBtn').textContent=t.reset;
   document.getElementById('footText').textContent=t.foot;
   renderOpts('opts-style','style',styleOpts[l]);
   renderOpts('opts-family','family',familyOpts[l]);
@@ -198,6 +209,10 @@ function setLang(l){
   const moreWrap=document.getElementById('moreWrap');
   if(moreWrap && moreWrap.style.display==='block'){
     refreshMoreBtn(Object.keys(countries).length-3);
+  }
+  const compareMoreWrap=document.getElementById('compareMoreWrap');
+  if(compareMoreWrap && compareMoreWrap.style.display==='block'){
+    refreshCompareMoreBtn(Object.keys(countries).length-3);
   }
 }
 
@@ -212,6 +227,20 @@ function pick(btn){
 }
 function go(n){document.getElementById('s'+step).classList.remove('active');if(step<n)document.getElementById('d'+step).classList.add('done');document.getElementById('d'+step).classList.remove('active');step=n;document.getElementById('s'+step).classList.add('active');document.getElementById('d'+step).classList.add('active');}
 function score(d){let s=0;if(d.style.includes(ans.style))s+=40;if(d.family.includes(ans.family))s+=30;const diff=Math.abs(d.mid-ans.budget);if(diff<500)s+=30;else if(diff<1500)s+=20;else if(diff<2500)s+=10;return s;}
+
+function levelToDecile(type,valZh,valEn){
+  const v = (lang==='zh'?valZh:valEn);
+  const map={
+    visa:{'容易':9,'中等':6,'較難':3,'Easier':9,'Moderate':6,'Harder':3},
+    health:{'優秀':9,'良好':7,'Excellent':9,'Good':7},
+    tax:{'優惠':8,'一般':5,'Favorable':8,'Moderate':5},
+    cost:{'低廉':9,'中低':7,'中等':5,'偏高':3,'Low':9,'Medium-Low':7,'Medium':5,'High':3},
+    safe:{'極佳':10,'良好':7,'普通':5,'城市差異大':4,'Very High':10,'Good':7,'Moderate':5,'City-dependent':4},
+    lang:{'低':8,'中':5,'高':2,'Low':8,'Medium':5,'High':2}
+  };
+  return (map[type]&&map[type][v]) ? `${map[type][v]}/10` : '-';
+}
+
 let moreExpanded=false;
 function renderCard(x,i,isTopSection=true){
   const t=i18n[lang];
@@ -230,6 +259,32 @@ function toggleMore(){
   extra.style.display=moreExpanded?'grid':'none';
   const count=Object.keys(countries).length-3;
   refreshMoreBtn(count);
+}
+
+let compareExpanded=false;
+function refreshCompareMoreBtn(extraCount){
+  const t=i18n[lang];
+  document.getElementById('compareMoreBtn').textContent = compareExpanded ? t.compareMoreHide : t.compareMoreShow.replace('{n}',extraCount);
+}
+function toggleCompareMore(){
+  compareExpanded=!compareExpanded;
+  document.getElementById('compareMoreTable').style.display = compareExpanded ? 'table' : 'none';
+  refreshCompareMoreBtn(Object.keys(countries).length-3);
+}
+
+function resetQuiz(){
+  ans.style=null; ans.family=null; ans.budget=3000; step=1; moreExpanded=false; compareExpanded=false;
+  document.getElementById('budget').value='3000';
+  document.querySelector('.quiz').style.display='block';
+  document.getElementById('results').classList.remove('show');
+  ['d1','d2','d3'].forEach((id,i)=>{const el=document.getElementById(id);el.classList.remove('active','done'); if(i===0) el.classList.add('active');});
+  ['s1','s2','s3'].forEach((id,i)=>document.getElementById(id).classList.toggle('active',i===0));
+  document.getElementById('n1').disabled=true;document.getElementById('n2').disabled=true;
+  document.getElementById('mw').classList.remove('open');
+  renderOpts('opts-style','style',styleOpts[lang]);
+  renderOpts('opts-family','family',familyOpts[lang]);
+  updateBudget(3000);
+  document.getElementById('quiz').scrollIntoView({behavior:'smooth'});
 }
 
 function showResults(){
@@ -255,7 +310,22 @@ function showResults(){
     moreWrap.style.display='none';
   }
 
-  document.getElementById('compareRows').innerHTML=list.map(x=>`<tr><td><strong>${x.v.flag} ${x.v.name[lang]}</strong></td><td>${x.v.visa[lang]}</td><td>${x.v.health[lang]}</td><td>${x.v.tax[lang]}</td><td>${x.v.cost[lang]}</td><td>${x.v.safe[lang]}</td><td>${x.v.langBarrier[lang]}</td><td>${range(x.v.usd)}</td></tr>`).join('');
+  const topCompare=list.slice(0,3);
+  const restCompare=list.slice(3);
+  document.getElementById('compareRows').innerHTML=topCompare.map(x=>`<tr><td><strong>${x.v.flag} ${x.v.name[lang]}</strong></td><td>${levelToDecile('visa',x.v.visa.zh,x.v.visa.en)}</td><td>${levelToDecile('health',x.v.health.zh,x.v.health.en)}</td><td>${levelToDecile('tax',x.v.tax.zh,x.v.tax.en)}</td><td>${levelToDecile('cost',x.v.cost.zh,x.v.cost.en)}</td><td>${levelToDecile('safe',x.v.safe.zh,x.v.safe.en)}</td><td>${levelToDecile('lang',x.v.langBarrier.zh,x.v.langBarrier.en)}</td><td>${range(x.v.usd)}</td></tr>`).join('');
+
+  const compareMoreWrap=document.getElementById('compareMoreWrap');
+  const compareMoreRows=document.getElementById('compareMoreRows');
+  const compareMoreTable=document.getElementById('compareMoreTable');
+  compareExpanded=false;
+  if(restCompare.length>0){
+    compareMoreWrap.style.display='block';
+    compareMoreTable.style.display='none';
+    compareMoreRows.innerHTML=restCompare.map(x=>`<tr><td><strong>${x.v.flag} ${x.v.name[lang]}</strong></td><td>${levelToDecile('visa',x.v.visa.zh,x.v.visa.en)}</td><td>${levelToDecile('health',x.v.health.zh,x.v.health.en)}</td><td>${levelToDecile('tax',x.v.tax.zh,x.v.tax.en)}</td><td>${levelToDecile('cost',x.v.cost.zh,x.v.cost.en)}</td><td>${levelToDecile('safe',x.v.safe.zh,x.v.safe.en)}</td><td>${levelToDecile('lang',x.v.langBarrier.zh,x.v.langBarrier.en)}</td><td>${range(x.v.usd)}</td></tr>`).join('');
+    refreshCompareMoreBtn(restCompare.length);
+  }else{
+    compareMoreWrap.style.display='none';
+  }
 }
 function openModal(key){
   const t=i18n[lang],d=countries[key];
