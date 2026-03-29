@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Retire Anywhere｜跨國生活/民情探索 MVP（5國）</title>
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans TC",sans-serif;background:#f7f8fb;color:#111;margin:0}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px}
+    h1{font-size:24px;margin:8px 0}
+    .muted{color:#666;font-size:14px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px}
+    .score{font-size:28px;font-weight:700}
+    .row{display:flex;justify-content:space-between;gap:10px;padding:3px 0;font-size:14px}
+    .tag{display:inline-block;background:#eef2ff;color:#3730a3;padding:3px 8px;border-radius:999px;font-size:12px;margin:2px}
+    select,button{padding:8px;border-radius:8px;border:1px solid #d1d5db;background:#fff}
+    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden}
+    th,td{padding:10px;border-bottom:1px solid #eee;text-align:left;font-size:14px;vertical-align:top}
+    th{background:#f3f4f6}
+    .ok{color:#065f46}.warn{color:#92400e}
+    .footer{font-size:12px;color:#6b7280;margin-top:14px}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <p class="muted">Retire Anywhere Lab · 第一版（5國）</p>
+  <h1>跨國生活/民情探索研究（簽證・醫療・稅務・生活成本・文化・治安・人格適配）</h1>
+  <p class="muted">目的：快速判斷「哪個國家比較適合你這種個性與家庭型態」。本版為研究框架 MVP，非法律/稅務建議。</p>
+
+  <div class="card" style="margin:12px 0">
+    <div class="row" style="align-items:center;flex-wrap:wrap">
+      <div>
+        <label>個性偏好：</label>
+        <select id="persona">
+          <option value="all">不限</option>
+          <option value="穩健型">穩健型</option>
+          <option value="探索型">探索型</option>
+          <option value="家庭導向">家庭導向</option>
+          <option value="慢生活型">慢生活型</option>
+        </select>
+      </div>
+      <div>
+        <label>預算等級：</label>
+        <select id="budget">
+          <option value="all">不限</option>
+          <option value="高">高（雙人>$5k/月）</option>
+          <option value="中">中（$3k-$5k/月）</option>
+          <option value="低">低（<$3k/月）</option>
+        </select>
+      </div>
+      <button onclick="render()">套用篩選</button>
+    </div>
+  </div>
+
+  <div id="cards" class="grid"></div>
+
+  <h2>國家並排比較（5國）</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>國家</th><th>簽證</th><th>醫療</th><th>稅務友善</th><th>生活成本</th><th>治安</th><th>社會文化</th><th>適配人群</th><th>家庭/退休</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+
+  <div class="card" style="margin-top:12px">
+    <h3>方法論（中性）</h3>
+    <ul>
+      <li>每項 1-10 分，總分為加權平均：簽證15%、醫療20%、稅務15%、生活成本15%、治安15%、社會文化10%、家庭退休10%。</li>
+      <li>分數僅為「研究導航」，不直接等於個人最佳解；建議進一步做城市級驗證。</li>
+      <li>後續版本會接入更細資料來源（官方移民、稅務、保險、犯罪統計）與更新日期追蹤。</li>
+    </ul>
+  </div>
+
+  <p class="footer">v1.0 · 5國 MVP：日本、葡萄牙、西班牙、馬來西亞、泰國</p>
+</div>
+
+<script>
+const data = [
+  {country:'日本',budget:'高',persona:['穩健型','家庭導向'],visa:6,health:9,tax:5,cost:4,safety:9,culture:7,family:8,coupleCost:'$4,800-$6,500',fit:'重視秩序、治安、醫療品質',note:'簽證與稅務規劃需專業評估'},
+  {country:'葡萄牙',budget:'中',persona:['慢生活型','家庭導向'],visa:8,health:8,tax:6,cost:7,safety:8,culture:8,family:8,coupleCost:'$3,200-$4,800',fit:'偏好歐洲生活品質與慢節奏',note:'黃金簽/數位游牧政策需看最新法規'},
+  {country:'西班牙',budget:'中',persona:['探索型','家庭導向'],visa:7,health:8,tax:5,cost:6,safety:7,culture:9,family:8,coupleCost:'$3,300-$5,000',fit:'喜歡社交文化、氣候與城市生活',note:'稅務居民判定與地區差異要確認'},
+  {country:'馬來西亞',budget:'低',persona:['慢生活型','穩健型'],visa:7,health:7,tax:8,cost:9,safety:6,culture:7,family:7,coupleCost:'$2,200-$3,500',fit:'追求高CP值與英文可生活環境',note:'MM2H門檻與執行細節要每年核對'},
+  {country:'泰國',budget:'低',persona:['探索型','慢生活型'],visa:6,health:7,tax:7,cost:8,safety:6,culture:8,family:6,coupleCost:'$2,000-$3,200',fit:'彈性高、生活成本友善、文化多元',note:'簽證續簽與醫療保險條款需留意'}
+];
+
+const w={visa:.15,health:.2,tax:.15,cost:.15,safety:.15,culture:.1,family:.1};
+const score=d=> (d.visa*w.visa+d.health*w.health+d.tax*w.tax+d.cost*w.cost+d.safety*w.safety+d.culture*w.culture+d.family*w.family).toFixed(1);
+
+function render(){
+  const persona=document.getElementById('persona').value;
+  const budget=document.getElementById('budget').value;
+  const cards=document.getElementById('cards');
+  const tb=document.getElementById('tableBody');
+  const list=data.filter(d=>(persona==='all'||d.persona.includes(persona))&&(budget==='all'||d.budget===budget));
+
+  cards.innerHTML=list.map(d=>`
+    <div class='card'>
+      <div class='row'><strong>${d.country}</strong><span class='score'>${score(d)}</span></div>
+      <div class='muted'>雙人月成本：${d.coupleCost}</div>
+      <div style='margin:6px 0'>${d.persona.map(p=>`<span class='tag'>${p}</span>`).join('')}</div>
+      <div class='row'><span>簽證</span><span>${d.visa}/10</span></div>
+      <div class='row'><span>醫療</span><span>${d.health}/10</span></div>
+      <div class='row'><span>稅務友善</span><span>${d.tax}/10</span></div>
+      <div class='row'><span>治安</span><span>${d.safety}/10</span></div>
+      <div class='row'><span>文化融入</span><span>${d.culture}/10</span></div>
+      <div class='row'><span>家庭/退休</span><span>${d.family}/10</span></div>
+      <p class='muted'>適合：${d.fit}</p>
+      <p class='footer'>注意：${d.note}</p>
+    </div>`).join('');
+
+  tb.innerHTML=data.map(d=>`
+    <tr>
+      <td><strong>${d.country}</strong><br><span class='muted'>總分 ${score(d)}</span></td>
+      <td>${d.visa}/10</td><td>${d.health}/10</td><td>${d.tax}/10</td><td>${d.coupleCost}</td><td>${d.safety}/10</td><td>${d.culture}/10</td>
+      <td>${d.fit}</td><td>${d.family}/10</td>
+    </tr>`).join('');
+}
+render();
+</script>
+</body>
+</html>
