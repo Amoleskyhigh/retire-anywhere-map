@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Retire Anywhere｜你的退休理想國 v2.2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Noto+Serif+TC:wght@300;400;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--sand:#F5EFE4;--warm-white:#FDFAF5;--ink:#1A1410;--espresso:#3D2B1F;--terracotta:#C4623A;--gold:#D4A843;--muted:#8B7B6B;--card-bg:#FEFCF8;--border:#E8DFD0}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Noto Serif TC',serif;background:var(--warm-white);color:var(--ink);overflow-x:hidden}
+    .lang-switch{position:fixed;top:14px;right:14px;z-index:200;display:flex;gap:6px;background:rgba(255,255,255,.85);padding:6px;border-radius:999px;border:1px solid #ddd;backdrop-filter:blur(6px)}
+    .lang-btn{border:none;border-radius:999px;padding:7px 12px;cursor:pointer;font-size:12px}
+    .lang-btn.active{background:var(--espresso);color:#fff}
+    .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 20px;position:relative;background:var(--ink);text-align:center}
+    .hero:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 80%,rgba(196,98,58,.22),transparent 45%),radial-gradient(circle at 80% 20%,rgba(212,168,67,.16),transparent 45%)}
+    .hero>*{position:relative;z-index:1}
+    .label{font-family:'DM Mono',monospace;color:var(--terracotta);letter-spacing:2px;font-size:11px;text-transform:uppercase;margin-bottom:20px}
+    h1{font-family:'Playfair Display',serif;font-size:clamp(42px,8vw,90px);line-height:1.05;color:var(--sand)}
+    h1 em{font-style:italic;color:var(--gold)}
+    .hero p{margin-top:20px;color:rgba(245,239,228,.72);line-height:1.8}
+    .btn{border:none;border-radius:999px;padding:14px 30px;cursor:pointer;font-weight:600}
+    .primary{background:var(--terracotta);color:#fff;margin-top:28px}
+    .primary:hover{filter:brightness(1.06)}
+    .section{padding:72px 20px}
+    .quiz{background:var(--sand)}
+    .container{max-width:960px;margin:0 auto}
+    .tag{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--terracotta);text-transform:uppercase}
+    .title{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,44px);color:var(--espresso);margin:10px 0}
+    .sub{color:var(--muted);font-size:14px}
+    .progress{display:flex;gap:8px;margin:28px 0}
+    .dot{height:4px;flex:1;background:#ddd;border-radius:3px}.dot.active{background:var(--gold)}.dot.done{background:var(--terracotta)}
+    .step{display:none}.step.active{display:block}
+    .q{font-family:'Playfair Display',serif;font-size:24px;color:var(--espresso);margin:8px 0 6px}
+    .hint{font-size:13px;color:var(--muted);margin-bottom:18px}
+    .opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .opt{background:var(--card-bg);border:2px solid var(--border);border-radius:14px;padding:16px;text-align:left;cursor:pointer}
+    .opt:hover{border-color:var(--terracotta)} .opt.sel{border-color:var(--terracotta);background:rgba(196,98,58,.08)}
+    .opt .e{font-size:24px;display:block;margin-bottom:8px}.opt .l{font-weight:600;color:var(--espresso)}.opt .s{font-size:12px;color:var(--muted);display:block;margin-top:3px}
+    .nav{display:flex;justify-content:space-between;align-items:center;margin-top:20px}
+    .ghost{background:transparent;color:var(--muted)} .dark{background:var(--espresso);color:var(--sand)}
+    .btn:disabled{opacity:.4;cursor:not-allowed}
+    .budget-box{background:var(--card-bg);border:2px solid var(--border);border-radius:14px;padding:18px}
+    .budget-val{font-family:'Playfair Display',serif;font-size:36px;color:var(--terracotta)}
+    input[type='range']{width:100%;margin:18px 0}
+    .results{display:none}.results.show{display:block}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:24px}
+    .card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px}
+    .card.top{border:2px solid var(--gold)}
+    .badge{font-family:'DM Mono',monospace;font-size:10px;color:var(--espresso);background:var(--gold);padding:4px 8px;border-radius:999px;width:max-content}
+    .name{font-family:'Playfair Display',serif;font-size:24px;color:var(--espresso)}
+    .line{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+    .score{font-family:'DM Mono',monospace;font-size:12px;padding:2px 8px;border-radius:999px;background:#f2eee8;color:#5b4a38}
+    .scene{font-size:13px;color:#5f5042;line-height:1.7;background:var(--sand);padding:12px;border-radius:10px}
+    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--border);margin-top:24px}
+    th,td{padding:10px;border-bottom:1px solid #eee;font-size:13px;text-align:left}
+    th{background:#f7f3ea;color:#5f5042;font-family:'DM Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:1px}
+    .modal-wrap{display:none;position:fixed;inset:0;background:rgba(26,20,16,.55);z-index:99;align-items:center;justify-content:center;padding:20px}
+    .modal-wrap.open{display:flex}
+    .modal{background:var(--warm-white);border-radius:16px;max-width:720px;width:100%;max-height:86vh;overflow:auto;padding:20px;position:relative}
+    .close{position:absolute;right:12px;top:12px;border:none;background:#eee;border-radius:50%;width:30px;height:30px;cursor:pointer}
+    .modal h3{font-family:'Playfair Display',serif;font-size:30px;color:var(--espresso)}
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px}.chip{font-size:12px;border:1px solid var(--border);border-radius:999px;padding:4px 10px;color:#5c4b3d}
+    .sec{margin:18px 0}.sec h4{font-family:'DM Mono',monospace;font-size:11px;color:var(--terracotta);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+    .list{padding-left:18px;color:#5f5042;line-height:1.8;font-size:14px}
+    .foot{padding:20px;text-align:center;font-family:'DM Mono',monospace;color:var(--muted);font-size:11px}
+    @media(max-width:680px){.opts{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="lang-switch">
+    <button id="btn-zh" class="lang-btn active" onclick="setLang('zh')">繁中 / TWD</button>
+    <button id="btn-en" class="lang-btn" onclick="setLang('en')">EN / USD</button>
+  </div>
+
+  <section class="hero">
+    <div class="label" id="heroLabel">Retire Anywhere Lab</div>
+    <h1 id="heroTitle">你的退休<br><em>理想國</em><br>在哪裡？</h1>
+    <p id="heroSub">不是資料庫，是一次對話。<br>3 個問題，找到最適合你的地方。</p>
+    <button class="btn primary" id="heroBtn" onclick="document.getElementById('quiz').scrollIntoView({behavior:'smooth'})">開始探索 →</button>
+  </section>
+
+  <section class="section quiz" id="quiz">
+    <div class="container">
+      <div class="tag" id="tagStep">Step 01 · 了解你</div>
+      <h2 class="title" id="quizTitle">先告訴我你是誰</h2>
+      <p class="sub" id="quizSub">只要 3 個問題，不用填表格</p>
+      <div class="progress"><div class="dot active" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div></div>
+
+      <div class="step active" id="s1">
+        <div class="q" id="q1"></div><div class="hint" id="h1"></div>
+        <div class="opts" id="opts-style"></div>
+        <div class="nav"><span></span><button id="n1" class="btn dark" disabled onclick="go(2)">下一題 →</button></div>
+      </div>
+
+      <div class="step" id="s2">
+        <div class="q" id="q2"></div><div class="hint" id="h2"></div>
+        <div class="opts" id="opts-family"></div>
+        <div class="nav"><button class="btn ghost" id="back1" onclick="go(1)">← 上一題</button><button id="n2" class="btn dark" disabled onclick="go(3)">下一題 →</button></div>
+      </div>
+
+      <div class="step" id="s3">
+        <div class="q" id="q3"></div><div class="hint" id="h3"></div>
+        <div class="budget-box">
+          <div class="budget-val" id="budgetVal"></div>
+          <div class="sub" id="budgetUnit"></div>
+          <input id="budget" type="range" min="1500" max="7000" step="500" value="3000" oninput="updateBudget(this.value)">
+          <div class="line"><span id="bMin"></span><span id="bMid1"></span><span id="bMid2"></span><span id="bMax"></span></div>
+        </div>
+        <div class="nav"><button class="btn ghost" id="back2" onclick="go(2)">← 上一題</button><button class="btn dark" id="showBtn" onclick="showResults()">看我的推薦 ✦</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section results" id="results">
+    <div class="container">
+      <div class="tag" id="recTag">為你推薦</div>
+      <h2 class="title" id="resultTitle">根據你的偏好，這些地方最適合你</h2>
+      <div class="grid" id="cards"></div>
+      <h3 class="title" style="font-size:30px;margin-top:38px" id="compareTitle">5 國完整比較</h3>
+      <table>
+        <thead><tr><th id="thCountry"></th><th id="thVisa"></th><th id="thHealth"></th><th id="thTax"></th><th id="thCost"></th><th id="thSafe"></th><th id="thLang"></th><th id="thMonthly"></th></tr></thead>
+        <tbody id="compareRows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="modal-wrap" id="mw" onclick="closeModal(event)">
+    <div class="modal"><button class="close" onclick="document.getElementById('mw').classList.remove('open')">✕</button><div id="md"></div></div>
+  </div>
+
+  <div class="foot" id="footText">v2.2 · 僅供研究參考，非法律或稅務建議。資料需以官方最新公告為準。</div>
+
+<script>
+const FX=31.5; // 1 USD = 31.5 TWD (display only)
+let lang='zh';
+const i18n={
+  zh:{heroTitle:'你的退休<br><em>理想國</em><br>在哪裡？',heroSub:'不是資料庫，是一次對話。<br>3 個問題，找到最適合你的地方。',heroBtn:'開始探索 →',tagStep:'Step 01 · 了解你',quizTitle:'先告訴我你是誰',quizSub:'只要 3 個問題，不用填表格',q1:'退休後，你最嚮往哪種生活感？',h1:'選一個最接近你心裡那個畫面的',q2:'你打算帶家人一起去嗎？',h2:'這會影響簽證方式與生活選擇',q3:'每個月大概願意花多少？',h3:'以雙人月生活費（含住宿）估算',budgetUnit:'TWD / 月（雙人）',next:'下一題 →',back:'← 上一題',show:'看我的推薦 ✦',recTag:'為你推薦',compareTitle:'5 國完整比較',thCountry:'國家',thVisa:'簽證',thHealth:'醫療',thTax:'稅務',thCost:'生活成本',thSafe:'治安',thLang:'語言障礙',thMonthly:'雙人月費',lineCost:'預估雙人月費',lineScore:'匹配分數',detail:'深入了解 →',modalScene:'生活畫面',modalCost:'預估雙人月費',modalChecklist:'落地前檢查清單',modalNote:'提醒',note:'簽證與稅務規則會變動，請在決策前確認官方最新資訊與專業意見。',foot:'v2.2 · 僅供研究參考，非法律或稅務建議。資料需以官方最新公告為準。'},
+  en:{heroTitle:'Where is your<br><em>ideal retirement</em><br>country?',heroSub:'Not a cold database — a guided conversation.<br>3 questions to find your best-fit place.',heroBtn:'Start Exploring →',tagStep:'Step 01 · About You',quizTitle:'Tell me who you are',quizSub:'Just 3 quick questions',q1:'What lifestyle do you want after retirement?',h1:'Pick the closest vibe',q2:'Who will move with you?',h2:'This impacts visa and daily life choices',q3:'What monthly budget do you prefer?',h3:'Estimated monthly cost for a couple (incl. housing)',budgetUnit:'USD / month (couple)',next:'Next →',back:'← Back',show:'Show My Matches ✦',recTag:'Recommended for You',compareTitle:'5-Country Comparison',thCountry:'Country',thVisa:'Visa',thHealth:'Healthcare',thTax:'Tax',thCost:'Cost of Living',thSafe:'Safety',thLang:'Language Barrier',thMonthly:'Monthly (Couple)',lineCost:'Estimated Monthly (Couple)',lineScore:'Match Score',detail:'See Details →',modalScene:'Lifestyle Snapshot',modalCost:'Estimated Monthly (Couple)',modalChecklist:'Pre-Move Checklist',modalNote:'Note',note:'Visa/tax rules can change. Always verify with official sources and professionals.',foot:'v2.2 · For research reference only. Not legal or tax advice.'}
+};
+
+const countries={
+  japan:{flag:'🇯🇵',name:{zh:'日本',en:'Japan'},tagline:{zh:'秩序、乾淨、安心感無國能比',en:'Orderly, clean, and exceptionally safe'},scene:{zh:'每件事都準時，每個地方都乾淨。',en:'Everything runs on time, and public spaces are remarkably clean.'},usd:[3500,5000],mid:4200,style:['安穩秩序','便利舒適'],family:['伴侶','父母'],visa:{zh:'較難',en:'Harder'},health:{zh:'優秀',en:'Excellent'},tax:{zh:'一般',en:'Moderate'},cost:{zh:'中等',en:'Medium'},safe:{zh:'極佳',en:'Very High'},langBarrier:{zh:'高',en:'High'},check:{zh:['確認簽證財力要求','先短租試住 1-3 個月','了解長照與保險制度'],en:['Confirm visa financial requirements','Test with a 1-3 month short stay','Understand long-term care & insurance']}},
+  portugal:{flag:'🇵🇹',name:{zh:'葡萄牙',en:'Portugal'},tagline:{zh:'歐洲陽光 + 友善稅制',en:'European sunshine with favorable tax options'},scene:{zh:'歐洲生活品質與相對可控成本。',en:'High quality of life with relatively manageable costs.'},usd:[2800,4200],mid:3500,style:['文化探索','慢活自然'],family:['單獨','伴侶'],visa:{zh:'中等',en:'Moderate'},health:{zh:'良好',en:'Good'},tax:{zh:'優惠',en:'Favorable'},cost:{zh:'中等',en:'Medium'},safe:{zh:'良好',en:'Good'},langBarrier:{zh:'中',en:'Medium'},check:{zh:['核對 D7/數位游牧簽','確認最新稅制','比較里斯本與波多成本'],en:['Check D7/Digital Nomad visa rules','Verify latest tax policy','Compare Lisbon vs Porto costs']}},
+  spain:{flag:'🇪🇸',name:{zh:'西班牙',en:'Spain'},tagline:{zh:'公立醫療強，文化生活豐富',en:'Strong public healthcare and rich culture'},scene:{zh:'生活節奏慢但社交與文化很豐滿。',en:'A slower rhythm with vibrant social and cultural life.'},usd:[3000,4500],mid:3700,style:['文化探索','慢活自然'],family:['伴侶','家庭'],visa:{zh:'中等',en:'Moderate'},health:{zh:'優秀',en:'Excellent'},tax:{zh:'一般',en:'Moderate'},cost:{zh:'中等',en:'Medium'},safe:{zh:'良好',en:'Good'},langBarrier:{zh:'中',en:'Medium'},check:{zh:['確認居留與稅籍規則','醫療可及性城市比較','評估語言學習成本'],en:['Confirm residency and tax rules','Compare healthcare access by city','Plan language learning effort']}},
+  malaysia:{flag:'🇲🇾',name:{zh:'馬來西亞',en:'Malaysia'},tagline:{zh:'英語普及，生活成本友善',en:'English-friendly with budget-friendly living'},scene:{zh:'高 CP 值與熱帶生活並存。',en:'High value living with tropical lifestyle appeal.'},usd:[1800,2800],mid:2300,style:['慢活自然','便利舒適'],family:['單獨','伴侶','家庭'],visa:{zh:'容易',en:'Easier'},health:{zh:'良好',en:'Good'},tax:{zh:'優惠',en:'Favorable'},cost:{zh:'低廉',en:'Low'},safe:{zh:'普通',en:'Moderate'},langBarrier:{zh:'低',en:'Low'},check:{zh:['核對 MM2H 最新門檻','確認醫療保險涵蓋','試住不同社區'],en:['Review latest MM2H requirements','Confirm medical insurance coverage','Test different neighborhoods']}},
+  thailand:{flag:'🇹🇭',name:{zh:'泰國',en:'Thailand'},tagline:{zh:'生活成本低，私醫品質佳',en:'Low living cost with strong private healthcare'},scene:{zh:'美食、陽光與低成本的高生活感。',en:'Great food, sunshine, and a high-quality low-cost lifestyle.'},usd:[1500,2500],mid:2000,style:['慢活自然','文化探索'],family:['單獨','伴侶'],visa:{zh:'容易',en:'Easier'},health:{zh:'良好',en:'Good'},tax:{zh:'優惠',en:'Favorable'},cost:{zh:'低廉',en:'Low'},safe:{zh:'普通',en:'Moderate'},langBarrier:{zh:'低',en:'Low'},check:{zh:['確認退休簽證條件','比較曼谷與清邁醫療','確認外國人保險條款'],en:['Check retirement visa criteria','Compare Bangkok vs Chiang Mai healthcare','Review expat insurance terms']}}
+};
+
+const styleOpts={zh:[['🏯','安穩秩序','乾淨、安全、可預測'],['🎨','文化探索','異國語言、市集、人文'],['🌿','慢活自然','海邊山林、步調放慢'],['☕','便利舒適','機能佳、醫療近']],en:[['🏯','安穩秩序','Clean, safe, predictable'],['🎨','文化探索','Languages, markets, culture'],['🌿','慢活自然','Nature and slower pace'],['☕','便利舒適','Convenient city life']]};
+const familyOpts={zh:[['🧳','單獨','行動自由'],['👫','伴侶','兩人慢活'],['👨‍👩‍👧','家庭','學校與社區重要'],['👴','父母','醫療優先']],en:[['🧳','單獨','Solo and flexible'],['👫','伴侶','Life with partner'],['👨‍👩‍👧','家庭','Family-focused'],['👴','父母','Elder-care focused']]};
+
+const ans={style:null,family:null,budget:3000};let step=1;
+
+function money(v){
+  if(lang==='en') return '$'+Math.round(v).toLocaleString('en-US');
+  return 'NT$'+Math.round(v*FX).toLocaleString('zh-TW');
+}
+function range([a,b]){return `${money(a)}–${money(b)}`}
+function updateBudget(v){ans.budget=+v;document.getElementById('budgetVal').textContent=money(ans.budget);}
+
+function setLang(l){
+  lang=l;
+  document.getElementById('btn-zh').classList.toggle('active',l==='zh');
+  document.getElementById('btn-en').classList.toggle('active',l==='en');
+  const t=i18n[l];
+  document.title=l==='zh'?'Retire Anywhere｜你的退休理想國 v2.2':'Retire Anywhere | Find Your Ideal Retirement Country v2.2';
+  document.getElementById('heroTitle').innerHTML=t.heroTitle;
+  document.getElementById('heroSub').innerHTML=t.heroSub;
+  document.getElementById('heroBtn').textContent=t.heroBtn;
+  document.getElementById('tagStep').textContent=t.tagStep;
+  document.getElementById('quizTitle').textContent=t.quizTitle;
+  document.getElementById('quizSub').textContent=t.quizSub;
+  document.getElementById('q1').textContent=t.q1;document.getElementById('h1').textContent=t.h1;
+  document.getElementById('q2').textContent=t.q2;document.getElementById('h2').textContent=t.h2;
+  document.getElementById('q3').textContent=t.q3;document.getElementById('h3').textContent=t.h3;
+  document.getElementById('n1').textContent=t.next;document.getElementById('n2').textContent=t.next;
+  document.getElementById('back1').textContent=t.back;document.getElementById('back2').textContent=t.back;
+  document.getElementById('showBtn').textContent=t.show;
+  document.getElementById('budgetUnit').textContent=t.budgetUnit;
+  document.getElementById('bMin').textContent=money(1500);document.getElementById('bMid1').textContent=money(3500);document.getElementById('bMid2').textContent=money(5500);document.getElementById('bMax').textContent=money(7000)+'+';
+  document.getElementById('recTag').textContent=t.recTag;
+  document.getElementById('compareTitle').textContent=t.compareTitle;
+  document.getElementById('thCountry').textContent=t.thCountry;document.getElementById('thVisa').textContent=t.thVisa;document.getElementById('thHealth').textContent=t.thHealth;document.getElementById('thTax').textContent=t.thTax;document.getElementById('thCost').textContent=t.thCost;document.getElementById('thSafe').textContent=t.thSafe;document.getElementById('thLang').textContent=t.thLang;document.getElementById('thMonthly').textContent=t.thMonthly;
+  document.getElementById('footText').textContent=t.foot;
+  renderOpts('opts-style','style',styleOpts[l]);
+  renderOpts('opts-family','family',familyOpts[l]);
+  updateBudget(ans.budget);
+}
+
+function renderOpts(id,key,arr){
+  const el=document.getElementById(id);
+  el.innerHTML=arr.map(([e,l,s])=>`<button class="opt ${ans[key]===l?'sel':''}" data-key="${key}" data-val="${l}" onclick="pick(this)"><span class="e">${e}</span><span class="l">${l}</span><span class="s">${s}</span></button>`).join('');
+}
+function pick(btn){
+  const key=btn.dataset.key,val=btn.dataset.val;ans[key]=val;
+  document.querySelectorAll(`.opt[data-key='${key}']`).forEach(x=>x.classList.remove('sel'));btn.classList.add('sel');
+  if(step===1)document.getElementById('n1').disabled=false;if(step===2)document.getElementById('n2').disabled=false;
+}
+function go(n){document.getElementById('s'+step).classList.remove('active');if(step<n)document.getElementById('d'+step).classList.add('done');document.getElementById('d'+step).classList.remove('active');step=n;document.getElementById('s'+step).classList.add('active');document.getElementById('d'+step).classList.add('active');}
+function score(d){let s=0;if(d.style.includes(ans.style))s+=40;if(d.family.includes(ans.family))s+=30;const diff=Math.abs(d.mid-ans.budget);if(diff<500)s+=30;else if(diff<1500)s+=20;else if(diff<2500)s+=10;return s;}
+function showResults(){
+  document.querySelector('.quiz').style.display='none';
+  const t=i18n[lang];
+  const list=Object.entries(countries).map(([k,v])=>({k,v,sc:score(v)})).sort((a,b)=>b.sc-a.sc);
+  document.getElementById('results').classList.add('show');document.getElementById('results').scrollIntoView({behavior:'smooth'});
+  document.getElementById('resultTitle').textContent= lang==='zh' ? `喜歡「${ans.style||'未選擇'}」，預算 ${money(ans.budget)} 的你，可先看這些國家` : `Based on your profile and ${money(ans.budget)} budget, start with these countries`;
+  document.getElementById('cards').innerHTML=list.map((x,i)=>`<article class="card ${i===0?'top':''}">${i===0?'<div class="badge">✦ Top Match</div>':''}<div class="name">${x.v.flag} ${x.v.name[lang]}</div><div class="sub">${x.v.tagline[lang]}</div><div class="scene">${x.v.scene[lang]}</div><div class="line"><span>${t.lineCost}</span><strong>${range(x.v.usd)}</strong></div><div class="line"><span>${t.lineScore}</span><span class="score">${x.sc}/100</span></div><button class="btn dark" onclick="openModal('${x.k}')">${t.detail}</button></article>`).join('');
+  document.getElementById('compareRows').innerHTML=list.map(x=>`<tr><td><strong>${x.v.flag} ${x.v.name[lang]}</strong></td><td>${x.v.visa[lang]}</td><td>${x.v.health[lang]}</td><td>${x.v.tax[lang]}</td><td>${x.v.cost[lang]}</td><td>${x.v.safe[lang]}</td><td>${x.v.langBarrier[lang]}</td><td>${range(x.v.usd)}</td></tr>`).join('');
+}
+function openModal(key){
+  const t=i18n[lang],d=countries[key];
+  document.getElementById('md').innerHTML=`<h3>${d.flag} ${d.name[lang]}</h3><p class='sub'>${d.tagline[lang]}</p><div class='chips'>${d.style.map(s=>`<span class='chip'>${s}</span>`).join(' ')} ${d.family.map(s=>`<span class='chip'>${s}</span>`).join(' ')}</div><div class='sec'><h4>${t.modalScene}</h4><p class='sub' style='line-height:1.8'>${d.scene[lang]}</p></div><div class='sec'><h4>${t.modalCost}</h4><p class='title' style='font-size:28px'>${range(d.usd)}</p></div><div class='sec'><h4>${t.modalChecklist}</h4><ul class='list'>${d.check[lang].map(c=>`<li>${c}</li>`).join('')}</ul></div><div class='sec'><h4>${t.modalNote}</h4><p class='sub'>${t.note}</p></div>`;
+  document.getElementById('mw').classList.add('open');
+}
+function closeModal(e){if(e.target.id==='mw')document.getElementById('mw').classList.remove('open');}
+setLang('zh');
+</script>
+</body>
+</html>
