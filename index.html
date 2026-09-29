@@ -218,6 +218,16 @@ function labelHousehold(v){ const m={single:{zh:'單人',en:'Single'},couple:{zh
 function labelLevel(v){ const m={Essential:{zh:'基本可負擔',en:'Essential'},Comfortable:{zh:'舒適可負擔',en:'Comfortable'},Luxury:{zh:'奢華可負擔',en:'Luxury'},None:{zh:'資產不足',en:'None'}}; return m[v] ? m[v][state.lang] : v; }
 function labelCountry(v){ return state.lang==='zh' ? (countryZh[v]||v) : v; }
 function labelContinent(v){ return state.lang==='zh' ? (continentZh[v]||v) : v; }
+const FALLBACK_CITY_IMAGE='https://images.pexels.com/photos/1450353/pexels-photo-1450353.jpeg?auto=compress&cs=tinysrgb&w=1200';
+function resolveCityImage(src){
+  if(!src) return FALLBACK_CITY_IMAGE;
+  return /^(https?:)?\/\//i.test(src) ? src : new URL(src, document.baseURI).href;
+}
+function imageErrorFallback(img){
+  if(img.dataset.fallbackApplied) return;
+  img.dataset.fallbackApplied='1';
+  img.src=FALLBACK_CITY_IMAGE;
+}
 function getModeMultiplier(c,life){ if(life==='Essential') return 1; if(life==='Comfortable') return 1.5; return c.luxury_multiplier || 2; }
 function getMonthlyCost(c,house){
   const s=Number(c.monthly_living_cost_single), cp=Number(c.monthly_living_cost_couple), f=Number(c.monthly_living_cost_family);
@@ -346,9 +356,9 @@ function draw(){
     const label=state.lang==='zh'?(c.zh||c.city):c.city;
     const mk=L.marker(c.coords,{icon:pin(color)}).addTo(layer);
     const need=assetNeed(c,state.household,state.lifestyle); const estTag=s.estimated?(' '+t('estTag')):'';
-    const img=(c.img ? 'https://amoleskyhigh.github.io/retire-anywhere-map/'+c.img : 'https://images.pexels.com/photos/1450353/pexels-photo-1450353.jpeg');
-    mk.bindTooltip(`<div style="text-align:center"><b>${label}</b><br><img src="${img}" style="width:140px;height:80px;object-fit:cover;border-radius:8px;margin-top:6px"></div>`,{direction:'top',offset:[0,-8]});
-    mk.bindPopup(`<b>${labelCountry(c.country)} - ${label}</b><br/>${t('currentFilter')}: ${labelLifestyle(state.lifestyle)} / ${labelHousehold(state.household)}<br/>${t('afford')}: <b style='color:${color}'>${labelLevel(lv)}</b><br/>${t('annual')}: ${money(s.annual)}${estTag}<br/>${t('needAsset')}: ${money(need.asset)}${estTag}<br/><img src='${img}' style='width:120px;height:70px;object-fit:cover;border-radius:8px;margin:6px 0'><br/><button onclick="openCityDetail(${i})">${t('cityDetail')}</button> <button onclick="addCmp(${i})">${t('add')}</button>`);
+    const img=resolveCityImage(c.img);
+    mk.bindTooltip(`<div style="text-align:center"><b>${label}</b><br><img src="${img}" onerror="imageErrorFallback(this)" alt="${label}" style="width:140px;height:80px;object-fit:cover;border-radius:8px;margin-top:6px"></div>`,{direction:'top',offset:[0,-8]});
+    mk.bindPopup(`<b>${labelCountry(c.country)} - ${label}</b><br/>${t('currentFilter')}: ${labelLifestyle(state.lifestyle)} / ${labelHousehold(state.household)}<br/>${t('afford')}: <b style='color:${color}'>${labelLevel(lv)}</b><br/>${t('annual')}: ${money(s.annual)}${estTag}<br/>${t('needAsset')}: ${money(need.asset)}${estTag}<br/><img src='${img}' onerror="imageErrorFallback(this)" alt='${label}' style='width:120px;height:70px;object-fit:cover;border-radius:8px;margin:6px 0'><br/><button onclick="openCityDetail(${i})">${t('cityDetail')}</button> <button onclick="addCmp(${i})">${t('add')}</button>`);
     mk.on('click',()=>openCityDetail(i));
   });
 }
@@ -358,7 +368,9 @@ function openCityDetail(i){
   const name=state.lang==='zh'?(c.zh||c.city):c.city, lm=state.lang==='zh'?(c.zh_landmark||c.landmark||''):(c.landmark||''), desc=state.lang==='zh'?(c.zh_desc||c.desc||''):(c.desc||'');
   const need=assetNeed(c,state.household,state.lifestyle), estTag=s.estimated?(' '+t('estTag')):'';
   const photoSource=c.attribution||DATA_META.photoSource;
-  document.getElementById('cityModalBody').innerHTML=`<h3>${labelCountry(c.country)} - ${name}</h3><img class='city-img' src='${c.img||'https://images.pexels.com/photos/1450353/pexels-photo-1450353.jpeg'}'/><p>${lm}</p><p>${desc}</p><p>${t('currentFilter')}: ${labelLifestyle(state.lifestyle)} / ${labelHousehold(state.household)}</p><p>${t('afford')}: <b style='color:${markerColor[lv]}'>${labelLevel(lv)}</b></p><p>${t('annual')}: ${money(s.annual)}${estTag}</p><p>${t('needAsset')}: ${money(need.asset)}${estTag}</p><div class="info-card"><div class="title">${t('dataCard')}</div><div class="line">${t('dataUpdated')}: <b>${DATA_META.cityDataUpdated}</b> · ${t('uiUpdated')}: <b>${DATA_META.uiUpdated}</b></div><div class="line">${t('dataSource')}: ${DATA_META.costSource}</div><div class="line">${t('photoSource')}: ${photoSource}</div><div class="tagline"><span class="pill">${s.estimated?(state.lang==='zh'?'包含估算':'contains estimates'):(state.lang==='zh'?'資料齊全':'fully sourced')}</span><span class="pill">${state.lang==='zh'?'SWR 可調':'SWR adjustable'}</span></div></div>`;
+  const imageCredit=c.image_source?`<a href="${c.image_source}" target="_blank" rel="noopener">${c.image_license||'image source'}</a>`:photoSource;
+  const img=resolveCityImage(c.img);
+  document.getElementById('cityModalBody').innerHTML=`<h3>${labelCountry(c.country)} - ${name}</h3><img class='city-img' src='${img}' onerror="imageErrorFallback(this)" alt='${name}'/><p>${lm}</p><p>${desc}</p><p>${t('currentFilter')}: ${labelLifestyle(state.lifestyle)} / ${labelHousehold(state.household)}</p><p>${t('afford')}: <b style='color:${markerColor[lv]}'>${labelLevel(lv)}</b></p><p>${t('annual')}: ${money(s.annual)}${estTag}</p><p>${t('needAsset')}: ${money(need.asset)}${estTag}</p><div class="info-card"><div class="title">${t('dataCard')}</div><div class="line">${t('dataUpdated')}: <b>${DATA_META.cityDataUpdated}</b> · ${t('uiUpdated')}: <b>${DATA_META.uiUpdated}</b></div><div class="line">${t('dataSource')}: ${DATA_META.costSource}</div><div class="line">${t('photoSource')}: ${photoSource} · ${imageCredit}</div><div class="tagline"><span class="pill">${s.estimated?(state.lang==='zh'?'包含估算':'contains estimates'):(state.lang==='zh'?'資料齊全':'fully sourced')}</span><span class="pill">${state.lang==='zh'?'SWR 可調':'SWR adjustable'}</span></div></div>`;
   trackAB('city_modal_open',{version:'B',city:c.city,country:c.country}); const st=abState(); st.s.cityOpen+=1; saveAbState(st.s); maybeTaskComplete('city_filter_path');
   document.getElementById('cityModal').classList.add('show');
 }
