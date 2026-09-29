@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import sys
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -29,6 +30,32 @@ def image_signature(path: Path) -> bool:
         or header.startswith(b"\xff\xd8\xff")
         or (header[:4] == b"RIFF" and header[8:12] == b"WEBP")
     )
+
+
+def decode_image(path: Path) -> tuple[int, int]:
+    """Decode the raster and return dimensions; do not accept header-only files."""
+    try:
+        from PIL import Image
+
+        with Image.open(path) as image:
+            image.load()
+            width, height = image.size
+            if width < 2 or height < 2:
+                fail(f"{path}: decoded image is too small: {width}x{height}")
+            return width, height
+    except ImportError:
+        # macOS developer hosts may not have Pillow; sips still decodes the file.
+        result = subprocess.run(
+            ["sips", "-g", "pixelWidth", "-g", "pixelHeight", str(path)],
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0:
+            fail(f"{path}: image decoder unavailable (install Pillow or ImageMagick)")
+        values = [int(line.split(":", 1)[1].strip()) for line in result.stdout.splitlines() if ":" in line]
+        if len(values) != 2 or min(values) < 2:
+            fail(f"{path}: decoder returned invalid dimensions")
+        return values[0], values[1]
 
 
 def cities_from(snapshot: dict) -> list[dict]:
@@ -59,6 +86,7 @@ def main() -> int:
             fail(f"{city.get('city', '<unknown>')}: missing or empty image: {image}")
         if not image_signature(path):
             fail(f"{city.get('city', '<unknown>')}: unrecognized image file: {image}")
+        decode_image(path)
         checked += 1
 
     if checked == 0:

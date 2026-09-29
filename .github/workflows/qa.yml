@@ -18,7 +18,11 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install image decoder
+        run: python -m pip install --disable-pip-version-check Pillow
       - name: Validate Vietnam city images and click-flow hooks
         run: python tests/qa_vietnam_city_images.py
       - name: Validate all repository-local city image assets
         run: python tests/qa_city_image_assets.py
+      - name: Validate confirmed city/image corrections
+        run: python tests/qa_repaired_city_images.py
