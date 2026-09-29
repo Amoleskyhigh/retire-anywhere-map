@@ -695,6 +695,70 @@
       }
     }
   },
+  "Vietnam": {
+    "Cities": {
+      "Da Nang": {
+        "zh": "峴港",
+        "coords": [16.0544, 108.2022],
+        "monthly_living_cost_single": 750,
+        "monthly_living_cost_couple": 1200,
+        "monthly_living_cost_family": 2400,
+        "landmark": "My Khe Beach",
+        "zh_landmark": "美溪海灘",
+        "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Dragon%20Bridge%2C%20Da%20Nang.jpg?width=1200",
+        "desc": "A balanced coastal city with an international airport, growing expat community, and a relaxed retirement pace.",
+        "zh_desc": "兼具海濱生活、國際機場與逐漸成長的外籍社群，生活節奏適中的退休城市。",
+        "attribution": "Initial Vietnam estimate; 2026 cost baseline",
+        "luxury_multiplier": 2.0,
+        "data_status": "initial_estimate"
+      },
+      "Ho Chi Minh City": {
+        "zh": "胡志明市",
+        "coords": [10.8231, 106.6297],
+        "monthly_living_cost_single": 950,
+        "monthly_living_cost_couple": 1500,
+        "monthly_living_cost_family": 2900,
+        "landmark": "Saigon Central Post Office",
+        "zh_landmark": "西貢中央郵政局",
+        "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Ho%20Chi%20Minh%20City%20Hall.jpg?width=1200",
+        "desc": "Vietnam's largest commercial and healthcare hub, offering maximum convenience with more traffic, noise, and urban intensity.",
+        "zh_desc": "越南最大的商業與醫療中心，便利性最高，但交通、噪音與都市壓力也較大。",
+        "attribution": "Initial Vietnam estimate; 2026 cost baseline",
+        "luxury_multiplier": 2.3,
+        "data_status": "initial_estimate"
+      },
+      "Hanoi": {
+        "zh": "河內",
+        "coords": [21.0278, 105.8342],
+        "monthly_living_cost_single": 900,
+        "monthly_living_cost_couple": 1400,
+        "monthly_living_cost_family": 2700,
+        "landmark": "Hoan Kiem Lake",
+        "zh_landmark": "還劍湖",
+        "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Hoan%20Kiem%20Lake%20in%20Hanoi.jpg?width=1200",
+        "desc": "A culturally rich capital with strong urban services, but seasonal damp cold and air-quality variability.",
+        "zh_desc": "文化資源與城市機能完整的首都；冬季濕冷，空氣品質也有季節性波動。",
+        "attribution": "Initial Vietnam estimate; 2026 cost baseline",
+        "luxury_multiplier": 2.2,
+        "data_status": "initial_estimate"
+      },
+      "Nha Trang": {
+        "zh": "芽莊",
+        "coords": [12.2388, 109.1967],
+        "monthly_living_cost_single": 700,
+        "monthly_living_cost_couple": 1100,
+        "monthly_living_cost_family": 2200,
+        "landmark": "Nha Trang Bay",
+        "zh_landmark": "芽莊灣",
+        "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Nha%20Trang%20Bay.jpg?width=1200",
+        "desc": "A lower-cost beach city with a visible long-stay community, though healthcare and international connectivity are smaller than Da Nang's.",
+        "zh_desc": "生活成本較低、長住人口明顯的海濱城市；醫療與國際交通規模則小於峴港。",
+        "attribution": "Initial Vietnam estimate; 2026 cost baseline",
+        "luxury_multiplier": 2.0,
+        "data_status": "initial_estimate"
+      }
+    }
+  },
   "Spain": {
     "cost_of_living_index": 53.4,
     "monthly_budget_usd": 3200,
@@ -716,7 +780,9 @@
         "desc": "Futuristic architectural masterpiece.",
         "zh_desc": "地中海畔充滿未來感的藝術與科學殿堂。",
         "attribution": "AI Generated",
-        "luxury_multiplier": 2.5
+        "luxury_multiplier": 2.5,
+        "monthly_living_cost_single": 2080,
+        "monthly_living_cost_family": 4960
       },
       "Malaga": {
         "zh": "馬拉加",
@@ -731,7 +797,9 @@
         "desc": "Vibrant coastal promenade and historic fortress.",
         "zh_desc": "陽光海岸的門戶，融合歷史古蹟與蔚藍海景。",
         "attribution": "AI Generated",
-        "luxury_multiplier": 2.5
+        "luxury_multiplier": 2.5,
+        "monthly_living_cost_single": 1950,
+        "monthly_living_cost_family": 4650
       },
       "Bilbao": {
         "zh": "畢爾包",
@@ -746,7 +814,9 @@
         "desc": "Cultural center and food paradise.",
         "zh_desc": "北西班牙的美食天堂，以現代藝術建築聞名於世。",
         "attribution": "AI Generated",
-        "luxury_multiplier": 2.5
+        "luxury_multiplier": 2.5,
+        "monthly_living_cost_single": 1885,
+        "monthly_living_cost_family": 4495
       }
     }
   },
@@ -771,7 +841,9 @@
         "desc": "Stunning sea cliffs and turquoise water.",
         "zh_desc": "阿爾加維海岸最壯麗的海蝕洞與奇岩景觀。",
         "attribution": "AI Generated",
-        "luxury_multiplier": 2.5
+        "luxury_multiplier": 2.5,
+        "monthly_living_cost_single": 1820,
+        "monthly_living_cost_family": 4340
       },
       "Lisbon": {
         "zh": "里斯本",
@@ -786,7 +858,9 @@
         "desc": "Historic charm with urban convenience.",
         "zh_desc": "穿梭在老城區窄巷間的標誌性黃色復古電車。",
         "attribution": "AI Generated",
-        "luxury_multiplier": 3.0
+        "luxury_multiplier": 3.0,
+        "monthly_living_cost_single": 2275,
+        "monthly_living_cost_family": 5425
       },
       "Porto": {
         "zh": "波爾圖",
@@ -801,7 +875,9 @@
         "desc": "Picturesque riverside cultural hub.",
         "zh_desc": "杜羅河畔如畫般的彩色房舍與著名的波特酒鄉。",
         "attribution": "AI Generated",
-        "luxury_multiplier": 2.5
+        "luxury_multiplier": 2.5,
+        "monthly_living_cost_single": 1755,
+        "monthly_living_cost_family": 4185
       }
     }
   },
@@ -826,7 +902,9 @@
         "desc": "Medical tourism hub and food capital.",
         "zh_desc": "融合英殖民建築與世界級美食的醫療重鎮。",
         "attribution": "AI Generated",
-        "luxury_multiplier": 2.0
+        "luxury_multiplier": 2.0,
+        "monthly_living_cost_single": 1170,
+        "monthly_living_cost_family": 2790
       },
       "Kuala Lumpur": {
         "zh": "吉隆坡",
@@ -841,7 +919,9 @@
         "desc": "High-value modern metropolitan living.",
         "zh_desc": "現代感十足、具備高品質奢華設施的熱帶都會。",
         "attribution": "AI Generated",
-        "luxury_multiplier": 2.5
+        "luxury_multiplier": 2.5,
+        "monthly_living_cost_single": 1430,
+        "monthly_living_cost_family": 3410
       },
       "Melaka": {
         "zh": "馬六甲",
@@ -856,7 +936,9 @@
         "desc": "Laid-back historic city with a slow pace.",
         "zh_desc": "節奏悠閒、充滿文化底蘊與燈火浪漫的歷史古城。",
         "attribution": "AI Generated",
-        "luxury_multiplier": 2.0
+        "luxury_multiplier": 2.0,
+        "monthly_living_cost_single": 975,
+        "monthly_living_cost_family": 2325
       }
     }
   },
@@ -881,7 +963,9 @@
         "desc": "Surfers paradise and tropical vibes.",
         "zh_desc": "衝浪者的天堂，充滿熱帶度假風情的蔚藍海岸。",
         "attribution": "Photo via Unsplash",
-        "luxury_multiplier": 2.5
+        "luxury_multiplier": 2.5,
+        "monthly_living_cost_single": 1820,
+        "monthly_living_cost_family": 4340
       },
       "Grecia": {
         "zh": "格雷西亞",
@@ -896,7 +980,9 @@
         "desc": "Cleanest city in Latin America with mountain views.",
         "zh_desc": "拉丁美洲最乾淨的城市，擁有壯麗的山景與宜人氣候。",
         "attribution": "Photo via Unsplash",
-        "luxury_multiplier": 2.0
+        "luxury_multiplier": 2.0,
+        "monthly_living_cost_single": 1430,
+        "monthly_living_cost_family": 3410
       },
       "Puerto Viejo": {
         "zh": "波多維耶荷",
@@ -911,7 +997,9 @@
         "desc": "Lush jungle meeting turquoise Caribbean sea.",
         "zh_desc": "加勒比海岸的秘境，森林與海洋交織的自然天堂。",
         "attribution": "Photo via Unsplash",
-        "luxury_multiplier": 2.0
+        "luxury_multiplier": 2.0,
+        "monthly_living_cost_single": 1560,
+        "monthly_living_cost_family": 3720
       }
     }
   },
@@ -936,7 +1024,9 @@
         "desc": "Iconic pink gothic-style colonial church.",
         "zh_desc": "標誌性的粉紅色哥德式殖民時期教堂，藝術之城地標。",
         "attribution": "Photo via Unsplash",
-        "luxury_multiplier": 2.5
+        "luxury_multiplier": 2.5,
+        "monthly_living_cost_single": 1625,
+        "monthly_living_cost_family": 3875
       },
       "Merida": {
         "zh": "梅里達",
@@ -951,7 +1041,9 @@
         "desc": "Safe White City with Mayan culture influence.",
         "zh_desc": "全墨最安全的「白色之城」，融合瑪雅與殖民文化。",
         "attribution": "Photo via Unsplash",
-        "luxury_multiplier": 2.0
+        "luxury_multiplier": 2.0,
+        "monthly_living_cost_single": 1300,
+        "monthly_living_cost_family": 3100
       },
       "Puerto Vallarta": {
         "zh": "瓦雅塔港",
@@ -966,7 +1058,9 @@
         "desc": "Lively ocean boardwalk with Sierra Madre views.",
         "zh_desc": "熱鬧的海濱長廊，背山面海的絕佳退休地點。",
         "attribution": "Photo via Unsplash",
-        "luxury_multiplier": 2.5
+        "luxury_multiplier": 2.5,
+        "monthly_living_cost_single": 1690,
+        "monthly_living_cost_family": 4030
       }
     }
   },
@@ -991,7 +1085,9 @@
         "desc": "Expat beachfront hub near Panama City.",
         "zh_desc": "巴拿馬城近郊最受外籍人士歡迎的奢華海濱社區。",
         "attribution": "Photo via Unsplash",
-        "luxury_multiplier": 3.0
+        "luxury_multiplier": 3.0,
+        "monthly_living_cost_single": 1820,
+        "monthly_living_cost_family": 4340
       },
       "Boquete": {
         "zh": "波開特",
@@ -1006,7 +1102,9 @@
         "desc": "Spring-like weather and coffee plantations.",
         "zh_desc": "四季如春的山城，以頂級咖啡與純淨空氣聞名。",
         "attribution": "Photo via Unsplash",
-        "luxury_multiplier": 2.0
+        "luxury_multiplier": 2.0,
+        "monthly_living_cost_single": 1430,
+        "monthly_living_cost_family": 3410
       },
       "Panama City": {
         "zh": "巴拿馬城",
@@ -1021,7 +1119,9 @@
         "desc": "Historic Casco Viejo foreground with modern skyline behind, a true old-meets-new Panama City view.",
         "zh_desc": "前景為卡斯科維耶霍舊城、後方為現代天際線，呈現巴拿馬城新舊交融的代表景觀。",
         "attribution": "Photo via Unsplash",
-        "luxury_multiplier": 3.0
+        "luxury_multiplier": 3.0,
+        "monthly_living_cost_single": 1950,
+        "monthly_living_cost_family": 4650
       }
     }
   }
