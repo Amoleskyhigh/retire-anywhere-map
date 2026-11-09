@@ -1,36 +1,52 @@
-# QA_REPORT.md — Cross-border MVP v1.0
+# QA_REPORT.md — Cross-border Lab v2.2
 
-Date: 2026-03-29
-Scope: `github_deploy/cross-border-lab-mvp.html`
+Date: 2026-11-09
+Scope: `github_deploy/cross-border-lab-v2.2.html`
+Public URL: https://amoleskyhigh.github.io/retire-anywhere-map/cross-border-lab-v2.2.html
 
-## 測試結果
-1. 核心流程全通（PASS）
-   - 頁面可載入（HTTP 200）
-   - 國家卡片正常渲染
-   - 比較表正常渲染
-2. 主要按鈕可用（PASS）
-   - 「套用篩選」可執行
-3. 表單/篩選驗證（PASS）
-   - 個性篩選/預算篩選存在且可切換
-4. 手機版可讀性（PASS）
-   - 採用響應式 grid 與 viewport
-5. Console 基本風險（PASS）
-   - 無外部依賴、純前端靜態
-6. 內容完整度（PASS）
-   - 5 國資料齊全（日本/葡萄牙/西班牙/馬來西亞/泰國）
-   - 含方法論與免責聲明
+## QA 結果
 
-## 自動檢查證據（節錄）
-- file_exists PASS
-- has_cards_container PASS
-- has_table PASS
-- has_persona_filter PASS
-- has_budget_filter PASS
-- has_5_countries PASS
-- has_methodology PASS
-- has_disclaimer PASS
+### 1. 線上版本與部署（PASS）
+- Public URL HTTP 200。
+- 線上 `<title>`、頁尾與語系內容均標示 `v2.2`。
+- 線上 HTML 與本機待部署檔案 SHA-256 一致。
+- GitHub Pages 來源 repository：`Amoleskyhigh/retire-anywhere-map`，branch：`main`。
+
+### 2. 核心流程與按鈕（PASS）
+- 中文／英文切換可用，標題與介面文字同步切換。
+- 第 1 題選項可選取，未選取時「下一題」維持 disabled。
+- 第 1 → 第 2 → 第 3 題流程可完成。
+- 預算 slider 可操作並更新預算顯示。
+- 「看我的推薦」可產生結果。
+- Top 3 卡片正常渲染。
+- 「查看其他國家」可展開其他 7 國，再次操作可收合。
+- 比較表其餘國家可展開。
+- 城市／國家詳細視窗可開啟、關閉。
+- 「重新設定條件」可回到第 1 題並清除流程狀態。
+
+### 3. 手機版（PASS）
+- 測試 viewport：390×844。
+- 頁面無水平溢出：`body.scrollWidth = 390`。
+- 問卷、按鈕、推薦卡片、比較表與 modal 均可操作。
+
+### 4. Console／錯誤（PASS）
+- Playwright 無頭瀏覽器實測無 `console.error`。
+- 無 `pageerror`。
+- 頁面為自包含靜態 HTML，核心流程不依賴外部 API。
+
+### 5. 測試證據
+- HTTP：PASS
+- 雙語切換：PASS
+- 三題問卷：PASS
+- 推薦結果：3 張 Top cards + 7 張展開 cards：PASS
+- 比較表展開：7 列：PASS
+- 詳細 modal：PASS
+- 重設流程：PASS
+- Mobile viewport：PASS
+- Console/page errors：PASS
 
 ## 結論
+
 FINAL: 100% PASS
 
-無 blocker，可交付第一版給 Felix 驗收。
+v2.2 已完成 QA，線上版本確認為 v2.2，無 blocker。
