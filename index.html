@@ -430,7 +430,9 @@ async function init(){
   L.control.zoom({position:'topleft'}).addTo(map);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'&copy; OpenStreetMap'}).addTo(map); layer=L.layerGroup().addTo(map);
 
-  const base=await fetch('./world_retirement_data.json').then(r=>r.json());
+  // Versioned, no-cache fetch prevents GitHub Pages/browser caches from hiding
+  // newly added cities after a data-only deployment.
+  const base=await fetch('./world_retirement_data.json?v=20261125',{cache:'no-store'}).then(r=>r.json());
   const merged={...base,...batch6};
   cities=[];
   Object.keys(merged).forEach(country=>{
