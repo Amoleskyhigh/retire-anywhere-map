@@ -447,6 +447,63 @@
         "attribution": "Photo via Unsplash",
         "luxury_multiplier": 2.5
       },
+      "Oita": {
+        "zh": "大分",
+        "coords": [
+          33.2396,
+          131.6093
+        ],
+        "monthly_living_cost_single": 700,
+        "monthly_living_cost_couple": 1000,
+        "monthly_living_cost_family": 2100,
+        "landmark": "Oita Station and Hot-spring Country",
+        "zh_landmark": "大分車站與溫泉鄉",
+        "img": "assets/cities/oita.jpg",
+        "desc": "A relaxed regional capital with easy access to Beppu hot springs, coastal scenery, and Kyushu's outdoor destinations.",
+        "zh_desc": "步調悠閒的九州地方城市，鄰近別府溫泉、海岸景色與九州戶外旅遊地點。",
+        "attribution": "Wikimedia Commons, Sharon Hahn Darlin, CC BY 4.0",
+        "image_source": "https://commons.wikimedia.org/wiki/File:Oita_Station_%E5%A4%A7%E5%88%86%E9%A7%85,_Oita_City,_Kyushu,_Japan_%F0%9F%87%AF%F0%9F%87%B5.jpg",
+        "image_license": "CC BY 4.0",
+        "luxury_multiplier": 2.2
+      },
+      "Kitakyushu": {
+        "zh": "北九州",
+        "coords": [
+          33.8834,
+          130.8752
+        ],
+        "monthly_living_cost_single": 700,
+        "monthly_living_cost_couple": 1050,
+        "monthly_living_cost_family": 2200,
+        "landmark": "Kokura Castle and Waterfront",
+        "zh_landmark": "小倉城與港灣",
+        "img": "assets/cities/kitakyushu.jpg",
+        "desc": "A practical waterfront city with lower housing costs, strong rail links, and a mix of industrial heritage and green spaces.",
+        "zh_desc": "生活成本相對親民的港灣城市，鐵路交通便利，兼具工業歷史、城堡與綠地。",
+        "attribution": "Wikimedia Commons, wongwt, CC BY-SA 2.0",
+        "image_source": "https://commons.wikimedia.org/wiki/File:Kokura_Castle,_Kitakyuushuu_City;_November_2018_(02).jpg",
+        "image_license": "CC BY-SA 2.0",
+        "luxury_multiplier": 2.2
+      },
+      "Kagoshima": {
+        "zh": "鹿兒島",
+        "coords": [
+          31.5966,
+          130.5571
+        ],
+        "monthly_living_cost_single": 750,
+        "monthly_living_cost_couple": 1100,
+        "monthly_living_cost_family": 2300,
+        "landmark": "Sakurajima and Kagoshima Bay",
+        "zh_landmark": "櫻島與鹿兒島灣",
+        "img": "assets/cities/kagoshima.jpg",
+        "desc": "A warm southern city with a dramatic volcano-and-bay setting, trams, hot springs, and a slower coastal rhythm.",
+        "zh_desc": "氣候較溫暖的南九州城市，擁有櫻島火山與鹿兒島灣景觀、路面電車與溫泉生活。",
+        "attribution": "Wikimedia Commons, A pool full of water, CC BY-SA 4.0",
+        "image_source": "https://commons.wikimedia.org/wiki/File:Kagoshima_Montage.jpg",
+        "image_license": "CC BY-SA 4.0",
+        "luxury_multiplier": 2.3
+      },
       "Kawasaki": {
         "zh": "川崎",
         "coords": [
